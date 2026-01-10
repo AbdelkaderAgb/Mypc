@@ -31,55 +31,623 @@ require_once 'actions.php';
     <style>
         :root {
             --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #eef2ff;
             --secondary-color: #818cf8;
-            --bg-color: #f3f4f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --bg-color: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --card-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --border-radius: 16px;
+            --border-radius-sm: 10px;
         }
-        body { font-family: 'Tajawal', sans-serif; background: var(--bg-color); color: #333; }
-        .login-card { max-width: 420px; margin: 40px auto; border-radius: 20px; border:none; }
-        .app-navbar { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .stat-card { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border-radius: 15px; border: none; }
-        .content-card { border: none; border-radius: 15px; box-shadow: var(--card-shadow); background: white; overflow: hidden; }
-        .badge-pending { background-color: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
-        .badge-accepted { background-color: #dbeafe; color: #2563eb; border: 1px solid #93c5fd; }
-        .badge-delivered { background-color: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
-        .badge-cancelled { background-color: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
-        .pin-box { font-family: monospace; letter-spacing: 4px; font-weight: bold; font-size: 1.2rem; background: #eee; padding: 5px 10px; border-radius: 5px; user-select: all; display: inline-block;}
-        .btn-primary { background-color: var(--primary-color); border: none; }
-        .btn-primary:hover { background-color: #4338ca; }
-        .stats-box { background: white; border-radius: 10px; padding: 20px; box-shadow: var(--card-shadow); }
-        .modal-content { border-radius: 15px; border: none; }
-        .table-actions .btn { margin: 2px; }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color) 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .animate-fadeInUp { animation: fadeInUp 0.5s ease forwards; }
+        .animate-fadeInDown { animation: fadeInDown 0.5s ease forwards; }
+        .animate-fadeIn { animation: fadeIn 0.4s ease forwards; }
+        .animate-slideInRight { animation: slideInRight 0.4s ease forwards; }
+
+        /* Login Card */
+        .login-card {
+            max-width: 440px;
+            margin: 30px auto;
+            border-radius: var(--border-radius);
+            border: none;
+            animation: fadeInUp 0.6s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        /* App Navbar */
+        .app-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: var(--transition-normal);
+        }
+        .app-navbar.scrolled {
+            box-shadow: var(--card-shadow);
+        }
+
+        /* Cards */
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border-radius: var(--border-radius);
+            border: none;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .content-card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            background: white;
+            overflow: hidden;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+        .content-card:hover {
+            box-shadow: var(--card-shadow-lg);
+        }
+
+        .stats-box {
+            background: white;
+            border-radius: var(--border-radius-sm);
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        .stats-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform var(--transition-normal);
+        }
+        .stats-box:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-lg);
+        }
+        .stats-box:hover::after {
+            transform: scaleX(1);
+        }
+        .stats-box i {
+            transition: transform var(--transition-normal);
+        }
+        .stats-box:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Status Badges */
+        .badge-pending {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border: none;
+            font-weight: 600;
+        }
+        .badge-accepted {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1e40af;
+            border: none;
+            font-weight: 600;
+        }
+        .badge-delivered {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border: none;
+            font-weight: 600;
+        }
+        .badge-cancelled {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+            border: none;
+            font-weight: 600;
+        }
+
+        /* PIN Box */
+        .pin-box {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 6px;
+            font-weight: bold;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 10px 16px;
+            border-radius: 8px;
+            user-select: all;
+            display: inline-block;
+            border: 2px dashed #f59e0b;
+            transition: transform var(--transition-fast);
+        }
+        .pin-box:hover {
+            transform: scale(1.02);
+        }
+
+        /* Buttons */
+        .btn {
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #34d399);
+            border: none;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+        .btn-warning {
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        }
+        .btn-warning:hover {
+            transform: translateY(-2px);
+        }
+        .btn-outline-primary:hover, .btn-outline-success:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Form Controls */
+        .form-control, .form-select {
+            border-radius: var(--border-radius-sm);
+            border: 2px solid #e2e8f0;
+            padding: 12px 16px;
+            transition: all var(--transition-normal);
+            font-size: 1rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+        .form-floating > .form-control {
+            padding-top: 1.625rem;
+            padding-bottom: 0.625rem;
+        }
+        .form-floating > label {
+            padding: 1rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Input Group */
+        .input-group-text {
+            border: 2px solid #e2e8f0;
+            border-right: none;
+        }
+        .input-group .form-control {
+            border-left: none;
+        }
+        .input-group:focus-within .input-group-text {
+            border-color: var(--primary-color);
+        }
+        .input-group:focus-within .form-control {
+            border-color: var(--primary-color);
+        }
 
         /* Auth form toggle */
-        .auth-toggle { display: flex; background: #e5e7eb; border-radius: 10px; padding: 4px; margin-bottom: 20px; }
-        .auth-toggle button { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 8px; font-weight: 600; transition: all 0.3s; }
-        .auth-toggle button.active { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: var(--primary-color); }
-        .auth-form { display: none; }
-        .auth-form.active { display: block; }
+        .auth-toggle {
+            display: flex;
+            background: #e5e7eb;
+            border-radius: var(--border-radius-sm);
+            padding: 5px;
+            margin-bottom: 24px;
+        }
+        .auth-toggle button {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            color: var(--text-secondary);
+        }
+        .auth-toggle button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .auth-toggle button.active {
+            background: white;
+            box-shadow: var(--card-shadow);
+            color: var(--primary-color);
+        }
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .auth-form.active {
+            display: block;
+        }
+
+        /* Modals */
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: var(--card-shadow-lg);
+        }
+        .modal-header {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 20px 24px;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+        .modal-footer {
+            border-top: 1px solid #f1f5f9;
+            padding: 16px 24px;
+        }
+
+        /* Tables */
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            padding: 16px;
+        }
+        .table tbody tr {
+            transition: background-color var(--transition-fast);
+        }
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        .table tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .table-actions .btn {
+            margin: 2px;
+            padding: 6px 10px;
+        }
 
         /* Notification toast */
-        .notification-toast { position: fixed; top: 80px; right: 20px; z-index: 9999; max-width: 350px; }
-        .notification-toast.rtl { right: auto; left: 20px; }
+        .notification-toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 380px;
+        }
+        .notification-toast.rtl {
+            right: auto;
+            left: 20px;
+        }
+        .notification-toast .toast {
+            border-radius: var(--border-radius-sm);
+            border: none;
+            box-shadow: var(--card-shadow-lg);
+            animation: slideInRight 0.4s ease;
+        }
 
-        /* Mobile improvements */
-        @media (max-width: 768px) {
-            .login-card { margin: 20px 15px; }
-            .stats-box { padding: 15px; }
-            .stats-box h3 { font-size: 1.5rem; }
-            .table-actions .btn { padding: 0.25rem 0.4rem; font-size: 0.75rem; }
-            .nav-tabs .nav-link { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+        /* Nav Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid #e2e8f0;
+            gap: 8px;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+            padding: 12px 20px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            position: relative;
+        }
+        .nav-tabs .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transition: transform var(--transition-normal);
+            border-radius: 3px 3px 0 0;
+        }
+        .nav-tabs .nav-link:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+        .nav-tabs .nav-link.active {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+        .nav-tabs .nav-link.active::after {
+            transform: scaleX(1);
         }
 
         /* Notification badge pulse */
-        .pulse-badge { animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .pulse-badge {
+            animation: pulse 2s infinite;
         }
 
-        /* Settings icon */
-        .settings-btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; }
+        /* Settings button */
+        .settings-btn {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+        }
+        .settings-btn:hover {
+            transform: rotate(30deg);
+        }
+        .settings-btn.text-danger:hover {
+            transform: scale(1.1) rotate(0);
+        }
+
+        /* Points Badge */
+        .points-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            animation: bounce 2s infinite;
+        }
+
+        /* Loading state for buttons */
+        .btn.loading {
+            pointer-events: none;
+            position: relative;
+            color: transparent !important;
+        }
+        .btn.loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty state */
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .empty-state i {
+            font-size: 4rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+        .empty-state h5 {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Order row animations */
+        .order-row {
+            animation: fadeInUp 0.4s ease forwards;
+            opacity: 0;
+        }
+        .order-row:nth-child(1) { animation-delay: 0.05s; }
+        .order-row:nth-child(2) { animation-delay: 0.1s; }
+        .order-row:nth-child(3) { animation-delay: 0.15s; }
+        .order-row:nth-child(4) { animation-delay: 0.2s; }
+        .order-row:nth-child(5) { animation-delay: 0.25s; }
+
+        /* Mobile improvements */
+        @media (max-width: 768px) {
+            body {
+                background: var(--bg-color);
+            }
+            .login-card {
+                margin: 15px;
+                border-radius: var(--border-radius-sm);
+            }
+            .stats-box {
+                padding: 16px;
+            }
+            .stats-box h3 {
+                font-size: 1.4rem;
+            }
+            .table-actions .btn {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.8rem;
+            }
+            .nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 2px;
+            }
+            .nav-tabs .nav-link {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+            .content-card {
+                border-radius: var(--border-radius-sm);
+            }
+            .form-control, .form-select {
+                padding: 10px 14px;
+            }
+            .btn {
+                padding: 10px 16px;
+            }
+            .pin-box {
+                font-size: 1.2rem;
+                letter-spacing: 4px;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Dark scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Language switcher */
+        .lang-switcher .btn {
+            padding: 6px 14px;
+            font-size: 0.85rem;
+        }
+        .lang-switcher .btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Demo accounts box */
+        .demo-box {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 1px dashed #cbd5e1;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.85rem;
+        }
+
+        /* Profile avatar */
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Section divider */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        .section-divider::before { margin-right: 16px; }
+        .section-divider::after { margin-left: 16px; }
+
+        /* Footer */
+        .app-footer {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-top: 1px solid #e2e8f0;
+        }
     </style>
 </head>
 <body>
@@ -94,16 +662,17 @@ require_once 'actions.php';
 
 <?php if (!isset($_SESSION['user'])): ?>
     <!-- ================= LOGIN/REGISTER SCREEN ================= -->
-    <div class="container">
+    <div class="container py-4">
         <div class="card login-card content-card shadow-lg">
             <div class="card-body p-4 p-md-5">
                 <div class="text-center mb-4">
                     <div class="mb-3">
-                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="max-width: 120px; height: auto;">
+                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="max-width: 100px; height: auto;" onerror="this.style.display='none'">
                     </div>
-                    <h4 class="fw-bold"><?php echo $t['app_name']; ?></h4>
-                    <div class="btn-group btn-group-sm mt-2" role="group">
-                        <a href="?lang=ar" class="btn btn-outline-secondary <?php echo $lang=='ar'?'active':''; ?>">عربي</a>
+                    <h3 class="fw-bold mb-1" style="color: var(--primary-color);"><?php echo $t['app_name']; ?></h3>
+                    <p class="text-muted small mb-3"><?php echo $t['app_desc']; ?></p>
+                    <div class="btn-group btn-group-sm lang-switcher" role="group">
+                        <a href="?lang=ar" class="btn btn-outline-secondary <?php echo $lang=='ar'?'active':''; ?>">العربية</a>
                         <a href="?lang=fr" class="btn btn-outline-secondary <?php echo $lang=='fr'?'active':''; ?>">Français</a>
                     </div>
                 </div>
@@ -113,58 +682,85 @@ require_once 'actions.php';
                 <!-- Auth Toggle -->
                 <div class="auth-toggle">
                     <button type="button" id="loginToggle" class="active" onclick="showAuthForm('login')">
-                        <i class="fas fa-sign-in-alt me-1"></i> <?php echo $t['login_title']; ?>
+                        <i class="fas fa-sign-in-alt me-2"></i><?php echo $t['login_title']; ?>
                     </button>
                     <button type="button" id="registerToggle" onclick="showAuthForm('register')">
-                        <i class="fas fa-user-plus me-1"></i> <?php echo $t['register_title']; ?>
+                        <i class="fas fa-user-plus me-2"></i><?php echo $t['register_title']; ?>
                     </button>
                 </div>
 
                 <!-- Login Form -->
-                <form method="POST" id="loginForm" class="auth-form active">
-                    <div class="form-floating mb-3">
-                        <input type="text" name="username" class="form-control" id="loginUsername" placeholder="User" required>
-                        <label for="loginUsername"><?php echo $t['user_ph']; ?></label>
+                <form method="POST" id="loginForm" class="auth-form active" onsubmit="this.querySelector('button').classList.add('loading')">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['user_ph']; ?></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
+                            <input type="text" name="username" class="form-control" placeholder="<?php echo $t['user_ph']; ?>" required autocomplete="username">
+                        </div>
                     </div>
-                    <div class="form-floating mb-4">
-                        <input type="password" name="password" class="form-control" id="loginPassword" placeholder="Pass" required>
-                        <label for="loginPassword"><?php echo $t['pass_ph']; ?></label>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required autocomplete="current-password">
+                        </div>
                     </div>
-                    <button name="do_login" class="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow-sm">
-                        <?php echo $t['btn_login']; ?> <i class="fas fa-arrow-<?php echo ($lang=='ar')?'left':'right'; ?>"></i>
+                    <button name="do_login" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
+                        <?php echo $t['btn_login']; ?> <i class="fas fa-arrow-<?php echo ($lang=='ar')?'left':'right'; ?> ms-2"></i>
                     </button>
                 </form>
 
                 <!-- Register Form -->
-                <form method="POST" id="registerForm" class="auth-form">
-                    <div class="form-floating mb-3">
-                        <input type="text" name="reg_full_name" class="form-control" id="regFullName" placeholder="Name">
-                        <label for="regFullName"><?php echo $t['full_name_ph']; ?></label>
+                <form method="POST" id="registerForm" class="auth-form" onsubmit="this.querySelector('button').classList.add('loading')">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-id-card text-muted"></i></span>
+                            <input type="text" name="reg_full_name" class="form-control" placeholder="<?php echo $t['full_name_ph']; ?>">
+                        </div>
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="text" name="reg_username" class="form-control" id="regUsername" placeholder="User" required minlength="3">
-                        <label for="regUsername"><?php echo $t['user_ph']; ?></label>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['user_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
+                            <input type="text" name="reg_username" class="form-control" placeholder="<?php echo $t['user_ph']; ?>" required minlength="3" autocomplete="username">
+                        </div>
+                        <small class="text-muted"><?php echo $t['err_username_short']; ?></small>
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="tel" name="reg_phone" class="form-control" id="regPhone" placeholder="Phone">
-                        <label for="regPhone"><?php echo $t['phone_ph']; ?></label>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
+                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_ph']; ?>">
+                        </div>
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="password" name="reg_password" class="form-control" id="regPassword" placeholder="Pass" required minlength="4">
-                        <label for="regPassword"><?php echo $t['pass_ph']; ?></label>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
+                            <input type="password" name="reg_password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required minlength="4" autocomplete="new-password">
+                        </div>
+                        <small class="text-muted"><?php echo $t['err_password_short']; ?></small>
                     </div>
-                    <div class="form-floating mb-4">
-                        <input type="password" name="reg_confirm_password" class="form-control" id="regConfirmPassword" placeholder="Confirm" required>
-                        <label for="regConfirmPassword"><?php echo $t['confirm_pass_ph']; ?></label>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['confirm_pass_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
+                            <input type="password" name="reg_confirm_password" class="form-control" placeholder="<?php echo $t['confirm_pass_ph']; ?>" required autocomplete="new-password">
+                        </div>
                     </div>
-                    <button name="do_register" class="btn btn-success w-100 py-3 fw-bold rounded-pill shadow-sm">
-                        <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus ms-1"></i>
+                    <button name="do_register" class="btn btn-success w-100 py-3 fw-bold rounded-pill">
+                        <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus ms-2"></i>
                     </button>
                 </form>
 
-                <div class="mt-4 text-center small text-muted bg-light p-2 rounded">
-                    <strong>Demo Users:</strong><br>
-                    admin / 123 | driver / 123 | client / 123
+                <div class="mt-4 text-center demo-box p-3">
+                    <div class="fw-bold text-secondary mb-2"><i class="fas fa-info-circle me-1"></i> <?php echo $t['demo_accounts']; ?></div>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <span class="badge bg-danger">admin / 123</span>
+                        <span class="badge bg-info">driver / 123</span>
+                        <span class="badge bg-success">client / 123</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -207,62 +803,97 @@ require_once 'actions.php';
 
         <?php if(isset($_GET['settings'])): ?>
             <!-- ================= SETTINGS/PROFILE PAGE ================= -->
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
+            <div class="row justify-content-center animate-fadeInUp">
+                <div class="col-lg-6 col-xl-5">
                     <div class="card content-card">
-                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="fas fa-user-cog text-primary"></i> <?php echo $t['profile']; ?></h5>
-                            <a href="index.php" class="btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-arrow-<?php echo $dir=='rtl'?'right':'left'; ?>"></i> <?php echo $t['dashboard']; ?>
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-0">
+                            <h5 class="mb-0 fw-bold"><i class="fas fa-user-cog text-primary me-2"></i><?php echo $t['profile']; ?></h5>
+                            <a href="index.php" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                <i class="fas fa-arrow-<?php echo $dir=='rtl'?'right':'left'; ?> me-1"></i> <?php echo $t['dashboard']; ?>
                             </a>
                         </div>
                         <div class="card-body p-4">
-                            <form method="POST">
+                            <form method="POST" onsubmit="this.querySelector('button[type=submit]').classList.add('loading')">
+                                <!-- Profile Header -->
                                 <div class="text-center mb-4">
-                                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width:80px;height:80px;font-size:2rem;">
+                                    <div class="profile-avatar mb-3">
                                         <i class="fas fa-user"></i>
                                     </div>
-                                    <h5 class="mt-3 mb-0"><?php echo e($u['username']); ?></h5>
-                                    <span class="badge bg-secondary"><?php echo $t[$role]; ?></span>
+                                    <h5 class="fw-bold mb-1"><?php echo e($u['full_name'] ?: $u['username']); ?></h5>
+                                    <span class="badge bg-primary rounded-pill px-3"><?php echo $t[$role]; ?></span>
+                                    <?php if($role == 'driver'): ?>
+                                    <div class="mt-2">
+                                        <span class="badge bg-warning text-dark px-3 py-2">
+                                            <i class="fas fa-coins me-1"></i> <?php echo $u['points']; ?> <?php echo $t['pts']; ?>
+                                        </span>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Personal Info Section -->
+                                <div class="section-divider">
+                                    <i class="fas fa-id-card me-2"></i> <?php echo $t['personal_info']; ?>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label"><?php echo $t['full_name_ph']; ?></label>
-                                    <input type="text" name="full_name" class="form-control" value="<?php echo e($u['full_name']); ?>">
+                                    <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
+                                        <input type="text" name="full_name" class="form-control" value="<?php echo e($u['full_name']); ?>" placeholder="<?php echo $t['full_name_ph']; ?>">
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label"><?php echo $t['phone_ph']; ?></label>
-                                    <input type="tel" name="phone" class="form-control" value="<?php echo e($u['phone']); ?>">
+                                    <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
+                                        <input type="tel" name="phone" class="form-control" value="<?php echo e($u['phone']); ?>" placeholder="<?php echo $t['phone_ph']; ?>">
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label"><?php echo $t['email_ph']; ?></label>
-                                    <input type="email" name="email" class="form-control" value="<?php echo e($u['email']); ?>">
+                                    <label class="form-label small fw-bold text-secondary"><?php echo $t['email_ph']; ?></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-envelope text-muted"></i></span>
+                                        <input type="email" name="email" class="form-control" value="<?php echo e($u['email']); ?>" placeholder="<?php echo $t['email_ph']; ?>">
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label"><?php echo $t['address']; ?></label>
-                                    <input type="text" name="profile_address" class="form-control" value="<?php echo e($u['address']); ?>">
+                                    <label class="form-label small fw-bold text-secondary"><?php echo $t['address']; ?></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                                        <input type="text" name="profile_address" class="form-control" value="<?php echo e($u['address']); ?>" placeholder="<?php echo $t['address']; ?>">
+                                    </div>
                                 </div>
 
-                                <hr class="my-4">
+                                <!-- Security Section -->
+                                <div class="section-divider">
+                                    <i class="fas fa-shield-alt me-2"></i> <?php echo $t['security']; ?>
+                                </div>
 
-                                <h6 class="mb-3"><i class="fas fa-lock"></i> <?php echo $t['password']; ?></h6>
-                                <p class="text-muted small"><?php echo $t['leave_empty_password']; ?></p>
+                                <div class="alert alert-light border-0 bg-light rounded-3 mb-3">
+                                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i> <?php echo $t['leave_empty_password']; ?></small>
+                                </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label"><?php echo $t['new_password']; ?></label>
-                                    <input type="password" name="new_password" class="form-control" minlength="4">
+                                    <label class="form-label small fw-bold text-secondary"><?php echo $t['new_password']; ?></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-key text-muted"></i></span>
+                                        <input type="password" name="new_password" class="form-control" minlength="4" placeholder="<?php echo $t['new_password']; ?>">
+                                    </div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label"><?php echo $t['confirm_new_password']; ?></label>
-                                    <input type="password" name="confirm_new_password" class="form-control">
+                                    <label class="form-label small fw-bold text-secondary"><?php echo $t['confirm_new_password']; ?></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-key text-muted"></i></span>
+                                        <input type="password" name="confirm_new_password" class="form-control" placeholder="<?php echo $t['confirm_new_password']; ?>">
+                                    </div>
                                 </div>
 
-                                <button name="update_profile" class="btn btn-primary w-100 py-2 fw-bold">
-                                    <i class="fas fa-save me-1"></i> <?php echo $t['save_changes']; ?>
+                                <button type="submit" name="update_profile" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
+                                    <i class="fas fa-check-circle me-2"></i><?php echo $t['save_changes']; ?>
                                 </button>
                             </form>
                         </div>
@@ -803,16 +1434,20 @@ require_once 'actions.php';
                                     if($res->rowCount() == 0):
                                     ?>
                                     <tr>
-                                        <td colspan="3" class="text-center py-5 text-muted">
-                                            <i class="fas fa-box-open fa-3x mb-3 opacity-25"></i><br>
-                                            <?php echo $t['empty_list']; ?>
+                                        <td colspan="3" class="empty-state">
+                                            <i class="fas fa-box-open"></i>
+                                            <h5><?php echo $t['no_orders']; ?></h5>
+                                            <p class="text-muted small mb-0">
+                                                <?php echo ($role == 'driver') ? $t['no_pending_orders'] : $t['check_back_later']; ?>
+                                            </p>
                                         </td>
                                     </tr>
                                     <?php else: while($row = $res->fetch()):
                                         $st = $row['status'];
-                                        $badge = ($st=='pending')?'badge-pending':(($st=='accepted')?'badge-accepted':(($st=='cancelled')?'badge-cancelled':'badge-delivered'));
+                                        $badge = getStatusBadge($st);
+                                        $icon = getStatusIcon($st);
                                     ?>
-                                    <tr>
+                                    <tr class="order-row">
                                         <td class="ps-4 py-3">
                                             <div class="d-flex align-items-start gap-2">
                                                 <div class="mt-1"><i class="fas fa-clock text-muted small"></i></div>
@@ -832,7 +1467,8 @@ require_once 'actions.php';
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge <?php echo $badge; ?> rounded-pill px-3 py-2 fw-normal">
+                                            <span class="badge <?php echo $badge; ?> rounded-pill px-3 py-2">
+                                                <i class="fas fa-<?php echo $icon; ?> me-1"></i>
                                                 <?php echo $t['st_'.$st]; ?>
                                             </span>
                                         </td>
@@ -840,19 +1476,19 @@ require_once 'actions.php';
                                             <?php if($role == 'driver'): ?>
 
                                                 <?php if($st == 'pending'): ?>
-                                                    <form method="POST">
+                                                    <form method="POST" onsubmit="this.querySelector('button').classList.add('loading')">
                                                         <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                                        <button name="accept_order" class="btn btn-sm btn-outline-primary fw-bold" onclick="return confirm('<?php echo $t['driver_cost']; ?>: <?php echo $points_cost_per_order; ?> <?php echo $t['points']; ?>. Confirm?')">
-                                                            <?php echo $t['driver_accept']; ?>
+                                                        <button name="accept_order" class="btn btn-sm btn-primary rounded-pill px-3" onclick="return confirm('<?php echo $t['confirm_accept']; ?>\n<?php echo $t['cost_per_order']; ?>: <?php echo $points_cost_per_order; ?> <?php echo $t['pts']; ?>')">
+                                                            <i class="fas fa-hand-pointer me-1"></i> <?php echo $t['driver_accept']; ?>
                                                         </button>
                                                     </form>
 
                                                 <?php elseif($st == 'accepted' && $row['driver_id'] == $uid): ?>
-                                                    <form method="POST" class="d-flex justify-content-end align-items-center gap-2">
+                                                    <form method="POST" class="d-flex justify-content-end align-items-center gap-2" onsubmit="this.querySelector('button').classList.add('loading')">
                                                         <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                                        <input type="text" name="pin" class="form-control form-control-sm text-center fw-bold border-success" style="width:80px" placeholder="<?php echo $t['verify_ph']; ?>" required maxlength="4" pattern="[0-9]{4}">
-                                                        <button type="submit" name="finish_job" class="btn btn-sm btn-success text-white shadow-sm" title="<?php echo $t['verify_fin']; ?>">
-                                                            <i class="fas fa-check"></i>
+                                                        <input type="text" name="pin" class="form-control form-control-sm text-center fw-bold" style="width:85px; border-color: var(--success-color);" placeholder="<?php echo $t['verify_ph']; ?>" required maxlength="4" pattern="[0-9]{4}" inputmode="numeric">
+                                                        <button type="submit" name="finish_job" class="btn btn-sm btn-success rounded-pill px-3" title="<?php echo $t['finish_delivery']; ?>">
+                                                            <i class="fas fa-check-double me-1"></i> <?php echo $t['verify_fin']; ?>
                                                         </button>
                                                     </form>
                                                 <?php endif; ?>
@@ -870,23 +1506,84 @@ require_once 'actions.php';
         <?php endif; ?>
     </div>
 
-    <div class="text-center text-muted py-4 small">
-        &copy; <?php echo date('Y'); ?> <?php echo $t['app_name']; ?>. All rights reserved.
-    </div>
+    <footer class="app-footer text-center text-muted py-4 mt-5">
+        <div class="container">
+            <p class="mb-0 small">
+                <i class="fas fa-bolt text-primary me-1"></i>
+                &copy; <?php echo date('Y'); ?> <?php echo $t['app_name']; ?>. <?php echo $t['all_rights']; ?>.
+            </p>
+        </div>
+    </footer>
 <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Navbar scroll effect
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.app-navbar');
+    if (navbar) {
+        if (window.scrollY > 10) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }
+});
+
 // Auth form toggle
 function showAuthForm(form) {
-    document.getElementById('loginForm').classList.remove('active');
-    document.getElementById('registerForm').classList.remove('active');
-    document.getElementById('loginToggle').classList.remove('active');
-    document.getElementById('registerToggle').classList.remove('active');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const loginToggle = document.getElementById('loginToggle');
+    const registerToggle = document.getElementById('registerToggle');
+
+    if (!loginForm || !registerForm) return;
+
+    loginForm.classList.remove('active');
+    registerForm.classList.remove('active');
+    loginToggle.classList.remove('active');
+    registerToggle.classList.remove('active');
 
     document.getElementById(form + 'Form').classList.add('active');
     document.getElementById(form + 'Toggle').classList.add('active');
 }
+
+// Form validation feedback
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        const inputs = this.querySelectorAll('input[required]');
+        let valid = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                valid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        // Password match check for registration
+        const password = this.querySelector('input[name="reg_password"]');
+        const confirm = this.querySelector('input[name="reg_confirm_password"]');
+        if (password && confirm && password.value !== confirm.value) {
+            valid = false;
+            confirm.classList.add('is-invalid');
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            this.querySelector('button').classList.remove('loading');
+        }
+    });
+});
+
+// Remove invalid class on input
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+});
 
 // Admin modals
 function showAddUserModal(role) {
