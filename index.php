@@ -36,7 +36,7 @@ require_once 'actions.php';
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg-color); color: #333; }
-        .login-card { max-width: 400px; margin: 60px auto; border-radius: 20px; border:none; }
+        .login-card { max-width: 420px; margin: 40px auto; border-radius: 20px; border:none; }
         .app-navbar { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .stat-card { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border-radius: 15px; border: none; }
         .content-card { border: none; border-radius: 15px; box-shadow: var(--card-shadow); background: white; overflow: hidden; }
@@ -50,18 +50,56 @@ require_once 'actions.php';
         .stats-box { background: white; border-radius: 10px; padding: 20px; box-shadow: var(--card-shadow); }
         .modal-content { border-radius: 15px; border: none; }
         .table-actions .btn { margin: 2px; }
+
+        /* Auth form toggle */
+        .auth-toggle { display: flex; background: #e5e7eb; border-radius: 10px; padding: 4px; margin-bottom: 20px; }
+        .auth-toggle button { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 8px; font-weight: 600; transition: all 0.3s; }
+        .auth-toggle button.active { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: var(--primary-color); }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        /* Notification toast */
+        .notification-toast { position: fixed; top: 80px; right: 20px; z-index: 9999; max-width: 350px; }
+        .notification-toast.rtl { right: auto; left: 20px; }
+
+        /* Mobile improvements */
+        @media (max-width: 768px) {
+            .login-card { margin: 20px 15px; }
+            .stats-box { padding: 15px; }
+            .stats-box h3 { font-size: 1.5rem; }
+            .table-actions .btn { padding: 0.25rem 0.4rem; font-size: 0.75rem; }
+            .nav-tabs .nav-link { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+        }
+
+        /* Notification badge pulse */
+        .pulse-badge { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Settings icon */
+        .settings-btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
+<!-- Audio for notifications -->
+<audio id="notificationSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleAMCP6XS2qNrCwJEoc/YoWkKAU2gzNadZggBVJ/J1JhkBwFen8bRlWMGAWSexs+SYQUBap/Ez49fBAFwn8LNjF0DABZ4tsW/fEIAAneyyLt3PgADd7DHuHY8AAR2r8W2dDoABXatw7RzOAAFdazCtHI3AAZ0q8GsaTIABnOqv6tnLwAGc6m+qGUtAAdzqL2mZCwAB3KnvKRjKgAHcqW6o2IpAAdxpLmhYCgAB3GjuJ9fJwAHcKK3nl4mAAdwobacXSUAB2+gtZtcJAAHb5+0mVsjAAdun7OYWiIAB26espdZIQAHbZ2xlVggAAdsm6+SVB0ABmqZrY9RGgAFZ5aqi04XAAVllaeHTxQABWKSpIZNEQAEYI+hg0oOAANdjaB/RwwAA1qLnnxFCgACWImceEMIAAJVhpl1QAYAAVKDlnI9BAABUICTbzoCAA=='"/>
+</audio>
+
+<!-- Notification Toast Container -->
+<div id="notificationContainer" class="notification-toast <?php echo $dir == 'rtl' ? 'rtl' : ''; ?>"></div>
+
 <?php if (!isset($_SESSION['user'])): ?>
-    <!-- ================= LOGIN SCREEN ================= -->
+    <!-- ================= LOGIN/REGISTER SCREEN ================= -->
     <div class="container">
         <div class="card login-card content-card shadow-lg">
-            <div class="card-body p-5">
+            <div class="card-body p-4 p-md-5">
                 <div class="text-center mb-4">
                     <div class="mb-3">
-                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="max-width: 150px; height: auto;">
+                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="max-width: 120px; height: auto;">
                     </div>
                     <h4 class="fw-bold"><?php echo $t['app_name']; ?></h4>
                     <div class="btn-group btn-group-sm mt-2" role="group">
@@ -69,26 +107,65 @@ require_once 'actions.php';
                         <a href="?lang=fr" class="btn btn-outline-secondary <?php echo $lang=='fr'?'active':''; ?>">Français</a>
                     </div>
                 </div>
+
                 <?php echo getFlash(); ?>
-                <form method="POST">
+
+                <!-- Auth Toggle -->
+                <div class="auth-toggle">
+                    <button type="button" id="loginToggle" class="active" onclick="showAuthForm('login')">
+                        <i class="fas fa-sign-in-alt me-1"></i> <?php echo $t['login_title']; ?>
+                    </button>
+                    <button type="button" id="registerToggle" onclick="showAuthForm('register')">
+                        <i class="fas fa-user-plus me-1"></i> <?php echo $t['register_title']; ?>
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <form method="POST" id="loginForm" class="auth-form active">
                     <div class="form-floating mb-3">
-                        <input type="text" name="username" class="form-control" id="floatingInput" placeholder="User" required>
-                        <label for="floatingInput"><?php echo $t['user_ph']; ?></label>
+                        <input type="text" name="username" class="form-control" id="loginUsername" placeholder="User" required>
+                        <label for="loginUsername"><?php echo $t['user_ph']; ?></label>
                     </div>
                     <div class="form-floating mb-4">
-                        <input type="password" name="password" class="form-control" id="floatingPass" placeholder="Pass" required>
-                        <label for="floatingPass"><?php echo $t['pass_ph']; ?></label>
+                        <input type="password" name="password" class="form-control" id="loginPassword" placeholder="Pass" required>
+                        <label for="loginPassword"><?php echo $t['pass_ph']; ?></label>
                     </div>
                     <button name="do_login" class="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow-sm">
                         <?php echo $t['btn_login']; ?> <i class="fas fa-arrow-<?php echo ($lang=='ar')?'left':'right'; ?>"></i>
                     </button>
-                    <div class="mt-4 text-center small text-muted bg-light p-2 rounded">
-                        <strong>Demo Users:</strong><br>
-                        admin / 123<br>
-                        driver / 123<br>
-                        client / 123
-                    </div>
                 </form>
+
+                <!-- Register Form -->
+                <form method="POST" id="registerForm" class="auth-form">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="reg_full_name" class="form-control" id="regFullName" placeholder="Name">
+                        <label for="regFullName"><?php echo $t['full_name_ph']; ?></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="reg_username" class="form-control" id="regUsername" placeholder="User" required minlength="3">
+                        <label for="regUsername"><?php echo $t['user_ph']; ?></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="tel" name="reg_phone" class="form-control" id="regPhone" placeholder="Phone">
+                        <label for="regPhone"><?php echo $t['phone_ph']; ?></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" name="reg_password" class="form-control" id="regPassword" placeholder="Pass" required minlength="4">
+                        <label for="regPassword"><?php echo $t['pass_ph']; ?></label>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input type="password" name="reg_confirm_password" class="form-control" id="regConfirmPassword" placeholder="Confirm" required>
+                        <label for="regConfirmPassword"><?php echo $t['confirm_pass_ph']; ?></label>
+                    </div>
+                    <button name="do_register" class="btn btn-success w-100 py-3 fw-bold rounded-pill shadow-sm">
+                        <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus ms-1"></i>
+                    </button>
+                </form>
+
+                <div class="mt-4 text-center small text-muted bg-light p-2 rounded">
+                    <strong>Demo Users:</strong><br>
+                    admin / 123 | driver / 123 | client / 123
+                </div>
             </div>
         </div>
     </div>
@@ -96,20 +173,29 @@ require_once 'actions.php';
 <?php else:
     $u = $_SESSION['user'];
     $role = $u['role'];
+    $uid = $u['id'];
 ?>
     <!-- ================= DASHBOARD ================= -->
     <nav class="navbar app-navbar sticky-top mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.php">
                 <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 40px; width: auto;">
-                <span class="text-primary"><?php echo $t['app_name']; ?></span>
+                <span class="text-primary d-none d-sm-inline"><?php echo $t['app_name']; ?></span>
             </a>
-            <div class="d-flex align-items-center gap-3">
-                <div class="d-none d-md-block text-end lh-1">
-                    <span class="d-block fw-bold small"><?php echo e($u['username']); ?></span>
+            <div class="d-flex align-items-center gap-2">
+                <?php if($role == 'driver'): ?>
+                <span class="badge bg-warning text-dark px-3 py-2" id="pointsBadge">
+                    <i class="fas fa-coins"></i> <span id="currentPoints"><?php echo $u['points']; ?></span>
+                </span>
+                <?php endif; ?>
+                <div class="d-none d-md-block text-end lh-1 me-2">
+                    <span class="d-block fw-bold small"><?php echo e($u['full_name'] ?: $u['username']); ?></span>
                     <span class="badge bg-secondary rounded-pill" style="font-size:0.6rem"><?php echo strtoupper($role); ?></span>
                 </div>
-                <a href="?logout=1" class="btn btn-light text-danger rounded-circle shadow-sm" title="<?php echo $t['logout']; ?>">
+                <a href="?settings=1" class="btn btn-light settings-btn rounded-circle shadow-sm" title="<?php echo $t['settings']; ?>">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <a href="?logout=1" class="btn btn-light text-danger settings-btn rounded-circle shadow-sm" title="<?php echo $t['logout']; ?>">
                     <i class="fas fa-power-off"></i>
                 </a>
             </div>
@@ -119,33 +205,98 @@ require_once 'actions.php';
     <div class="container pb-5">
         <?php echo getFlash(); ?>
 
-        <?php if($role == 'admin'): ?>
+        <?php if(isset($_GET['settings'])): ?>
+            <!-- ================= SETTINGS/PROFILE PAGE ================= -->
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card content-card">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-user-cog text-primary"></i> <?php echo $t['profile']; ?></h5>
+                            <a href="index.php" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-arrow-<?php echo $dir=='rtl'?'right':'left'; ?>"></i> <?php echo $t['dashboard']; ?>
+                            </a>
+                        </div>
+                        <div class="card-body p-4">
+                            <form method="POST">
+                                <div class="text-center mb-4">
+                                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width:80px;height:80px;font-size:2rem;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <h5 class="mt-3 mb-0"><?php echo e($u['username']); ?></h5>
+                                    <span class="badge bg-secondary"><?php echo $t[$role]; ?></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label"><?php echo $t['full_name_ph']; ?></label>
+                                    <input type="text" name="full_name" class="form-control" value="<?php echo e($u['full_name']); ?>">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label"><?php echo $t['phone_ph']; ?></label>
+                                    <input type="tel" name="phone" class="form-control" value="<?php echo e($u['phone']); ?>">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label"><?php echo $t['email_ph']; ?></label>
+                                    <input type="email" name="email" class="form-control" value="<?php echo e($u['email']); ?>">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label"><?php echo $t['address']; ?></label>
+                                    <input type="text" name="profile_address" class="form-control" value="<?php echo e($u['address']); ?>">
+                                </div>
+
+                                <hr class="my-4">
+
+                                <h6 class="mb-3"><i class="fas fa-lock"></i> <?php echo $t['password']; ?></h6>
+                                <p class="text-muted small"><?php echo $t['leave_empty_password']; ?></p>
+
+                                <div class="mb-3">
+                                    <label class="form-label"><?php echo $t['new_password']; ?></label>
+                                    <input type="password" name="new_password" class="form-control" minlength="4">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label"><?php echo $t['confirm_new_password']; ?></label>
+                                    <input type="password" name="confirm_new_password" class="form-control">
+                                </div>
+
+                                <button name="update_profile" class="btn btn-primary w-100 py-2 fw-bold">
+                                    <i class="fas fa-save me-1"></i> <?php echo $t['save_changes']; ?>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <?php elseif($role == 'admin'): ?>
             <!-- ================= ADMIN DASHBOARD ================= -->
 
             <!-- Statistics -->
             <div class="row g-3 mb-4">
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="stats-box text-center">
                         <i class="fas fa-users fa-2x text-primary mb-2"></i>
                         <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='customer'")->fetchColumn(); ?></h3>
                         <small class="text-muted"><?php echo $t['customer']; ?>s</small>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="stats-box text-center">
                         <i class="fas fa-motorcycle fa-2x text-info mb-2"></i>
                         <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver'")->fetchColumn(); ?></h3>
                         <small class="text-muted"><?php echo $t['driver']; ?>s</small>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="stats-box text-center">
                         <i class="fas fa-box fa-2x text-success mb-2"></i>
                         <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM orders1")->fetchColumn(); ?></h3>
                         <small class="text-muted"><?php echo $t['total_orders']; ?></small>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="stats-box text-center">
                         <i class="fas fa-check-circle fa-2x text-warning mb-2"></i>
                         <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver' AND status='active'")->fetchColumn(); ?></h3>
@@ -155,18 +306,18 @@ require_once 'actions.php';
             </div>
 
             <!-- Admin Tabs -->
-            <ul class="nav nav-tabs mb-4" role="tablist">
+            <ul class="nav nav-tabs mb-4 flex-nowrap overflow-auto" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#customers"><i class="fas fa-users"></i> <?php echo $t['manage_users']; ?></a>
+                    <a class="nav-link active" data-bs-toggle="tab" href="#customers"><i class="fas fa-users"></i> <span class="d-none d-sm-inline"><?php echo $t['manage_users']; ?></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#drivers"><i class="fas fa-motorcycle"></i> <?php echo $t['manage_drivers']; ?></a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#drivers"><i class="fas fa-motorcycle"></i> <span class="d-none d-sm-inline"><?php echo $t['manage_drivers']; ?></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#orders"><i class="fas fa-box"></i> <?php echo $t['manage_orders']; ?></a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#orders"><i class="fas fa-box"></i> <span class="d-none d-sm-inline"><?php echo $t['manage_orders']; ?></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#points"><i class="fas fa-coins"></i> <?php echo $t['add_points']; ?></a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#points"><i class="fas fa-coins"></i> <span class="d-none d-sm-inline"><?php echo $t['add_points']; ?></span></a>
                 </li>
             </ul>
 
@@ -174,7 +325,7 @@ require_once 'actions.php';
                 <!-- CUSTOMERS TAB -->
                 <div class="tab-pane fade show active" id="customers">
                     <div class="card content-card">
-                        <div class="card-header bg-white py-3 d-flex justify-content-between">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between flex-wrap gap-2">
                             <h5 class="mb-0"><i class="fas fa-users text-primary"></i> <?php echo $t['manage_users']; ?></h5>
                             <button class="btn btn-sm btn-primary" onclick="showAddUserModal('customer')">
                                 <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
@@ -186,9 +337,8 @@ require_once 'actions.php';
                                     <tr>
                                         <th>ID</th>
                                         <th><?php echo $t['username']; ?></th>
-                                        <th><?php echo $t['points']; ?></th>
+                                        <th class="d-none d-md-table-cell"><?php echo $t['phone_ph']; ?></th>
                                         <th><?php echo $t['status']; ?></th>
-                                        <th>Date</th>
                                         <th class="text-end"><?php echo $t['action']; ?></th>
                                     </tr>
                                 </thead>
@@ -199,8 +349,13 @@ require_once 'actions.php';
                                     ?>
                                     <tr>
                                         <td><?php echo $user['id']; ?></td>
-                                        <td><strong><?php echo e($user['username']); ?></strong></td>
-                                        <td><?php echo $user['points']; ?></td>
+                                        <td>
+                                            <strong><?php echo e($user['username']); ?></strong>
+                                            <?php if($user['full_name']): ?>
+                                            <br><small class="text-muted"><?php echo e($user['full_name']); ?></small>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="d-none d-md-table-cell"><?php echo e($user['phone']); ?></td>
                                         <td>
                                             <?php if($user['status'] == 'active'): ?>
                                                 <span class="badge bg-success"><?php echo $t['active']; ?></span>
@@ -208,7 +363,6 @@ require_once 'actions.php';
                                                 <span class="badge bg-danger"><?php echo $t['banned']; ?></span>
                                             <?php endif; ?>
                                         </td>
-                                        <td><small class="text-muted"><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></small></td>
                                         <td class="text-end table-actions">
                                             <button class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
                                                 <i class="fas fa-edit"></i>
@@ -231,7 +385,7 @@ require_once 'actions.php';
                 <!-- DRIVERS TAB -->
                 <div class="tab-pane fade" id="drivers">
                     <div class="card content-card">
-                        <div class="card-header bg-white py-3 d-flex justify-content-between">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between flex-wrap gap-2">
                             <h5 class="mb-0"><i class="fas fa-motorcycle text-info"></i> <?php echo $t['manage_drivers']; ?></h5>
                             <button class="btn btn-sm btn-info text-white" onclick="showAddUserModal('driver')">
                                 <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
@@ -245,7 +399,6 @@ require_once 'actions.php';
                                         <th><?php echo $t['username']; ?></th>
                                         <th><?php echo $t['points']; ?></th>
                                         <th><?php echo $t['status']; ?></th>
-                                        <th>Date</th>
                                         <th class="text-end"><?php echo $t['action']; ?></th>
                                     </tr>
                                 </thead>
@@ -256,7 +409,12 @@ require_once 'actions.php';
                                     ?>
                                     <tr>
                                         <td><?php echo $driver['id']; ?></td>
-                                        <td><strong><?php echo e($driver['username']); ?></strong></td>
+                                        <td>
+                                            <strong><?php echo e($driver['username']); ?></strong>
+                                            <?php if($driver['full_name']): ?>
+                                            <br><small class="text-muted"><?php echo e($driver['full_name']); ?></small>
+                                            <?php endif; ?>
+                                        </td>
                                         <td><span class="badge bg-warning text-dark"><?php echo $driver['points']; ?> pts</span></td>
                                         <td>
                                             <?php if($driver['status'] == 'active'): ?>
@@ -265,7 +423,6 @@ require_once 'actions.php';
                                                 <span class="badge bg-danger"><?php echo $t['banned']; ?></span>
                                             <?php endif; ?>
                                         </td>
-                                        <td><small class="text-muted"><?php echo date('d/m/Y', strtotime($driver['created_at'])); ?></small></td>
                                         <td class="text-end table-actions">
                                             <button class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($driver)); ?>)">
                                                 <i class="fas fa-edit"></i>
@@ -288,7 +445,7 @@ require_once 'actions.php';
                 <!-- ORDERS TAB -->
                 <div class="tab-pane fade" id="orders">
                     <div class="card content-card">
-                        <div class="card-header bg-white py-3 d-flex justify-content-between">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between flex-wrap gap-2">
                             <h5 class="mb-0"><i class="fas fa-box text-success"></i> <?php echo $t['manage_orders']; ?></h5>
                             <button class="btn btn-sm btn-success text-white" data-bs-toggle="modal" data-bs-target="#addOrderModal">
                                 <i class="fas fa-plus"></i> <?php echo $t['add_order']; ?>
@@ -300,11 +457,9 @@ require_once 'actions.php';
                                     <tr>
                                         <th>ID</th>
                                         <th><?php echo $t['order_details']; ?></th>
-                                        <th>Customer</th>
-                                        <th>Driver</th>
+                                        <th class="d-none d-md-table-cell">Customer</th>
                                         <th><?php echo $t['status']; ?></th>
                                         <th>PIN</th>
-                                        <th>Date</th>
                                         <th class="text-end"><?php echo $t['action']; ?></th>
                                     </tr>
                                 </thead>
@@ -318,14 +473,12 @@ require_once 'actions.php';
                                     <tr>
                                         <td><?php echo $order['id']; ?></td>
                                         <td>
-                                            <div class="fw-bold"><?php echo e($order['details']); ?></div>
+                                            <div class="fw-bold text-truncate" style="max-width:150px;"><?php echo e($order['details']); ?></div>
                                             <small class="text-muted"><i class="fas fa-map-marker-alt"></i> <?php echo e($order['address']); ?></small>
                                         </td>
-                                        <td><?php echo e($order['customer_name']); ?></td>
-                                        <td><?php echo $order['driver_name'] ? e($order['driver_name']) : '<span class="text-muted">-</span>'; ?></td>
+                                        <td class="d-none d-md-table-cell"><?php echo e($order['customer_name']); ?></td>
                                         <td><span class="badge <?php echo $badge; ?>"><?php echo $t['st_'.$st]; ?></span></td>
                                         <td><code><?php echo $order['delivery_code']; ?></code></td>
-                                        <td><small><?php echo date('d/m H:i', strtotime($order['created_at'])); ?></small></td>
                                         <td class="text-end table-actions">
                                             <button class="btn btn-sm btn-outline-primary" onclick="editOrder(<?php echo htmlspecialchars(json_encode($order)); ?>)">
                                                 <i class="fas fa-edit"></i>
@@ -575,10 +728,10 @@ require_once 'actions.php';
                     <div class="card stat-card mb-3">
                         <div class="card-body text-center p-4">
                             <h6 class="opacity-75 mb-2"><?php echo $t['balance']; ?></h6>
-                            <h1 class="display-4 fw-bold mb-0"><?php echo $u['points']; ?></h1>
+                            <h1 class="display-4 fw-bold mb-0" id="driverPoints"><?php echo $u['points']; ?></h1>
                             <span class="opacity-75"><?php echo $t['points']; ?></span>
                             <?php if($u['points'] < $points_cost_per_order): ?>
-                                <div class="mt-3 bg-white text-danger rounded p-2 small fw-bold">
+                                <div class="mt-3 bg-white text-danger rounded p-2 small fw-bold" id="lowBalanceWarning">
                                     <i class="fas fa-exclamation-triangle"></i> <?php echo $t['err_low_bal']; ?>
                                 </div>
                             <?php endif; ?>
@@ -618,13 +771,18 @@ require_once 'actions.php';
                 <div class="col-lg-8">
                     <div class="card content-card h-100">
                         <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                            <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-list-ul"></i> <?php echo $t['recent_orders']; ?></h5>
+                            <h5 class="fw-bold mb-0 text-primary">
+                                <i class="fas fa-list-ul"></i> <?php echo $t['recent_orders']; ?>
+                                <?php if($role == 'driver'): ?>
+                                <span class="badge bg-warning text-dark ms-2 pulse-badge" id="pendingBadge" style="display:none;">0</span>
+                                <?php endif; ?>
+                            </h5>
                             <?php if($role == 'customer'): ?>
                                 <span class="badge bg-light text-dark border"><?php echo $u['username']; ?></span>
                             <?php endif; ?>
                         </div>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="ordersContainer">
                             <table class="table align-middle mb-0 table-hover">
                                 <thead class="bg-light">
                                     <tr class="text-secondary small text-uppercase">
@@ -719,6 +877,18 @@ require_once 'actions.php';
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Auth form toggle
+function showAuthForm(form) {
+    document.getElementById('loginForm').classList.remove('active');
+    document.getElementById('registerForm').classList.remove('active');
+    document.getElementById('loginToggle').classList.remove('active');
+    document.getElementById('registerToggle').classList.remove('active');
+
+    document.getElementById(form + 'Form').classList.add('active');
+    document.getElementById(form + 'Toggle').classList.add('active');
+}
+
+// Admin modals
 function showAddUserModal(role) {
     document.getElementById('addUserRole').value = role;
     var modal = new bootstrap.Modal(document.getElementById('addUserModal'));
@@ -746,6 +916,100 @@ function editOrder(order) {
     var modal = new bootstrap.Modal(document.getElementById('editOrderModal'));
     modal.show();
 }
+
+// Notification functions
+function showNotification(title, message, type = 'info') {
+    const container = document.getElementById('notificationContainer');
+    const id = 'toast-' + Date.now();
+
+    const bgClass = type === 'success' ? 'bg-success' : (type === 'warning' ? 'bg-warning' : 'bg-primary');
+    const textClass = type === 'warning' ? 'text-dark' : 'text-white';
+
+    const toast = document.createElement('div');
+    toast.id = id;
+    toast.className = `toast show ${bgClass} ${textClass} mb-2`;
+    toast.innerHTML = `
+        <div class="toast-header ${bgClass} ${textClass}">
+            <i class="fas fa-bell me-2"></i>
+            <strong class="me-auto">${title}</strong>
+            <button type="button" class="btn-close btn-close-white" onclick="this.closest('.toast').remove()"></button>
+        </div>
+        <div class="toast-body">${message}</div>
+    `;
+
+    container.appendChild(toast);
+
+    // Play notification sound
+    playNotificationSound();
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }, 5000);
+}
+
+function playNotificationSound() {
+    const sound = document.getElementById('notificationSound');
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+    }
+}
+
+<?php if(isset($_SESSION['user']) && !isset($_GET['settings'])): ?>
+// Real-time notifications polling
+let lastCheck = Math.floor(Date.now() / 1000);
+const userRole = '<?php echo $role; ?>';
+
+function checkForUpdates() {
+    fetch(`api.php?action=check_orders&last_check=${lastCheck}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                lastCheck = data.timestamp;
+
+                if (userRole === 'driver' && data.should_notify && data.new_orders > 0) {
+                    showNotification(
+                        '<?php echo $t['new_order_alert']; ?>',
+                        `${data.new_orders} <?php echo $t['new_order']; ?>`,
+                        'warning'
+                    );
+
+                    // Update pending badge
+                    const badge = document.getElementById('pendingBadge');
+                    if (badge && data.pending_count > 0) {
+                        badge.textContent = data.pending_count;
+                        badge.style.display = 'inline';
+                    }
+
+                    // Refresh page to show new orders
+                    setTimeout(() => location.reload(), 2000);
+                }
+
+                if (userRole === 'customer' && data.should_notify && data.changed_orders.length > 0) {
+                    data.changed_orders.forEach(order => {
+                        showNotification(
+                            '<?php echo $t['order_status_changed']; ?>',
+                            `Order #${order.order_id}: ${order.status}`,
+                            'success'
+                        );
+                    });
+
+                    // Refresh page to show updated status
+                    setTimeout(() => location.reload(), 2000);
+                }
+            }
+        })
+        .catch(err => console.log('Check failed:', err));
+}
+
+// Check every 10 seconds
+setInterval(checkForUpdates, 10000);
+
+// Initial check after 3 seconds
+setTimeout(checkForUpdates, 3000);
+<?php endif; ?>
 </script>
 </body>
 </html>

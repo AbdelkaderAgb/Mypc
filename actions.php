@@ -8,22 +8,59 @@
 if (isset($_SESSION['user'])) {
 
     // ==========================================
+    // PROFILE UPDATE (All Users)
+    // ==========================================
+    if (isset($_POST['update_profile'])) {
+        $full_name = trim($_POST['full_name']);
+        $phone = trim($_POST['phone']);
+        $email = trim($_POST['email']);
+        $address = trim($_POST['profile_address']);
+        $new_password = trim($_POST['new_password']);
+        $confirm_new_password = trim($_POST['confirm_new_password']);
+
+        // Update profile info
+        $conn->prepare("UPDATE users1 SET full_name=?, phone=?, email=?, address=? WHERE id=?")
+             ->execute([$full_name, $phone, $email, $address, $uid]);
+
+        // Update password if provided
+        if (!empty($new_password)) {
+            if (strlen($new_password) < 4) {
+                setFlash('error', $t['err_password_short'] ?? 'Password must be at least 4 characters');
+                header("Location: index.php?settings=1");
+                exit();
+            } elseif ($new_password !== $confirm_new_password) {
+                setFlash('error', $t['err_password_mismatch'] ?? 'Passwords do not match');
+                header("Location: index.php?settings=1");
+                exit();
+            } else {
+                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                $conn->prepare("UPDATE users1 SET password=? WHERE id=?")->execute([$hashed_password, $uid]);
+            }
+        }
+
+        setFlash('success', $t['success_profile'] ?? 'Profile updated successfully');
+        header("Location: index.php?settings=1");
+        exit();
+    }
+
+    // ==========================================
     // ADMIN ACTIONS
     // ==========================================
-    if($u['role'] == 'admin') {
+    if ($u['role'] == 'admin') {
 
-        // Add User
-        if(isset($_POST['admin_add_user'])) {
+        // Add User (with hashed password)
+        if (isset($_POST['admin_add_user'])) {
             $username = trim($_POST['username']);
             $password = trim($_POST['password']);
             $role = $_POST['role'];
             $points = (int)$_POST['points'];
 
             try {
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $stmt = $conn->prepare("INSERT INTO users1 (username, password, role, points, status) VALUES (?, ?, ?, ?, 'active')");
-                $stmt->execute([$username, $password, $role, $points]);
+                $stmt->execute([$username, $hashed_password, $role, $points]);
                 setFlash('success', 'User added successfully');
-            } catch(PDOException $e) {
+            } catch (PDOException $e) {
                 setFlash('error', 'Username already exists');
             }
             header("Location: index.php");
@@ -31,15 +68,16 @@ if (isset($_SESSION['user'])) {
         }
 
         // Edit User
-        if(isset($_POST['admin_edit_user'])) {
+        if (isset($_POST['admin_edit_user'])) {
             $user_id = (int)$_POST['user_id'];
             $password = trim($_POST['password']);
             $role = $_POST['role'];
             $points = (int)$_POST['points'];
 
-            if(!empty($password)) {
+            if (!empty($password)) {
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $conn->prepare("UPDATE users1 SET password=?, role=?, points=? WHERE id=?")
-                     ->execute([$password, $role, $points, $user_id]);
+                     ->execute([$hashed_password, $role, $points, $user_id]);
             } else {
                 $conn->prepare("UPDATE users1 SET role=?, points=? WHERE id=?")
                      ->execute([$role, $points, $user_id]);
@@ -50,7 +88,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Ban/Unban User
-        if(isset($_GET['toggle_ban'])) {
+        if (isset($_GET['toggle_ban'])) {
             $user_id = (int)$_GET['toggle_ban'];
             $stmt = $conn->prepare("SELECT status FROM users1 WHERE id=?");
             $stmt->execute([$user_id]);
@@ -64,7 +102,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Delete User
-        if(isset($_GET['delete_user'])) {
+        if (isset($_GET['delete_user'])) {
             $user_id = (int)$_GET['delete_user'];
             $conn->prepare("DELETE FROM users1 WHERE id=? AND id!=?")->execute([$user_id, $uid]);
             setFlash('success', 'User deleted');
@@ -85,7 +123,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Add Order (Admin)
-        if(isset($_POST['admin_add_order'])) {
+        if (isset($_POST['admin_add_order'])) {
             $customer_name = trim($_POST['customer_name']);
             $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
             $address = mb_convert_encoding(trim($_POST['address']), 'UTF-8', 'UTF-8');
@@ -101,7 +139,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Edit Order (Admin)
-        if(isset($_POST['admin_edit_order'])) {
+        if (isset($_POST['admin_edit_order'])) {
             $order_id = (int)$_POST['order_id'];
             $customer_name = trim($_POST['customer_name']);
             $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
@@ -117,7 +155,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Cancel Order
-        if(isset($_GET['cancel_order'])) {
+        if (isset($_GET['cancel_order'])) {
             $order_id = (int)$_GET['cancel_order'];
             $conn->prepare("UPDATE orders1 SET status='cancelled' WHERE id=?")->execute([$order_id]);
             setFlash('success', 'Order cancelled');
@@ -126,7 +164,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Delete Order
-        if(isset($_GET['delete_order'])) {
+        if (isset($_GET['delete_order'])) {
             $order_id = (int)$_GET['delete_order'];
             $conn->prepare("DELETE FROM orders1 WHERE id=?")->execute([$order_id]);
             setFlash('success', 'Order deleted');
@@ -142,7 +180,7 @@ if (isset($_SESSION['user'])) {
         $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
         $address = mb_convert_encoding(trim($_POST['address']), 'UTF-8', 'UTF-8');
 
-        if($details && $address) {
+        if ($details && $address) {
             $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
             $stmt = $conn->prepare("INSERT INTO orders1 (customer_name, details, address, status, delivery_code) VALUES (?, ?, ?, 'pending', ?)");
