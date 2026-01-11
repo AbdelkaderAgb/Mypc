@@ -688,6 +688,50 @@ require_once 'actions.php';
             font-weight: 600;
         }
 
+        /* Verified badge */
+        .verified-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+        }
+        .verified-badge-sm {
+            width: 20px;
+            height: 20px;
+            font-size: 0.6rem;
+            border-width: 2px;
+        }
+        .avatar-with-badge {
+            position: relative;
+            display: inline-block;
+        }
+        .not-verified-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+        }
+
         /* Phone verification badge */
         .phone-verified {
             color: var(--success-color);
@@ -804,10 +848,10 @@ require_once 'actions.php';
                 <!-- Login Form -->
                 <form method="POST" id="loginForm" class="auth-form active" onsubmit="this.querySelector('button').classList.add('loading')">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['user_ph']; ?></label>
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['login_identifier'] ?? 'Phone or Username'; ?></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                            <input type="text" name="username" class="form-control" placeholder="<?php echo $t['user_ph']; ?>" required autocomplete="username">
+                            <input type="text" name="username" class="form-control" placeholder="<?php echo $t['login_identifier_ph'] ?? 'Phone number or username'; ?>" required autocomplete="username">
                         </div>
                     </div>
                     <div class="mb-4">
@@ -816,54 +860,44 @@ require_once 'actions.php';
                             <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
                             <input type="password" name="password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required autocomplete="current-password">
                         </div>
+                        <small class="text-muted"><?php echo $t['new_users_phone_password'] ?? 'New users: use your phone number as password'; ?></small>
                     </div>
                     <button name="do_login" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
                         <?php echo $t['btn_login']; ?> <i class="fas fa-arrow-<?php echo ($lang=='ar')?'left':'right'; ?> ms-2"></i>
                     </button>
                 </form>
 
-                <!-- Register Form -->
+                <!-- Register Form (Phone-Only) -->
                 <form method="POST" id="registerForm" class="auth-form" onsubmit="this.querySelector('button').classList.add('loading')">
+                    <div class="alert alert-info border-0 small mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <?php echo $t['register_phone_info'] ?? 'Register with your phone number. You can complete your profile later.'; ?>
+                    </div>
+
                     <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
+                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '06XXXXXXXX'; ?>" required minlength="8" inputmode="tel">
+                        </div>
+                        <small class="text-muted"><?php echo $t['phone_password_note'] ?? 'Your phone number will be your initial password'; ?></small>
+                    </div>
+
+                    <div class="mb-4">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-id-card text-muted"></i></span>
+                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
                             <input type="text" name="reg_full_name" class="form-control" placeholder="<?php echo $t['full_name_ph']; ?>">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['user_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                            <input type="text" name="reg_username" class="form-control" placeholder="<?php echo $t['user_ph']; ?>" required minlength="3" autocomplete="username">
-                        </div>
-                        <small class="text-muted"><?php echo $t['err_username_short']; ?></small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
-                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_ph']; ?>">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
-                            <input type="password" name="reg_password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required minlength="4" autocomplete="new-password">
-                        </div>
-                        <small class="text-muted"><?php echo $t['err_password_short']; ?></small>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['confirm_pass_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
-                            <input type="password" name="reg_confirm_password" class="form-control" placeholder="<?php echo $t['confirm_pass_ph']; ?>" required autocomplete="new-password">
-                        </div>
-                    </div>
+
                     <button name="do_register" class="btn btn-success w-100 py-3 fw-bold rounded-pill">
                         <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus ms-2"></i>
                     </button>
+
+                    <div class="text-center mt-3">
+                        <small class="text-muted"><?php echo $t['complete_profile_later'] ?? 'You can set a custom username and password after registration'; ?></small>
+                    </div>
                 </form>
 
                 <div class="mt-4 text-center demo-box p-3">
@@ -929,17 +963,24 @@ require_once 'actions.php';
                                 <!-- Profile Header -->
                                 <div class="text-center mb-4">
                                     <label for="avatarInput" class="d-inline-block" style="cursor: pointer;">
-                                        <div class="profile-avatar mb-3">
-                                            <?php
-                                            $avatarUrl = getAvatarUrl($u);
-                                            if ($avatarUrl): ?>
-                                                <img src="<?php echo e($avatarUrl); ?>" alt="Avatar">
-                                            <?php else: ?>
-                                                <span style="font-size: 2rem;"><?php echo getUserInitials($u); ?></span>
-                                            <?php endif; ?>
-                                            <div class="profile-avatar-edit">
-                                                <i class="fas fa-camera"></i> <?php echo $t['change_photo'] ?? 'Change'; ?>
+                                        <div class="avatar-with-badge">
+                                            <div class="profile-avatar mb-3">
+                                                <?php
+                                                $avatarUrl = getAvatarUrl($u);
+                                                if ($avatarUrl): ?>
+                                                    <img src="<?php echo e($avatarUrl); ?>" alt="Avatar">
+                                                <?php else: ?>
+                                                    <span style="font-size: 2rem;"><?php echo getUserInitials($u); ?></span>
+                                                <?php endif; ?>
+                                                <div class="profile-avatar-edit">
+                                                    <i class="fas fa-camera"></i> <?php echo $t['change_photo'] ?? 'Change'; ?>
+                                                </div>
                                             </div>
+                                            <?php if($role == 'driver' && !empty($u['is_verified'])): ?>
+                                                <div class="verified-badge" title="<?php echo $t['driver_verified'] ?? 'Verified Driver'; ?>">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                     </label>
                                     <input type="file" name="avatar" id="avatarInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="this.form.submit()">
@@ -954,6 +995,17 @@ require_once 'actions.php';
                                     <?php endif; ?>
 
                                     <?php if($role == 'driver'): ?>
+                                    <!-- Driver Verification Status -->
+                                    <?php if(!empty($u['is_verified'])): ?>
+                                        <div class="mt-2">
+                                            <span class="badge bg-success px-3 py-2"><i class="fas fa-certificate me-1"></i> <?php echo $t['driver_verified'] ?? 'Verified Driver'; ?></span>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="mt-2">
+                                            <span class="badge bg-warning text-dark px-3 py-2"><i class="fas fa-clock me-1"></i> <?php echo $t['pending_verification'] ?? 'Pending Verification'; ?></span>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <div class="mt-2">
                                         <span class="badge bg-warning text-dark px-3 py-2">
                                             <i class="fas fa-coins me-1"></i> <?php echo $u['points']; ?> <?php echo $t['pts']; ?>
@@ -1220,9 +1272,10 @@ require_once 'actions.php';
                             <table class="table table-hover mb-0">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>ID</th>
-                                        <th><?php echo $t['username']; ?></th>
+                                        <th><?php echo $t['driver'] ?? 'Driver'; ?></th>
+                                        <th><?php echo $t['phone_ph']; ?></th>
                                         <th><?php echo $t['points']; ?></th>
+                                        <th><?php echo $t['verification'] ?? 'Verification'; ?></th>
                                         <th><?php echo $t['status']; ?></th>
                                         <th class="text-end"><?php echo $t['action']; ?></th>
                                     </tr>
@@ -1231,16 +1284,55 @@ require_once 'actions.php';
                                     <?php
                                     $drivers = $conn->query("SELECT * FROM users1 WHERE role='driver' ORDER BY id DESC");
                                     while($driver = $drivers->fetch()):
+                                        $driverAvatarUrl = getAvatarUrl($driver);
+                                        $isVerified = !empty($driver['is_verified']);
                                     ?>
                                     <tr>
-                                        <td><?php echo $driver['id']; ?></td>
                                         <td>
-                                            <strong><?php echo e($driver['username']); ?></strong>
-                                            <?php if($driver['full_name']): ?>
-                                            <br><small class="text-muted"><?php echo e($driver['full_name']); ?></small>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar-with-badge">
+                                                    <div style="width:40px;height:40px;border-radius:50%;background:<?php echo getAvatarColor('driver'); ?>;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:0.9rem;overflow:hidden;">
+                                                        <?php if($driverAvatarUrl): ?>
+                                                            <img src="<?php echo e($driverAvatarUrl); ?>" style="width:100%;height:100%;object-fit:cover;">
+                                                        <?php else: ?>
+                                                            <?php echo getUserInitials($driver); ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <?php if($isVerified): ?>
+                                                        <div class="verified-badge verified-badge-sm" title="<?php echo $t['driver_verified'] ?? 'Verified Driver'; ?>">
+                                                            <i class="fas fa-check"></i>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div>
+                                                    <strong><?php echo e($driver['username']); ?></strong>
+                                                    <?php if($driver['full_name']): ?>
+                                                    <br><small class="text-muted"><?php echo e($driver['full_name']); ?></small>
+                                                    <?php endif; ?>
+                                                    <?php if(!empty($driver['serial_no'])): ?>
+                                                    <br><small class="text-primary"><?php echo e($driver['serial_no']); ?></small>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <?php if(!empty($driver['phone'])): ?>
+                                                <span class="text-dark"><?php echo e($driver['phone']); ?></span>
+                                                <?php if($driver['phone_verified']): ?>
+                                                    <i class="fas fa-check-circle text-success ms-1" title="<?php echo $t['phone_verified'] ?? 'Verified'; ?>"></i>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
                                             <?php endif; ?>
                                         </td>
                                         <td><span class="badge bg-warning text-dark"><?php echo $driver['points']; ?> pts</span></td>
+                                        <td>
+                                            <?php if($isVerified): ?>
+                                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i><?php echo $t['verified'] ?? 'Verified'; ?></span>
+                                            <?php else: ?>
+                                                <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i><?php echo $t['pending_verification'] ?? 'Pending'; ?></span>
+                                            <?php endif; ?>
+                                        </td>
                                         <td>
                                             <?php if($driver['status'] == 'active'): ?>
                                                 <span class="badge bg-success"><?php echo $t['active']; ?></span>
@@ -1249,6 +1341,10 @@ require_once 'actions.php';
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-end table-actions">
+                                            <!-- Verify/Unverify Button -->
+                                            <a href="?toggle_verify=<?php echo $driver['id']; ?>" class="btn btn-sm btn-<?php echo $isVerified ? 'success' : 'outline-success'; ?>" onclick="return confirm('<?php echo $isVerified ? ($t['confirm_unverify'] ?? 'Remove verification?') : ($t['confirm_verify'] ?? 'Verify this driver?'); ?>')" title="<?php echo $isVerified ? ($t['unverify'] ?? 'Remove Verification') : ($t['verify_driver'] ?? 'Verify Driver'); ?>">
+                                                <i class="fas fa-<?php echo $isVerified ? 'certificate' : 'user-check'; ?>"></i>
+                                            </a>
                                             <button class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($driver)); ?>)">
                                                 <i class="fas fa-edit"></i>
                                             </button>

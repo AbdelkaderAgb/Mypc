@@ -569,6 +569,32 @@ $text = [
         'phone_verified' => 'رقم الهاتف مؤكد',
         'add_phone_first' => 'أضف رقم هاتفك أولاً',
 
+        // Driver Verification
+        'driver_verified' => 'سائق موثق',
+        'driver_not_verified' => 'يجب أن يتم التحقق من حسابك من قبل المدير قبل قبول الطلبات',
+        'pending_verification' => 'في انتظار التحقق',
+        'verified' => 'موثق',
+        'verification' => 'التحقق',
+        'verify_driver' => 'توثيق السائق',
+        'unverify' => 'إلغاء التوثيق',
+        'confirm_verify' => 'هل تريد توثيق هذا السائق؟',
+        'confirm_unverify' => 'هل تريد إلغاء التوثيق؟',
+        'driver_verified_success' => 'تم توثيق السائق بنجاح! يمكنه الآن قبول الطلبات.',
+        'driver_unverified' => 'تم إلغاء توثيق السائق.',
+
+        // Phone-Only Registration
+        'register_phone_info' => 'سجل برقم هاتفك. يمكنك إكمال ملفك الشخصي لاحقاً.',
+        'phone_example' => '06XXXXXXXX',
+        'phone_password_note' => 'رقم هاتفك سيكون كلمة المرور الأولية',
+        'complete_profile_later' => 'يمكنك تعيين اسم مستخدم وكلمة مرور بعد التسجيل',
+        'login_identifier' => 'الهاتف أو اسم المستخدم',
+        'login_identifier_ph' => 'رقم الهاتف أو اسم المستخدم',
+        'new_users_phone_password' => 'المستخدمون الجدد: استخدم رقم هاتفك ككلمة مرور',
+        'err_phone_invalid' => 'الرجاء إدخال رقم هاتف صحيح',
+        'err_phone_exists' => 'رقم الهاتف مسجل بالفعل. الرجاء تسجيل الدخول.',
+        'success_register_phone' => 'مرحباً! تم إنشاء حسابك. يمكنك إكمال ملفك الشخصي في الإعدادات.',
+        'profile_completed' => 'تم تحديث الملف الشخصي بنجاح!',
+
         // Driver Enhanced
         'go_online' => 'أصبح متصلاً',
         'go_offline' => 'أصبح غير متصل',
@@ -865,6 +891,32 @@ $text = [
         'verify_phone' => 'Vérifier le téléphone',
         'phone_verified' => 'Téléphone vérifié',
         'add_phone_first' => 'Ajoutez d\'abord votre téléphone',
+
+        // Driver Verification
+        'driver_verified' => 'Chauffeur vérifié',
+        'driver_not_verified' => 'Votre compte doit être vérifié par l\'admin avant d\'accepter des commandes',
+        'pending_verification' => 'En attente de vérification',
+        'verified' => 'Vérifié',
+        'verification' => 'Vérification',
+        'verify_driver' => 'Vérifier le chauffeur',
+        'unverify' => 'Retirer la vérification',
+        'confirm_verify' => 'Vérifier ce chauffeur?',
+        'confirm_unverify' => 'Retirer la vérification?',
+        'driver_verified_success' => 'Chauffeur vérifié avec succès! Il peut maintenant accepter des commandes.',
+        'driver_unverified' => 'Vérification du chauffeur retirée.',
+
+        // Phone-Only Registration
+        'register_phone_info' => 'Inscrivez-vous avec votre téléphone. Vous pourrez compléter votre profil plus tard.',
+        'phone_example' => '06XXXXXXXX',
+        'phone_password_note' => 'Votre numéro sera votre mot de passe initial',
+        'complete_profile_later' => 'Vous pouvez définir un nom d\'utilisateur et mot de passe après inscription',
+        'login_identifier' => 'Téléphone ou nom d\'utilisateur',
+        'login_identifier_ph' => 'Numéro de téléphone ou nom d\'utilisateur',
+        'new_users_phone_password' => 'Nouveaux utilisateurs: utilisez votre numéro comme mot de passe',
+        'err_phone_invalid' => 'Veuillez entrer un numéro de téléphone valide',
+        'err_phone_exists' => 'Ce numéro est déjà enregistré. Veuillez vous connecter.',
+        'success_register_phone' => 'Bienvenue! Votre compte a été créé. Vous pouvez compléter votre profil dans Paramètres.',
+        'profile_completed' => 'Profil mis à jour avec succès!',
 
         // Driver Enhanced
         'go_online' => 'Passer en ligne',

@@ -152,6 +152,27 @@ if (isset($_SESSION['user'])) {
             exit();
         }
 
+        // Toggle Driver Verification
+        if (isset($_GET['toggle_verify'])) {
+            $driver_id = (int)$_GET['toggle_verify'];
+            $stmt = $conn->prepare("SELECT is_verified, role FROM users1 WHERE id=?");
+            $stmt->execute([$driver_id]);
+            $driver = $stmt->fetch();
+
+            if ($driver && $driver['role'] == 'driver') {
+                $new_verified = $driver['is_verified'] ? 0 : 1;
+                $conn->prepare("UPDATE users1 SET is_verified=? WHERE id=?")->execute([$new_verified, $driver_id]);
+
+                if ($new_verified) {
+                    setFlash('success', $t['driver_verified_success'] ?? 'Driver verified successfully! They can now accept orders.');
+                } else {
+                    setFlash('warning', $t['driver_unverified'] ?? 'Driver verification removed.');
+                }
+            }
+            header("Location: index.php#drivers");
+            exit();
+        }
+
         // Delete User
         if (isset($_GET['delete_user'])) {
             $user_id = (int)$_GET['delete_user'];
@@ -280,6 +301,13 @@ if (isset($_SESSION['user'])) {
     // ==========================================
     if (isset($_POST['accept_order']) && $u['role'] == 'driver') {
         $oid = (int)$_POST['oid'];
+
+        // Check driver verification by admin
+        if (empty($u['is_verified'])) {
+            setFlash('error', $t['driver_not_verified'] ?? 'Your account must be verified by admin before accepting orders');
+            header("Location: index.php");
+            exit();
+        }
 
         // Check phone verification
         if (!isPhoneVerified($u)) {
