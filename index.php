@@ -845,13 +845,13 @@ require_once 'actions.php';
                     </button>
                 </div>
 
-                <!-- Login Form -->
+                <!-- Login Form (Phone + Password) -->
                 <form method="POST" id="loginForm" class="auth-form active" onsubmit="this.querySelector('button').classList.add('loading')">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['login_identifier'] ?? 'Phone or Username'; ?></label>
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?></label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                            <input type="text" name="username" class="form-control" placeholder="<?php echo $t['login_identifier_ph'] ?? 'Phone number or username'; ?>" required autocomplete="username">
+                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
+                            <input type="tel" name="phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '06XXXXXXXX'; ?>" required inputmode="tel">
                         </div>
                     </div>
                     <div class="mb-4">
@@ -860,30 +860,23 @@ require_once 'actions.php';
                             <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
                             <input type="password" name="password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required autocomplete="current-password">
                         </div>
-                        <small class="text-muted"><?php echo $t['new_users_phone_password'] ?? 'New users: use your phone number as password'; ?></small>
                     </div>
                     <button name="do_login" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
                         <?php echo $t['btn_login']; ?> <i class="fas fa-arrow-<?php echo ($lang=='ar')?'left':'right'; ?> ms-2"></i>
                     </button>
                 </form>
 
-                <!-- Register Form (Phone-Only) -->
+                <!-- Register Form (Phone + Password) -->
                 <form method="POST" id="registerForm" class="auth-form" onsubmit="this.querySelector('button').classList.add('loading')">
-                    <div class="alert alert-info border-0 small mb-4">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <?php echo $t['register_phone_info'] ?? 'Register with your phone number. You can complete your profile later.'; ?>
-                    </div>
-
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
                             <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '06XXXXXXXX'; ?>" required minlength="8" inputmode="tel">
                         </div>
-                        <small class="text-muted"><?php echo $t['phone_password_note'] ?? 'Your phone number will be your initial password'; ?></small>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
@@ -891,21 +884,35 @@ require_once 'actions.php';
                         </div>
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
+                            <input type="password" name="reg_password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required minlength="4" autocomplete="new-password">
+                        </div>
+                        <small class="text-muted"><?php echo $t['err_password_short']; ?></small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['confirm_pass_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
+                            <input type="password" name="reg_confirm_password" class="form-control" placeholder="<?php echo $t['confirm_pass_ph']; ?>" required autocomplete="new-password">
+                        </div>
+                    </div>
+
                     <button name="do_register" class="btn btn-success w-100 py-3 fw-bold rounded-pill">
                         <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus ms-2"></i>
                     </button>
-
-                    <div class="text-center mt-3">
-                        <small class="text-muted"><?php echo $t['complete_profile_later'] ?? 'You can set a custom username and password after registration'; ?></small>
-                    </div>
                 </form>
 
                 <div class="mt-4 text-center demo-box p-3">
                     <div class="fw-bold text-secondary mb-2"><i class="fas fa-info-circle me-1"></i> <?php echo $t['demo_accounts']; ?></div>
+                    <small class="text-muted d-block mb-2"><?php echo $t['demo_phone_login'] ?? 'Demo accounts (Phone / Password):'; ?></small>
                     <div class="d-flex flex-wrap justify-content-center gap-2">
-                        <span class="badge bg-danger">admin / 123</span>
-                        <span class="badge bg-info">driver / 123</span>
-                        <span class="badge bg-success">client / 123</span>
+                        <span class="badge bg-danger">22200000001 / 123</span>
+                        <span class="badge bg-info">22200000002 / 123</span>
+                        <span class="badge bg-success">22200000003 / 123</span>
                     </div>
                 </div>
             </div>
