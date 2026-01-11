@@ -117,8 +117,13 @@ function getStatusIcon($status) {
  * Get user avatar URL or generate initials avatar
  */
 function getAvatarUrl($user) {
-    if (!empty($user['avatar_url']) && file_exists(__DIR__ . '/' . $user['avatar_url'])) {
-        return $user['avatar_url'];
+    if (!empty($user['avatar_url'])) {
+        $fullPath = __DIR__ . '/' . $user['avatar_url'];
+        if (file_exists($fullPath)) {
+            // Add cache-busting parameter based on file modification time
+            $mtime = filemtime($fullPath);
+            return $user['avatar_url'] . '?v=' . $mtime;
+        }
     }
     // Return null to use initials avatar
     return null;
@@ -275,8 +280,8 @@ function getDriverStats($conn, $driverId) {
 function getClientStats($conn, $clientId, $username) {
     $stats = [
         'total_orders' => 0,
-        'active_orders' => 0,
-        'completed_orders' => 0,
+        'active' => 0,
+        'delivered' => 0,
         'this_month' => 0
     ];
 
@@ -288,12 +293,12 @@ function getClientStats($conn, $clientId, $username) {
     // Active orders (pending, accepted, picked_up)
     $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE (client_id = ? OR customer_name = ?) AND status IN ('pending', 'accepted', 'picked_up')");
     $stmt->execute([$clientId, $username]);
-    $stats['active_orders'] = $stmt->fetchColumn();
+    $stats['active'] = $stmt->fetchColumn();
 
-    // Completed
+    // Delivered
     $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE (client_id = ? OR customer_name = ?) AND status = 'delivered'");
     $stmt->execute([$clientId, $username]);
-    $stats['completed_orders'] = $stmt->fetchColumn();
+    $stats['delivered'] = $stmt->fetchColumn();
 
     // This month
     $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE (client_id = ? OR customer_name = ?) AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())");
@@ -638,7 +643,10 @@ $text = [
         'this_week' => 'هذا الأسبوع',
         'this_month' => 'هذا الشهر',
         'orders_count' => 'عدد الطلبات',
-        'delivery_count' => 'عدد التوصيلات'
+        'delivery_count' => 'عدد التوصيلات',
+
+        // Help
+        'need_help' => 'تحتاج مساعدة؟'
     ],
 
     'fr' => [
@@ -956,7 +964,10 @@ $text = [
         'this_week' => 'Cette semaine',
         'this_month' => 'Ce mois',
         'orders_count' => 'Nombre de commandes',
-        'delivery_count' => 'Nombre de livraisons'
+        'delivery_count' => 'Nombre de livraisons',
+
+        // Help
+        'need_help' => 'Besoin d\'aide?'
     ]
 ];
 $t = $text[$lang];

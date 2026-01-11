@@ -808,10 +808,67 @@ require_once 'actions.php';
 </head>
 <body>
 
-<!-- Audio for notifications -->
-<audio id="notificationSound" preload="auto">
-    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleAMCP6XS2qNrCwJEoc/YoWkKAU2gzNadZggBVJ/J1JhkBwFen8bRlWMGAWSexs+SYQUBap/Ez49fBAFwn8LNjF0DABZ4tsW/fEIAAneyyLt3PgADd7DHuHY8AAR2r8W2dDoABXatw7RzOAAFdazCtHI3AAZ0q8GsaTIABnOqv6tnLwAGc6m+qGUtAAdzqL2mZCwAB3KnvKRjKgAHcqW6o2IpAAdxpLmhYCgAB3GjuJ9fJwAHcKK3nl4mAAdwobacXSUAB2+gtZtcJAAHb5+0mVsjAAdun7OYWiIAB26espdZIQAHbZ2xlVggAAdsm6+SVB0ABmqZrY9RGgAFZ5aqi04XAAVllaeHTxQABWKSpIZNEQAEYI+hg0oOAANdjaB/RwwAA1qLnnxFCgACWImceEMIAAJVhpl1QAYAAVKDlnI9BAABUICTbzoCAA=='"/>
-</audio>
+<!-- Audio for notifications - Using Web Audio API for better sound -->
+<script>
+// Web Audio API notification sound generator
+let audioContext = null;
+function getAudioContext() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioContext;
+}
+
+function createNotificationSound() {
+    try {
+        const ctx = getAudioContext();
+
+        // Resume context if suspended (needed for user interaction requirement)
+        if (ctx.state === 'suspended') {
+            ctx.resume();
+        }
+
+        const currentTime = ctx.currentTime;
+
+        // Create oscillator for the main tone
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        // Connect nodes
+        osc1.connect(gainNode);
+        osc2.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        // Configure sound - pleasant notification tone
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(880, currentTime); // A5
+        osc1.frequency.setValueAtTime(1046.5, currentTime + 0.1); // C6
+
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(659.25, currentTime); // E5
+        osc2.frequency.setValueAtTime(783.99, currentTime + 0.1); // G5
+
+        // Envelope
+        gainNode.gain.setValueAtTime(0, currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, currentTime + 0.02);
+        gainNode.gain.linearRampToValueAtTime(0.2, currentTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0.3, currentTime + 0.12);
+        gainNode.gain.linearRampToValueAtTime(0, currentTime + 0.3);
+
+        // Start and stop
+        osc1.start(currentTime);
+        osc2.start(currentTime);
+        osc1.stop(currentTime + 0.3);
+        osc2.stop(currentTime + 0.3);
+
+        return true;
+    } catch(e) {
+        console.log('Audio not available:', e);
+        return false;
+    }
+}
+</script>
 
 <!-- Notification Toast Container -->
 <div id="notificationContainer" class="notification-toast <?php echo $dir == 'rtl' ? 'rtl' : ''; ?>"></div>
@@ -853,7 +910,6 @@ require_once 'actions.php';
                             <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
                             <input type="tel" name="phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" pattern="[234][0-9]{7}">
                         </div>
-                        <small class="text-muted"><?php echo $t['phone_format_hint'] ?? '8 digits starting with 2, 3, or 4'; ?></small>
                     </div>
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?></label>
@@ -870,19 +926,18 @@ require_once 'actions.php';
                 <!-- Register Form (Phone + Password) -->
                 <form method="POST" id="registerForm" class="auth-form" onsubmit="this.querySelector('button').classList.add('loading')">
                     <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
+                            <input type="text" name="reg_full_name" class="form-control" placeholder="<?php echo $t['full_name_ph']; ?>" required minlength="2">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
                             <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" minlength="8" pattern="[234][0-9]{7}">
-                        </div>
-                        <small class="text-muted"><?php echo $t['phone_format_hint'] ?? '8 digits starting with 2, 3, or 4'; ?></small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                            <input type="text" name="reg_full_name" class="form-control" placeholder="<?php echo $t['full_name_ph']; ?>">
                         </div>
                     </div>
 
@@ -892,7 +947,6 @@ require_once 'actions.php';
                             <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
                             <input type="password" name="reg_password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required minlength="4" autocomplete="new-password">
                         </div>
-                        <small class="text-muted"><?php echo $t['err_password_short']; ?></small>
                     </div>
 
                     <div class="mb-4">
@@ -908,14 +962,14 @@ require_once 'actions.php';
                     </button>
                 </form>
 
-                <div class="mt-4 text-center demo-box p-3">
-                    <div class="fw-bold text-secondary mb-2"><i class="fas fa-info-circle me-1"></i> <?php echo $t['demo_accounts']; ?></div>
-                    <small class="text-muted d-block mb-2"><?php echo $t['demo_phone_login'] ?? 'Demo accounts (Phone / Password):'; ?></small>
-                    <div class="d-flex flex-wrap justify-content-center gap-2">
-                        <span class="badge bg-danger">20000001 / 123</span>
-                        <span class="badge bg-info">30000002 / 123</span>
-                        <span class="badge bg-success">40000003 / 123</span>
-                    </div>
+                <!-- Help Contact Info -->
+                <div class="mt-4 text-center p-3">
+                    <small class="text-muted">
+                        <?php echo $t['need_help'] ?? 'Need help?'; ?>
+                        <a href="mailto:<?php echo $help_email; ?>" class="text-primary"><?php echo $help_email; ?></a>
+                        <br>
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" class="text-success"><i class="fab fa-whatsapp"></i> <?php echo $help_phone; ?></a>
+                    </small>
                 </div>
             </div>
         </div>
@@ -1054,7 +1108,7 @@ require_once 'actions.php';
                                     <?php if($role == 'customer'): ?>
                                     <?php
                                     // Get client stats
-                                    $clientStats = getClientStats($conn, $u['username']);
+                                    $clientStats = getClientStats($conn, $u['id'], $u['username']);
                                     ?>
                                     <div class="mini-stats">
                                         <div class="mini-stat">
@@ -1435,30 +1489,70 @@ require_once 'actions.php';
                     <div class="card content-card" style="max-width: 500px;">
                         <div class="card-body p-4">
                             <h5 class="fw-bold mb-4"><i class="fas fa-coins text-warning"></i> <?php echo $t['add_points']; ?></h5>
+
+                            <!-- Search Box -->
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-search me-1"></i> <?php echo $t['search'] ?? 'Search'; ?> (ID / <?php echo $t['serial_no'] ?? 'Serial No.'; ?>)</label>
+                                <input type="text" id="driverSearchInput" class="form-control" placeholder="<?php echo $t['search'] ?? 'Search'; ?>..." onkeyup="filterDrivers()">
+                            </div>
+
                             <form method="POST">
                                 <div class="mb-3">
-                                    <label class="form-label">Driver</label>
-                                    <select name="driver_id" class="form-select" required>
-                                        <option value="">Select Driver</option>
+                                    <label class="form-label"><?php echo $t['driver'] ?? 'Driver'; ?></label>
+                                    <select name="driver_id" id="driverSelect" class="form-select" required>
+                                        <option value=""><?php echo $t['select_driver'] ?? 'Select Driver'; ?></option>
                                         <?php
-                                        $ds = $conn->query("SELECT id, username, points FROM users1 WHERE role='driver' ORDER BY username");
+                                        $ds = $conn->query("SELECT id, serial_no, username, full_name, phone, points FROM users1 WHERE role='driver' ORDER BY username");
                                         while($d=$ds->fetch()) {
-                                            echo "<option value='{$d['id']}'>{$d['username']} (Current: {$d['points']} pts)</option>";
+                                            $displayName = $d['full_name'] ?: $d['username'];
+                                            $serialNo = $d['serial_no'] ?: 'N/A';
+                                            echo "<option value='{$d['id']}' data-serial='{$serialNo}' data-phone='{$d['phone']}'>[{$serialNo}] {$displayName} ({$d['points']} pts)</option>";
                                         }
                                         ?>
                                     </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label">Amount</label>
+                                    <label class="form-label"><?php echo $t['amount'] ?? 'Amount'; ?></label>
                                     <input type="number" name="amount" class="form-control" placeholder="20" min="1" required>
                                 </div>
                                 <button name="recharge" class="btn btn-warning w-100 fw-bold">
-                                    <i class="fas fa-plus"></i> Add Points
+                                    <i class="fas fa-plus"></i> <?php echo $t['add_points'] ?? 'Add Points'; ?>
                                 </button>
                             </form>
                         </div>
                     </div>
                 </div>
+
+                <script>
+                function filterDrivers() {
+                    const search = document.getElementById('driverSearchInput').value.toLowerCase();
+                    const select = document.getElementById('driverSelect');
+                    const options = select.querySelectorAll('option');
+
+                    options.forEach(option => {
+                        if (option.value === '') {
+                            option.style.display = '';
+                            return;
+                        }
+                        const text = option.textContent.toLowerCase();
+                        const serial = (option.dataset.serial || '').toLowerCase();
+                        const phone = (option.dataset.phone || '').toLowerCase();
+                        const id = option.value;
+
+                        if (text.includes(search) || serial.includes(search) || phone.includes(search) || id.includes(search)) {
+                            option.style.display = '';
+                        } else {
+                            option.style.display = 'none';
+                        }
+                    });
+
+                    // Auto-select if only one match
+                    const visible = Array.from(options).filter(o => o.style.display !== 'none' && o.value !== '');
+                    if (visible.length === 1) {
+                        select.value = visible[0].value;
+                    }
+                }
+                </script>
             </div>
 
             <!-- Add User Modal -->
@@ -1855,12 +1949,34 @@ require_once 'actions.php';
                                             <?php elseif($role == 'customer'): ?>
 
                                                 <?php if($st == 'pending'): ?>
-                                                    <form method="POST" onsubmit="return confirm('<?php echo $t['confirm_cancel'] ?? 'Cancel this order?'; ?>');">
-                                                        <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                                        <button type="submit" name="customer_cancel" class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                                            <i class="fas fa-times me-1"></i> <?php echo $t['cancel'] ?? 'Cancel'; ?>
-                                                        </button>
-                                                    </form>
+                                                    <a href="?customer_cancel=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('<?php echo $t['confirm_cancel'] ?? 'Cancel this order?'; ?>');">
+                                                        <i class="fas fa-times me-1"></i> <?php echo $t['cancel'] ?? 'Cancel'; ?>
+                                                    </a>
+
+                                                <?php elseif($st == 'accepted' || $st == 'picked_up'): ?>
+                                                    <?php
+                                                    // Get driver info for this order
+                                                    $driverStmt = $conn->prepare("SELECT id, full_name, phone, avatar_url, rating, is_verified FROM users1 WHERE id = ?");
+                                                    $driverStmt->execute([$row['driver_id']]);
+                                                    $orderDriver = $driverStmt->fetch();
+                                                    $driverAvatarUrl = $orderDriver ? getAvatarUrl($orderDriver) : null;
+                                                    ?>
+                                                    <button type="button" class="btn btn-sm btn-info text-white rounded-pill px-3"
+                                                            onclick="showOrderTracking(<?php echo htmlspecialchars(json_encode([
+                                                                'id' => $row['id'],
+                                                                'status' => $st,
+                                                                'details' => $row['details'],
+                                                                'address' => $row['address'],
+                                                                'driver_name' => $orderDriver['full_name'] ?? 'Driver',
+                                                                'driver_phone' => $orderDriver['phone'] ?? '',
+                                                                'driver_rating' => $orderDriver['rating'] ?? 5,
+                                                                'driver_verified' => $orderDriver['is_verified'] ?? 0,
+                                                                'driver_avatar' => $driverAvatarUrl,
+                                                                'accepted_at' => $row['accepted_at'],
+                                                                'picked_at' => $row['picked_at']
+                                                            ])); ?>)">
+                                                        <i class="fas fa-map-marker-alt me-1"></i> <?php echo $t['track_order'] ?? 'Track'; ?>
+                                                    </button>
                                                 <?php endif; ?>
 
                                             <?php endif; ?>
@@ -1873,6 +1989,146 @@ require_once 'actions.php';
                     </div>
                 </div>
             </div>
+        <?php endif; ?>
+
+        <?php if($role == 'customer'): ?>
+        <!-- Order Tracking Modal -->
+        <div class="modal fade" id="orderTrackingModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title"><i class="fas fa-map-marker-alt me-2"></i><?php echo $t['track_order'] ?? 'Track Order'; ?></h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <!-- Order Progress -->
+                        <div class="order-progress mb-4">
+                            <div class="progress-track">
+                                <div class="progress-step completed" id="step-pending">
+                                    <div class="step-icon"><i class="fas fa-receipt"></i></div>
+                                    <div class="step-label"><?php echo $t['st_pending'] ?? 'Pending'; ?></div>
+                                </div>
+                                <div class="progress-step" id="step-accepted">
+                                    <div class="step-icon"><i class="fas fa-truck"></i></div>
+                                    <div class="step-label"><?php echo $t['st_accepted'] ?? 'Accepted'; ?></div>
+                                </div>
+                                <div class="progress-step" id="step-picked_up">
+                                    <div class="step-icon"><i class="fas fa-box"></i></div>
+                                    <div class="step-label"><?php echo $t['st_picked_up'] ?? 'Picked Up'; ?></div>
+                                </div>
+                                <div class="progress-step" id="step-delivered">
+                                    <div class="step-icon"><i class="fas fa-check-double"></i></div>
+                                    <div class="step-label"><?php echo $t['st_delivered'] ?? 'Delivered'; ?></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Driver Info -->
+                        <div class="driver-info-card bg-light rounded-3 p-3 mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="driver-avatar-lg" id="tracking-driver-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="mb-0 fw-bold" id="tracking-driver-name">Driver</h6>
+                                        <span class="badge bg-success" id="tracking-verified-badge" style="display:none;">
+                                            <i class="fas fa-check-circle"></i> <?php echo $t['verified'] ?? 'Verified'; ?>
+                                        </span>
+                                    </div>
+                                    <div class="text-warning small" id="tracking-driver-rating">
+                                        <i class="fas fa-star"></i> 5.0
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex gap-2">
+                                <a href="#" id="tracking-call-btn" class="btn btn-success btn-sm flex-grow-1 rounded-pill">
+                                    <i class="fas fa-phone me-1"></i> <?php echo $t['call_driver'] ?? 'Call'; ?>
+                                </a>
+                                <a href="#" id="tracking-whatsapp-btn" class="btn btn-outline-success btn-sm flex-grow-1 rounded-pill">
+                                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Order Details -->
+                        <div class="order-details-card border rounded-3 p-3">
+                            <h6 class="fw-bold mb-2"><i class="fas fa-info-circle text-primary me-2"></i><?php echo $t['order_details'] ?? 'Order Details'; ?></h6>
+                            <p class="mb-2 small" id="tracking-order-details">-</p>
+                            <p class="mb-0 small text-muted"><i class="fas fa-map-marker-alt text-danger me-1"></i> <span id="tracking-order-address">-</span></p>
+                        </div>
+
+                        <!-- Time Info -->
+                        <div class="mt-3 text-center">
+                            <small class="text-muted" id="tracking-time-info"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+        .order-progress { padding: 0 10px; }
+        .progress-track { display: flex; justify-content: space-between; position: relative; }
+        .progress-track::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        .progress-step.completed .step-icon,
+        .progress-step.active .step-icon {
+            background: var(--primary-color, #0d6efd);
+            color: white;
+        }
+        .progress-step.active .step-icon {
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2); }
+            50% { box-shadow: 0 0 0 8px rgba(13, 110, 253, 0.1); }
+        }
+        .step-label { font-size: 0.7rem; color: #666; text-align: center; }
+        .driver-avatar-lg {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0891b2, #0d6efd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            overflow: hidden;
+        }
+        .driver-avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
+        </style>
         <?php endif; ?>
     </div>
 
@@ -1984,6 +2240,74 @@ function editOrder(order) {
     modal.show();
 }
 
+// Order tracking function for customers
+function showOrderTracking(order) {
+    // Reset all steps
+    document.querySelectorAll('.progress-step').forEach(step => {
+        step.classList.remove('completed', 'active');
+    });
+
+    // Mark completed and active steps based on status
+    const steps = ['pending', 'accepted', 'picked_up', 'delivered'];
+    const currentIndex = steps.indexOf(order.status);
+
+    steps.forEach((step, index) => {
+        const stepEl = document.getElementById('step-' + step);
+        if (stepEl) {
+            if (index < currentIndex) {
+                stepEl.classList.add('completed');
+            } else if (index === currentIndex) {
+                stepEl.classList.add('completed', 'active');
+            }
+        }
+    });
+
+    // Set driver info
+    document.getElementById('tracking-driver-name').textContent = order.driver_name;
+    document.getElementById('tracking-driver-rating').innerHTML = '<i class="fas fa-star"></i> ' + parseFloat(order.driver_rating).toFixed(1);
+
+    // Set avatar
+    const avatarEl = document.getElementById('tracking-driver-avatar');
+    if (order.driver_avatar) {
+        avatarEl.innerHTML = '<img src="' + order.driver_avatar + '" alt="Driver">';
+    } else {
+        avatarEl.innerHTML = '<i class="fas fa-user"></i>';
+    }
+
+    // Show verified badge
+    const verifiedBadge = document.getElementById('tracking-verified-badge');
+    verifiedBadge.style.display = order.driver_verified ? 'inline-block' : 'none';
+
+    // Set contact buttons
+    if (order.driver_phone) {
+        document.getElementById('tracking-call-btn').href = 'tel:+222' + order.driver_phone;
+        document.getElementById('tracking-whatsapp-btn').href = 'https://wa.me/222' + order.driver_phone;
+    }
+
+    // Set order details
+    document.getElementById('tracking-order-details').textContent = order.details;
+    document.getElementById('tracking-order-address').textContent = order.address;
+
+    // Calculate and show time info
+    let timeInfo = '';
+    if (order.accepted_at) {
+        const acceptedTime = new Date(order.accepted_at);
+        const now = new Date();
+        const diffMins = Math.floor((now - acceptedTime) / 60000);
+        if (diffMins < 60) {
+            timeInfo = '<?php echo $t['driver_assigned'] ?? 'Driver assigned'; ?> ' + diffMins + ' <?php echo $t['min'] ?? 'min'; ?> ago';
+        } else {
+            const diffHours = Math.floor(diffMins / 60);
+            timeInfo = '<?php echo $t['driver_assigned'] ?? 'Driver assigned'; ?> ' + diffHours + 'h ago';
+        }
+    }
+    document.getElementById('tracking-time-info').textContent = timeInfo;
+
+    // Show modal
+    var modal = new bootstrap.Modal(document.getElementById('orderTrackingModal'));
+    modal.show();
+}
+
 // Notification functions
 function showNotification(title, message, type = 'info') {
     const container = document.getElementById('notificationContainer');
@@ -2017,12 +2341,15 @@ function showNotification(title, message, type = 'info') {
 }
 
 function playNotificationSound() {
-    const sound = document.getElementById('notificationSound');
-    if (sound) {
-        sound.currentTime = 0;
-        sound.play().catch(() => {});
-    }
+    // Use Web Audio API for notification sound
+    createNotificationSound();
 }
+
+// Initialize audio context on first user interaction (required by browsers)
+document.addEventListener('click', function initAudio() {
+    getAudioContext();
+    document.removeEventListener('click', initAudio);
+}, { once: true });
 
 <?php if(isset($_SESSION['user']) && !isset($_GET['settings'])): ?>
 // Real-time notifications polling

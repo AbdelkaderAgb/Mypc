@@ -5,6 +5,15 @@
  * This file contains all business logic for admin, driver, and customer actions
  */
 
+// ==========================================
+// AUTO-EXPIRE OLD PENDING ORDERS (3 hours)
+// ==========================================
+try {
+    $conn->exec("UPDATE orders1 SET status='cancelled', cancelled_at=NOW(), cancel_reason='Auto-expired: No driver accepted within 3 hours' WHERE status='pending' AND created_at < DATE_SUB(NOW(), INTERVAL {$order_expiry_hours} HOUR)");
+} catch (Exception $e) {
+    // Silently fail - table might not exist yet
+}
+
 // Only process actions if user is logged in
 if (isset($_SESSION['user'])) {
 
