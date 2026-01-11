@@ -5,6 +5,15 @@
  * Phone + Password authentication for all users
  */
 
+/**
+ * Validate Mauritanian phone number
+ * Must be 8 digits starting with 2, 3, or 4
+ */
+function isValidMauritanianPhone($phone) {
+    $phone = preg_replace('/[^0-9]/', '', $phone);
+    return strlen($phone) === 8 && preg_match('/^[234]/', $phone);
+}
+
 // ==========================================
 // REGISTRATION HANDLER (Phone + Password)
 // ==========================================
@@ -14,12 +23,12 @@ if (isset($_POST['do_register'])) {
     $confirm_password = trim($_POST['reg_confirm_password'] ?? '');
     $full_name = trim($_POST['reg_full_name'] ?? '');
 
-    // Validate phone number (remove non-digits)
+    // Clean phone number (remove non-digits)
     $phone = preg_replace('/[^0-9]/', '', $phone);
 
-    // Validation
-    if (strlen($phone) < 8) {
-        setFlash('error', $t['err_phone_invalid'] ?? 'Please enter a valid phone number');
+    // Validation - Mauritanian phone: 8 digits starting with 2, 3, or 4
+    if (!isValidMauritanianPhone($phone)) {
+        setFlash('error', $t['err_phone_invalid'] ?? 'Phone must be 8 digits starting with 2, 3, or 4');
     } elseif (strlen($password) < 4) {
         setFlash('error', $t['err_password_short'] ?? 'Password must be at least 4 characters');
     } elseif ($password !== $confirm_password) {
@@ -36,14 +45,14 @@ if (isset($_POST['do_register'])) {
                 // Generate serial number for new customer
                 $serial_no = generateSerialNumber($conn, 'customer');
 
-                // Generate username from phone (last 8 digits)
-                $username = 'user_' . substr($phone, -8);
+                // Generate username from phone
+                $username = 'user_' . $phone;
 
                 // Check if username exists, add random suffix if needed
                 $check_stmt = $conn->prepare("SELECT id FROM users1 WHERE username = ?");
                 $check_stmt->execute([$username]);
                 if ($check_stmt->rowCount() > 0) {
-                    $username = 'user_' . substr($phone, -8) . rand(10, 99);
+                    $username = 'user_' . $phone . rand(10, 99);
                 }
 
                 // Hash password

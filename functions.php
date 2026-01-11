@@ -582,17 +582,12 @@ $text = [
         'driver_verified_success' => 'تم توثيق السائق بنجاح! يمكنه الآن قبول الطلبات.',
         'driver_unverified' => 'تم إلغاء توثيق السائق.',
 
-        // Phone-Only Registration
-        'register_phone_info' => 'سجل برقم هاتفك. يمكنك إكمال ملفك الشخصي لاحقاً.',
-        'phone_example' => '06XXXXXXXX',
-        'phone_password_note' => 'رقم هاتفك سيكون كلمة المرور الأولية',
-        'complete_profile_later' => 'يمكنك تعيين اسم مستخدم وكلمة مرور بعد التسجيل',
-        'login_identifier' => 'الهاتف أو اسم المستخدم',
-        'login_identifier_ph' => 'رقم الهاتف أو اسم المستخدم',
-        'new_users_phone_password' => 'المستخدمون الجدد: استخدم رقم هاتفك ككلمة مرور',
-        'err_phone_invalid' => 'الرجاء إدخال رقم هاتف صحيح',
+        // Phone Registration (Mauritania: 8 digits starting with 2, 3, or 4)
+        'phone_example' => '2XXXXXXX',
+        'phone_format_hint' => '8 أرقام تبدأ بـ 2 أو 3 أو 4',
+        'err_phone_invalid' => 'الهاتف يجب أن يكون 8 أرقام تبدأ بـ 2 أو 3 أو 4',
         'err_phone_exists' => 'رقم الهاتف مسجل بالفعل. الرجاء تسجيل الدخول.',
-        'success_register_phone' => 'مرحباً! تم إنشاء حسابك. يمكنك إكمال ملفك الشخصي في الإعدادات.',
+        'demo_phone_login' => 'حسابات تجريبية (الهاتف / كلمة المرور):',
         'profile_completed' => 'تم تحديث الملف الشخصي بنجاح!',
 
         // Driver Enhanced
@@ -905,17 +900,12 @@ $text = [
         'driver_verified_success' => 'Chauffeur vérifié avec succès! Il peut maintenant accepter des commandes.',
         'driver_unverified' => 'Vérification du chauffeur retirée.',
 
-        // Phone-Only Registration
-        'register_phone_info' => 'Inscrivez-vous avec votre téléphone. Vous pourrez compléter votre profil plus tard.',
-        'phone_example' => '06XXXXXXXX',
-        'phone_password_note' => 'Votre numéro sera votre mot de passe initial',
-        'complete_profile_later' => 'Vous pouvez définir un nom d\'utilisateur et mot de passe après inscription',
-        'login_identifier' => 'Téléphone ou nom d\'utilisateur',
-        'login_identifier_ph' => 'Numéro de téléphone ou nom d\'utilisateur',
-        'new_users_phone_password' => 'Nouveaux utilisateurs: utilisez votre numéro comme mot de passe',
-        'err_phone_invalid' => 'Veuillez entrer un numéro de téléphone valide',
+        // Phone Registration (Mauritania: 8 digits starting with 2, 3, or 4)
+        'phone_example' => '2XXXXXXX',
+        'phone_format_hint' => '8 chiffres commençant par 2, 3 ou 4',
+        'err_phone_invalid' => 'Le téléphone doit être 8 chiffres commençant par 2, 3 ou 4',
         'err_phone_exists' => 'Ce numéro est déjà enregistré. Veuillez vous connecter.',
-        'success_register_phone' => 'Bienvenue! Votre compte a été créé. Vous pouvez compléter votre profil dans Paramètres.',
+        'demo_phone_login' => 'Comptes démo (Téléphone / Mot de passe):',
         'profile_completed' => 'Profil mis à jour avec succès!',
 
         // Driver Enhanced

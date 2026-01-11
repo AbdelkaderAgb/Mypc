@@ -1,6 +1,7 @@
 -- ============================================
 -- Delivery Pro System - Database Schema v2.0
 -- Phone + Password Authentication
+-- Mauritanian Phone Format: 8 digits starting with 2, 3, or 4
 -- ============================================
 
 SET NAMES utf8mb4;
@@ -18,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users1 (
     points INT DEFAULT 0 COMMENT 'Driver balance for accepting orders',
     status ENUM('active','banned') DEFAULT 'active',
     full_name VARCHAR(100) DEFAULT NULL,
-    phone VARCHAR(20) DEFAULT NULL UNIQUE COMMENT 'Primary login identifier',
+    phone VARCHAR(20) DEFAULT NULL UNIQUE COMMENT 'Mauritanian: 8 digits starting with 2/3/4',
     phone_verified TINYINT(1) DEFAULT 0,
     email VARCHAR(100) DEFAULT NULL,
     address VARCHAR(255) DEFAULT NULL,
@@ -122,18 +123,21 @@ CREATE TABLE IF NOT EXISTS order_tracking (
 -- ============================================
 -- DEFAULT USERS
 -- Login with phone number + password
+-- Mauritanian phone: 8 digits starting with 2, 3, or 4
 -- ============================================
 -- Password for all: 123 (hashed)
 
 INSERT INTO users1 (serial_no, username, password, role, points, status, full_name, phone, phone_verified, is_verified) VALUES
-('AD-2501-00001', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 0, 'active', 'Administrator', '22200000001', 1, 1),
-('DR-2501-00001', 'driver', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'driver', 50, 'active', 'Demo Driver', '22200000002', 1, 1),
-('CL-2501-00001', 'client', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'customer', 0, 'active', 'Demo Client', '22200000003', 1, 0);
+('AD-2501-00001', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 0, 'active', 'Administrator', '20000001', 1, 1),
+('DR-2501-00001', 'driver', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'driver', 50, 'active', 'Demo Driver', '30000002', 1, 1),
+('CL-2501-00001', 'client', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'customer', 0, 'active', 'Demo Client', '40000003', 1, 0);
 
 -- ============================================
 -- DEMO ACCOUNTS LOGIN INFO:
 -- ============================================
--- Admin:    Phone: 22200000001  Password: 123
--- Driver:   Phone: 22200000002  Password: 123
--- Client:   Phone: 22200000003  Password: 123
+-- Admin:    Phone: 20000001  Password: 123
+-- Driver:   Phone: 30000002  Password: 123
+-- Client:   Phone: 40000003  Password: 123
+-- ============================================
+-- Phone format: 8 digits starting with 2, 3, or 4
 -- ============================================

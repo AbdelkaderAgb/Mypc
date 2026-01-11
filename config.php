@@ -222,22 +222,23 @@ try {
 
     // ==========================================
     // DEFAULT USERS (with phone + password)
+    // Mauritanian phone: 8 digits starting with 2, 3, or 4
     // ==========================================
     $check_users = $conn->query("SELECT count(*) FROM users1")->fetchColumn();
     if ($check_users == 0) {
         $hashed_password = password_hash('123', PASSWORD_DEFAULT);
 
-        // Admin: phone 22200000001, password 123
+        // Admin: phone 20000001, password 123
         $conn->prepare("INSERT INTO users1 (username, password, role, points, status, full_name, phone, phone_verified, is_verified) VALUES (?, ?, ?, ?, 'active', ?, ?, 1, 1)")
-             ->execute(['admin', $hashed_password, 'admin', 0, 'Administrator', '22200000001']);
+             ->execute(['admin', $hashed_password, 'admin', 0, 'Administrator', '20000001']);
 
-        // Driver: phone 22200000002, password 123 (verified)
+        // Driver: phone 30000002, password 123 (verified)
         $conn->prepare("INSERT INTO users1 (username, password, role, points, status, full_name, phone, phone_verified, is_verified) VALUES (?, ?, ?, ?, 'active', ?, ?, 1, 1)")
-             ->execute(['driver', $hashed_password, 'driver', 50, 'Demo Driver', '22200000002']);
+             ->execute(['driver', $hashed_password, 'driver', 50, 'Demo Driver', '30000002']);
 
-        // Client: phone 22200000003, password 123
+        // Client: phone 40000003, password 123
         $conn->prepare("INSERT INTO users1 (username, password, role, points, status, full_name, phone, phone_verified) VALUES (?, ?, ?, ?, 'active', ?, ?, 1)")
-             ->execute(['client', $hashed_password, 'customer', 0, 'Demo Client', '22200000003']);
+             ->execute(['client', $hashed_password, 'customer', 0, 'Demo Client', '40000003']);
     }
 
     // Migrate old plain-text passwords to hashed

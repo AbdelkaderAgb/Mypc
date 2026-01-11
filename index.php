@@ -851,8 +851,9 @@ require_once 'actions.php';
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
-                            <input type="tel" name="phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '06XXXXXXXX'; ?>" required inputmode="tel">
+                            <input type="tel" name="phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" pattern="[234][0-9]{7}">
                         </div>
+                        <small class="text-muted"><?php echo $t['phone_format_hint'] ?? '8 digits starting with 2, 3, or 4'; ?></small>
                     </div>
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?></label>
@@ -872,8 +873,9 @@ require_once 'actions.php';
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
-                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '06XXXXXXXX'; ?>" required minlength="8" inputmode="tel">
+                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" minlength="8" pattern="[234][0-9]{7}">
                         </div>
+                        <small class="text-muted"><?php echo $t['phone_format_hint'] ?? '8 digits starting with 2, 3, or 4'; ?></small>
                     </div>
 
                     <div class="mb-3">
@@ -910,9 +912,9 @@ require_once 'actions.php';
                     <div class="fw-bold text-secondary mb-2"><i class="fas fa-info-circle me-1"></i> <?php echo $t['demo_accounts']; ?></div>
                     <small class="text-muted d-block mb-2"><?php echo $t['demo_phone_login'] ?? 'Demo accounts (Phone / Password):'; ?></small>
                     <div class="d-flex flex-wrap justify-content-center gap-2">
-                        <span class="badge bg-danger">22200000001 / 123</span>
-                        <span class="badge bg-info">22200000002 / 123</span>
-                        <span class="badge bg-success">22200000003 / 123</span>
+                        <span class="badge bg-danger">20000001 / 123</span>
+                        <span class="badge bg-info">30000002 / 123</span>
+                        <span class="badge bg-success">40000003 / 123</span>
                     </div>
                 </div>
             </div>
