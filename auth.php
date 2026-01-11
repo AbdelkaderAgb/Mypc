@@ -33,8 +33,14 @@ if (isset($_POST['do_register'])) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             try {
-                $stmt = $conn->prepare("INSERT INTO users1 (username, password, role, points, status, full_name, phone) VALUES (?, ?, 'customer', 0, 'active', ?, ?)");
-                $stmt->execute([$username, $hashed_password, $full_name, $phone]);
+                // Generate serial number for new customer
+                $serial_no = generateSerialNumber($conn, 'customer');
+
+                // Phone is auto-verified when provided (no OTP)
+                $phone_verified = !empty($phone) ? 1 : 0;
+
+                $stmt = $conn->prepare("INSERT INTO users1 (serial_no, username, password, role, points, status, full_name, phone, phone_verified) VALUES (?, ?, ?, 'customer', 0, 'active', ?, ?, ?)");
+                $stmt->execute([$serial_no, $username, $hashed_password, $full_name, $phone, $phone_verified]);
 
                 setFlash('success', $t['success_register'] ?? 'Registration successful! You can now login.');
                 header("Location: index.php");

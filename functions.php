@@ -92,7 +92,7 @@ function getStatusBadge($status) {
     $badges = [
         'pending' => 'badge-pending',
         'accepted' => 'badge-accepted',
-        'picked_up' => 'badge-accepted',
+        'picked_up' => 'badge-picked_up',
         'delivered' => 'badge-delivered',
         'cancelled' => 'badge-cancelled'
     ];
@@ -397,6 +397,7 @@ $text = [
 
         // Driver
         'driver_accept' => 'قبول',
+        'driver_pickup' => 'تم الاستلام',
         'accept_order' => 'قبول الطلب',
         'driver_cost' => 'التكلفة',
         'cost_per_order' => 'تكلفة الطلب',
@@ -693,6 +694,7 @@ $text = [
 
         // Driver
         'driver_accept' => 'Accepter',
+        'driver_pickup' => 'Récupéré',
         'accept_order' => 'Accepter la commande',
         'driver_cost' => 'Coût',
         'cost_per_order' => 'Coût par commande',
