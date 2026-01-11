@@ -121,10 +121,10 @@ try {
     $conn->exec("CREATE TABLE IF NOT EXISTS serial_counters (
         id INT AUTO_INCREMENT PRIMARY KEY,
         prefix CHAR(2) NOT NULL,
-        year_month CHAR(4) NOT NULL,
+        `year_month` CHAR(4) NOT NULL,
         current_count INT DEFAULT 0,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        UNIQUE KEY unique_prefix_month (prefix, year_month)
+        UNIQUE KEY unique_prefix_month (prefix, `year_month`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
     // 4. Create Ratings Table
@@ -282,17 +282,17 @@ function generateSerialNumber($conn, $role, $date = null) {
     $conn->beginTransaction();
     try {
         // Try to get existing counter
-        $stmt = $conn->prepare("SELECT current_count FROM serial_counters WHERE prefix = ? AND year_month = ? FOR UPDATE");
+        $stmt = $conn->prepare("SELECT current_count FROM serial_counters WHERE prefix = ? AND `year_month` = ? FOR UPDATE");
         $stmt->execute([$prefix, $yearMonth]);
         $row = $stmt->fetch();
 
         if ($row) {
             $newCount = $row['current_count'] + 1;
-            $conn->prepare("UPDATE serial_counters SET current_count = ? WHERE prefix = ? AND year_month = ?")
+            $conn->prepare("UPDATE serial_counters SET current_count = ? WHERE prefix = ? AND `year_month` = ?")
                  ->execute([$newCount, $prefix, $yearMonth]);
         } else {
             $newCount = 1;
-            $conn->prepare("INSERT INTO serial_counters (prefix, year_month, current_count) VALUES (?, ?, ?)")
+            $conn->prepare("INSERT INTO serial_counters (prefix, `year_month`, current_count) VALUES (?, ?, ?)")
                  ->execute([$prefix, $yearMonth, $newCount]);
         }
 
