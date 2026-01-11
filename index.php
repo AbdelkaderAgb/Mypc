@@ -1108,7 +1108,7 @@ function createNotificationSound() {
                                     <?php if($role == 'customer'): ?>
                                     <?php
                                     // Get client stats
-                                    $clientStats = getClientStats($conn, $u['username']);
+                                    $clientStats = getClientStats($conn, $u['id'], $u['username']);
                                     ?>
                                     <div class="mini-stats">
                                         <div class="mini-stat">
