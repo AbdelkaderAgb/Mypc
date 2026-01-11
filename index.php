@@ -804,6 +804,232 @@ require_once 'actions.php';
             background: linear-gradient(135deg, #f8fafc, #f1f5f9);
             border-top: 1px solid #e2e8f0;
         }
+
+        /* Order Status Popup */
+        .order-status-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+        .order-status-popup.fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; }
+        }
+        .status-popup-content {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            max-width: 340px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .status-icon-wrapper {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+        .status-icon-wrapper.pulse {
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+        .status-icon-wrapper.bounce {
+            animation: bounceIcon 1s ease infinite;
+        }
+        .status-icon-wrapper.celebrate {
+            animation: celebrateIcon 0.6s ease;
+        }
+        .status-icon-wrapper.shake {
+            animation: shakeIcon 0.5s ease;
+        }
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        @keyframes bounceIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes celebrateIcon {
+            0% { transform: scale(0.5) rotate(-10deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+        @keyframes shakeIcon {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .status-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .status-order-id {
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        .status-driver {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .status-progress {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .progress-bar-animated {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            animation: progressGlow 1.5s ease-in-out infinite;
+        }
+        @keyframes progressGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Enhanced Button Styles */
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .btn-icon:hover {
+            transform: translateY(-2px);
+        }
+        .btn-icon-sm {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+        }
+
+        /* Enhanced Form Inputs */
+        .form-control-modern {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.2s ease;
+        }
+        .form-control-modern:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        /* GPS Location Button Animation */
+        .location-btn {
+            transition: all 0.3s ease;
+        }
+        .location-btn:hover {
+            transform: scale(1.05);
+        }
+        .location-btn.locating {
+            animation: locatingPulse 1s ease infinite;
+        }
+        @keyframes locatingPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        }
+
+        /* Enhanced Card Hover Effects */
+        .card-hover-lift {
+            transition: all 0.3s ease;
+        }
+        .card-hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        /* Status Indicator Animations */
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-dot.active {
+            animation: statusPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Modern Icon Buttons */
+        .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-light), #fff);
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        .icon-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+        }
+        [dir="rtl"] .fab {
+            right: auto;
+            left: 24px;
+        }
     </style>
 </head>
 <body>
@@ -1815,21 +2041,83 @@ function createNotificationSound() {
                     <?php if($role == 'customer'): ?>
                     <div class="card content-card">
                         <div class="card-body p-4">
-                            <h5 class="fw-bold mb-4"><i class="fas fa-plus-circle text-primary"></i> <?php echo $t['new_order']; ?></h5>
-                            <form method="POST" accept-charset="UTF-8">
+                            <h5 class="fw-bold mb-4">
+                                <i class="fas fa-plus-circle text-primary me-2"></i><?php echo $t['new_order']; ?>
+                            </h5>
+                            <form method="POST" accept-charset="UTF-8" id="newOrderForm">
+                                <!-- Order Details -->
                                 <div class="mb-3">
-                                    <label class="small text-muted mb-1"><?php echo $t['order_details']; ?></label>
-                                    <textarea name="details" class="form-control bg-light border-0" rows="3" required></textarea>
+                                    <label class="form-label small text-muted mb-1">
+                                        <i class="fas fa-box me-1"></i><?php echo $t['order_details']; ?>
+                                    </label>
+                                    <textarea name="details" class="form-control bg-light border-0 rounded-3" rows="3" placeholder="<?php echo $t['order_details_placeholder'] ?? 'Describe what you need delivered...'; ?>" required></textarea>
                                 </div>
-                                <div class="mb-4">
-                                    <label class="small text-muted mb-1"><?php echo $t['address']; ?></label>
+
+                                <!-- Phone Number -->
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">
+                                        <i class="fas fa-phone me-1"></i><?php echo $t['phone_ph'] ?? 'Phone'; ?>
+                                    </label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-light border-0"><i class="fas fa-map-marker-alt text-danger"></i></span>
-                                        <input type="text" name="address" class="form-control bg-light border-0" required>
+                                        <span class="input-group-text bg-light border-0 rounded-start-3">+222</span>
+                                        <input type="tel" name="client_phone" class="form-control bg-light border-0 rounded-end-3"
+                                               value="<?php echo e($u['phone'] ?? ''); ?>"
+                                               placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>"
+                                               pattern="[234][0-9]{7}" maxlength="8" inputmode="tel"
+                                               <?php echo !empty($u['phone']) ? '' : 'required'; ?>>
                                     </div>
                                 </div>
-                                <button name="add_order" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">
-                                    <?php echo $t['btn_publish']; ?>
+
+                                <!-- Pickup Location -->
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">
+                                        <i class="fas fa-store me-1 text-success"></i><?php echo $t['pickup_location'] ?? 'Pickup Location'; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" name="pickup_address" id="pickupAddress" class="form-control bg-light border-0"
+                                               placeholder="<?php echo $t['pickup_placeholder'] ?? 'Where to pick up from...'; ?>" required>
+                                        <button type="button" class="btn btn-outline-success border-0 bg-light" onclick="getLocation('pickup')">
+                                            <i class="fas fa-location-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="pickup_lat" id="pickupLat">
+                                    <input type="hidden" name="pickup_lng" id="pickupLng">
+                                </div>
+
+                                <!-- Delivery Address -->
+                                <div class="mb-4">
+                                    <label class="form-label small text-muted mb-1">
+                                        <i class="fas fa-map-marker-alt me-1 text-danger"></i><?php echo $t['delivery_address'] ?? 'Delivery Address'; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" name="address" id="deliveryAddress" class="form-control bg-light border-0"
+                                               placeholder="<?php echo $t['delivery_placeholder'] ?? 'Where to deliver...'; ?>" required>
+                                        <button type="button" class="btn btn-outline-danger border-0 bg-light" onclick="getLocation('delivery')">
+                                            <i class="fas fa-location-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="delivery_lat" id="deliveryLat">
+                                    <input type="hidden" name="delivery_lng" id="deliveryLng">
+                                </div>
+
+                                <!-- Distance Preview (shown when both locations are set) -->
+                                <div id="distancePreview" class="mb-3 p-3 bg-primary bg-opacity-10 rounded-3 text-center" style="display:none;">
+                                    <div class="d-flex justify-content-around align-items-center">
+                                        <div>
+                                            <i class="fas fa-route fa-lg text-primary"></i>
+                                            <div class="small text-muted"><?php echo $t['distance'] ?? 'Distance'; ?></div>
+                                            <div class="fw-bold" id="estimatedDistance">--</div>
+                                        </div>
+                                        <div class="border-start ps-4">
+                                            <i class="fas fa-clock fa-lg text-warning"></i>
+                                            <div class="small text-muted"><?php echo $t['eta'] ?? 'ETA'; ?></div>
+                                            <div class="fw-bold" id="estimatedTime">--</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button name="add_order" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-sm btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i><?php echo $t['btn_publish']; ?>
                                 </button>
                             </form>
                         </div>
@@ -2306,6 +2594,244 @@ function showOrderTracking(order) {
     // Show modal
     var modal = new bootstrap.Modal(document.getElementById('orderTrackingModal'));
     modal.show();
+}
+
+// ==========================================
+// GPS & LOCATION FUNCTIONS
+// ==========================================
+
+// Get current location
+function getLocation(type) {
+    if (!navigator.geolocation) {
+        alert('<?php echo $t['geolocation_not_supported'] ?? 'Geolocation is not supported by your browser'; ?>');
+        return;
+    }
+
+    const btn = event.target.closest('button');
+    const originalIcon = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            if (type === 'pickup') {
+                document.getElementById('pickupLat').value = lat;
+                document.getElementById('pickupLng').value = lng;
+                reverseGeocode(lat, lng, 'pickupAddress');
+            } else {
+                document.getElementById('deliveryLat').value = lat;
+                document.getElementById('deliveryLng').value = lng;
+                reverseGeocode(lat, lng, 'deliveryAddress');
+            }
+
+            btn.innerHTML = '<i class="fas fa-check text-success"></i>';
+            setTimeout(() => {
+                btn.innerHTML = originalIcon;
+                btn.disabled = false;
+            }, 2000);
+
+            calculateDistance();
+        },
+        (error) => {
+            btn.innerHTML = originalIcon;
+            btn.disabled = false;
+            let errorMsg = '<?php echo $t['location_error'] ?? 'Error getting location'; ?>';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMsg = '<?php echo $t['location_denied'] ?? 'Location access denied'; ?>';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMsg = '<?php echo $t['location_unavailable'] ?? 'Location unavailable'; ?>';
+                    break;
+                case error.TIMEOUT:
+                    errorMsg = '<?php echo $t['location_timeout'] ?? 'Location request timed out'; ?>';
+                    break;
+            }
+            showNotification('<?php echo $t['error'] ?? 'Error'; ?>', errorMsg, 'warning');
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+}
+
+// Reverse geocode coordinates to address
+function reverseGeocode(lat, lng, inputId) {
+    // Use Nominatim for reverse geocoding (free, no API key needed)
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=<?php echo $lang; ?>`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.display_name) {
+                // Shorten the address
+                let address = data.display_name;
+                const parts = address.split(', ');
+                if (parts.length > 3) {
+                    address = parts.slice(0, 3).join(', ');
+                }
+                document.getElementById(inputId).value = address;
+            }
+        })
+        .catch(() => {
+            // If geocoding fails, just show coordinates
+            document.getElementById(inputId).value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+        });
+}
+
+// Calculate distance between pickup and delivery
+function calculateDistance() {
+    const pickupLat = parseFloat(document.getElementById('pickupLat')?.value);
+    const pickupLng = parseFloat(document.getElementById('pickupLng')?.value);
+    const deliveryLat = parseFloat(document.getElementById('deliveryLat')?.value);
+    const deliveryLng = parseFloat(document.getElementById('deliveryLng')?.value);
+
+    if (pickupLat && pickupLng && deliveryLat && deliveryLng) {
+        const distance = haversineDistance(pickupLat, pickupLng, deliveryLat, deliveryLng);
+        const time = Math.ceil(distance / 30 * 60); // Estimate: 30 km/h average speed
+
+        const preview = document.getElementById('distancePreview');
+        if (preview) {
+            preview.style.display = 'block';
+            document.getElementById('estimatedDistance').textContent = distance.toFixed(1) + ' <?php echo $t['km'] ?? 'km'; ?>';
+            document.getElementById('estimatedTime').textContent = time + ' <?php echo $t['min'] ?? 'min'; ?>';
+        }
+    }
+}
+
+// Haversine formula for distance calculation
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+// Live tracking for driver location (called periodically)
+let trackingInterval = null;
+
+function startLiveTracking(orderId, driverId) {
+    if (trackingInterval) clearInterval(trackingInterval);
+
+    trackingInterval = setInterval(() => {
+        fetch(`api.php?action=get_driver_location&driver_id=${driverId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.lat && data.lng) {
+                    updateDriverDistance(data.lat, data.lng);
+                }
+            })
+            .catch(() => {});
+    }, 30000); // Update every 30 seconds
+}
+
+function stopLiveTracking() {
+    if (trackingInterval) {
+        clearInterval(trackingInterval);
+        trackingInterval = null;
+    }
+}
+
+function updateDriverDistance(driverLat, driverLng) {
+    // Get client's current position for distance calculation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const clientLat = position.coords.latitude;
+                const clientLng = position.coords.longitude;
+                const distance = haversineDistance(clientLat, clientLng, driverLat, driverLng);
+                const time = Math.ceil(distance / 25 * 60); // 25 km/h in city
+
+                const distanceEl = document.getElementById('live-distance');
+                const timeEl = document.getElementById('live-eta');
+
+                if (distanceEl) distanceEl.textContent = distance.toFixed(1) + ' <?php echo $t['km'] ?? 'km'; ?>';
+                if (timeEl) timeEl.textContent = time + ' <?php echo $t['min'] ?? 'min'; ?>';
+            },
+            () => {}
+        );
+    }
+}
+
+// Update driver location (for drivers)
+function updateMyLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                fetch('api.php?action=update_location', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ lat, lng })
+                }).catch(() => {});
+            },
+            () => {}
+        );
+    }
+}
+
+// Start location updates for drivers
+<?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
+setInterval(updateMyLocation, 60000); // Update every minute
+updateMyLocation(); // Initial update
+<?php endif; ?>
+
+// ==========================================
+// ANIMATED ORDER STATUS POPUP
+// ==========================================
+
+function showOrderStatusPopup(order) {
+    // Remove existing popup
+    const existingPopup = document.getElementById('orderStatusPopup');
+    if (existingPopup) existingPopup.remove();
+
+    const statusConfig = {
+        'pending': { icon: 'clock', color: '#f59e0b', text: '<?php echo $t['st_pending'] ?? 'Pending'; ?>', animation: 'pulse' },
+        'accepted': { icon: 'truck', color: '#3b82f6', text: '<?php echo $t['st_accepted'] ?? 'Accepted'; ?>', animation: 'bounce' },
+        'picked_up': { icon: 'box', color: '#8b5cf6', text: '<?php echo $t['st_picked_up'] ?? 'Picked Up'; ?>', animation: 'bounce' },
+        'delivered': { icon: 'check-double', color: '#10b981', text: '<?php echo $t['st_delivered'] ?? 'Delivered'; ?>', animation: 'celebrate' },
+        'cancelled': { icon: 'times-circle', color: '#ef4444', text: '<?php echo $t['st_cancelled'] ?? 'Cancelled'; ?>', animation: 'shake' }
+    };
+
+    const config = statusConfig[order.status] || statusConfig['pending'];
+
+    const popup = document.createElement('div');
+    popup.id = 'orderStatusPopup';
+    popup.className = 'order-status-popup';
+    popup.innerHTML = `
+        <div class="status-popup-content">
+            <div class="status-icon-wrapper ${config.animation}">
+                <i class="fas fa-${config.icon}" style="color: ${config.color}"></i>
+            </div>
+            <h4 class="status-title">${config.text}</h4>
+            <p class="status-order-id"><?php echo $t['order_number'] ?? 'Order'; ?> #${order.id}</p>
+            ${order.driver_name ? `<p class="status-driver"><i class="fas fa-user"></i> ${order.driver_name}</p>` : ''}
+            <div class="status-progress">
+                <div class="progress-bar-animated" style="width: ${getProgressPercent(order.status)}%; background: ${config.color}"></div>
+            </div>
+            <button class="btn btn-light btn-sm mt-3" onclick="this.closest('.order-status-popup').remove()">
+                <i class="fas fa-times"></i> <?php echo $t['close'] ?? 'Close'; ?>
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    // Auto-close after 5 seconds
+    setTimeout(() => {
+        popup.classList.add('fade-out');
+        setTimeout(() => popup.remove(), 500);
+    }, 5000);
+}
+
+function getProgressPercent(status) {
+    const progress = { 'pending': 25, 'accepted': 50, 'picked_up': 75, 'delivered': 100, 'cancelled': 0 };
+    return progress[status] || 0;
 }
 
 // Notification functions
