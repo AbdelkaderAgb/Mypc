@@ -1,7 +1,7 @@
 <?php
 /**
  * Helper Functions & Translations
- * This file contains utility functions and language translations
+ * Enhanced Delivery Pro System v2.0
  */
 
 // ==========================================
@@ -92,6 +92,7 @@ function getStatusBadge($status) {
     $badges = [
         'pending' => 'badge-pending',
         'accepted' => 'badge-accepted',
+        'picked_up' => 'badge-picked_up',
         'delivered' => 'badge-delivered',
         'cancelled' => 'badge-cancelled'
     ];
@@ -105,10 +106,217 @@ function getStatusIcon($status) {
     $icons = [
         'pending' => 'clock',
         'accepted' => 'truck',
+        'picked_up' => 'box',
         'delivered' => 'check-double',
         'cancelled' => 'times-circle'
     ];
     return $icons[$status] ?? 'circle';
+}
+
+/**
+ * Get user avatar URL or generate initials avatar
+ */
+function getAvatarUrl($user) {
+    if (!empty($user['avatar_url']) && file_exists(__DIR__ . '/' . $user['avatar_url'])) {
+        return $user['avatar_url'];
+    }
+    // Return null to use initials avatar
+    return null;
+}
+
+/**
+ * Get user initials for avatar
+ */
+function getUserInitials($user) {
+    $name = $user['full_name'] ?? $user['username'] ?? 'U';
+    $parts = explode(' ', trim($name));
+    if (count($parts) >= 2) {
+        return mb_strtoupper(mb_substr($parts[0], 0, 1) . mb_substr($parts[1], 0, 1));
+    }
+    return mb_strtoupper(mb_substr($name, 0, 2));
+}
+
+/**
+ * Get avatar background color based on role
+ */
+function getAvatarColor($role) {
+    $colors = [
+        'admin' => '#dc2626',
+        'driver' => '#0891b2',
+        'customer' => '#059669'
+    ];
+    return $colors[$role] ?? '#6366f1';
+}
+
+/**
+ * Handle avatar upload
+ */
+function uploadAvatar($file, $userId) {
+    global $uploads_dir;
+
+    $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
+    $max_size = 5 * 1024 * 1024; // 5MB
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        return ['success' => false, 'error' => 'Upload error'];
+    }
+
+    if ($file['size'] > $max_size) {
+        return ['success' => false, 'error' => 'File too large (max 5MB)'];
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($file['tmp_name']);
+
+    if (!in_array($mime, $allowed_types)) {
+        return ['success' => false, 'error' => 'Invalid file type'];
+    }
+
+    // Create user directory
+    $user_dir = $uploads_dir . '/avatars/' . $userId;
+    if (!is_dir($user_dir)) {
+        mkdir($user_dir, 0755, true);
+    }
+
+    // Generate filename
+    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $filename = 'avatar_' . time() . '.' . $ext;
+    $filepath = $user_dir . '/' . $filename;
+
+    if (move_uploaded_file($file['tmp_name'], $filepath)) {
+        return [
+            'success' => true,
+            'path' => 'uploads/avatars/' . $userId . '/' . $filename
+        ];
+    }
+
+    return ['success' => false, 'error' => 'Failed to save file'];
+}
+
+/**
+ * Format rating stars
+ */
+function formatRating($rating, $showNumber = true) {
+    $rating = floatval($rating);
+    $fullStars = floor($rating);
+    $halfStar = ($rating - $fullStars) >= 0.5;
+    $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+
+    $html = '<span class="rating-stars">';
+    for ($i = 0; $i < $fullStars; $i++) {
+        $html .= '<i class="fas fa-star text-warning"></i>';
+    }
+    if ($halfStar) {
+        $html .= '<i class="fas fa-star-half-alt text-warning"></i>';
+    }
+    for ($i = 0; $i < $emptyStars; $i++) {
+        $html .= '<i class="far fa-star text-warning"></i>';
+    }
+    if ($showNumber) {
+        $html .= ' <small class="text-muted">(' . number_format($rating, 1) . ')</small>';
+    }
+    $html .= '</span>';
+
+    return $html;
+}
+
+/**
+ * Get driver stats
+ */
+function getDriverStats($conn, $driverId) {
+    $stats = [
+        'total_orders' => 0,
+        'completed_today' => 0,
+        'earnings_today' => 0,
+        'earnings_week' => 0,
+        'earnings_month' => 0,
+        'rating' => 5.0
+    ];
+
+    // Total completed orders
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE driver_id = ? AND status = 'delivered'");
+    $stmt->execute([$driverId]);
+    $stats['total_orders'] = $stmt->fetchColumn();
+
+    // Completed today
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE driver_id = ? AND status = 'delivered' AND DATE(delivered_at) = CURDATE()");
+    $stmt->execute([$driverId]);
+    $stats['completed_today'] = $stmt->fetchColumn();
+
+    // Earnings (points spent by driver for orders)
+    $stmt = $conn->prepare("SELECT COALESCE(SUM(points_cost), 0) FROM orders1 WHERE driver_id = ? AND status = 'delivered' AND DATE(delivered_at) = CURDATE()");
+    $stmt->execute([$driverId]);
+    $stats['earnings_today'] = $stmt->fetchColumn();
+
+    // This week
+    $stmt = $conn->prepare("SELECT COALESCE(SUM(points_cost), 0) FROM orders1 WHERE driver_id = ? AND status = 'delivered' AND YEARWEEK(delivered_at) = YEARWEEK(NOW())");
+    $stmt->execute([$driverId]);
+    $stats['earnings_week'] = $stmt->fetchColumn();
+
+    // This month
+    $stmt = $conn->prepare("SELECT COALESCE(SUM(points_cost), 0) FROM orders1 WHERE driver_id = ? AND status = 'delivered' AND MONTH(delivered_at) = MONTH(NOW()) AND YEAR(delivered_at) = YEAR(NOW())");
+    $stmt->execute([$driverId]);
+    $stats['earnings_month'] = $stmt->fetchColumn();
+
+    // Average rating
+    $stmt = $conn->prepare("SELECT AVG(score) FROM ratings WHERE ratee_id = ?");
+    $stmt->execute([$driverId]);
+    $avgRating = $stmt->fetchColumn();
+    if ($avgRating) {
+        $stats['rating'] = round($avgRating, 2);
+    }
+
+    return $stats;
+}
+
+/**
+ * Get client stats
+ */
+function getClientStats($conn, $clientId, $username) {
+    $stats = [
+        'total_orders' => 0,
+        'active_orders' => 0,
+        'completed_orders' => 0,
+        'this_month' => 0
+    ];
+
+    // Total orders
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE client_id = ? OR customer_name = ?");
+    $stmt->execute([$clientId, $username]);
+    $stats['total_orders'] = $stmt->fetchColumn();
+
+    // Active orders (pending, accepted, picked_up)
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE (client_id = ? OR customer_name = ?) AND status IN ('pending', 'accepted', 'picked_up')");
+    $stmt->execute([$clientId, $username]);
+    $stats['active_orders'] = $stmt->fetchColumn();
+
+    // Completed
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE (client_id = ? OR customer_name = ?) AND status = 'delivered'");
+    $stmt->execute([$clientId, $username]);
+    $stats['completed_orders'] = $stmt->fetchColumn();
+
+    // This month
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE (client_id = ? OR customer_name = ?) AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())");
+    $stmt->execute([$clientId, $username]);
+    $stats['this_month'] = $stmt->fetchColumn();
+
+    return $stats;
+}
+
+/**
+ * Count active orders for a driver
+ */
+function countActiveOrders($conn, $driverId) {
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM orders1 WHERE driver_id = ? AND status IN ('accepted', 'picked_up')");
+    $stmt->execute([$driverId]);
+    return $stmt->fetchColumn();
+}
+
+/**
+ * Check if phone is verified
+ */
+function isPhoneVerified($user) {
+    return !empty($user['phone']) && !empty($user['phone_verified']);
 }
 
 // ==========================================
@@ -189,6 +397,7 @@ $text = [
 
         // Driver
         'driver_accept' => 'قبول',
+        'driver_pickup' => 'تم الاستلام',
         'accept_order' => 'قبول الطلب',
         'driver_cost' => 'التكلفة',
         'cost_per_order' => 'تكلفة الطلب',
@@ -345,7 +554,91 @@ $text = [
         'yesterday' => 'أمس',
         'minutes_ago' => 'منذ دقائق',
         'hours_ago' => 'منذ ساعات',
-        'days_ago' => 'منذ أيام'
+        'days_ago' => 'منذ أيام',
+
+        // Enhanced v2.0
+        'serial_no' => 'الرقم التسلسلي',
+        'user_id' => 'معرف المستخدم',
+        'profile_picture' => 'صورة الملف الشخصي',
+        'upload_photo' => 'رفع صورة',
+        'change_photo' => 'تغيير الصورة',
+        'remove_photo' => 'إزالة الصورة',
+        'phone_required' => 'رقم الهاتف مطلوب للمتابعة',
+        'phone_not_verified' => 'يرجى إضافة رقم هاتفك للمتابعة',
+        'verify_phone' => 'تأكيد رقم الهاتف',
+        'phone_verified' => 'رقم الهاتف مؤكد',
+        'add_phone_first' => 'أضف رقم هاتفك أولاً',
+
+        // Driver Verification
+        'driver_verified' => 'سائق موثق',
+        'driver_not_verified' => 'يجب أن يتم التحقق من حسابك من قبل المدير قبل قبول الطلبات',
+        'pending_verification' => 'في انتظار التحقق',
+        'verified' => 'موثق',
+        'verification' => 'التحقق',
+        'verify_driver' => 'توثيق السائق',
+        'unverify' => 'إلغاء التوثيق',
+        'confirm_verify' => 'هل تريد توثيق هذا السائق؟',
+        'confirm_unverify' => 'هل تريد إلغاء التوثيق؟',
+        'driver_verified_success' => 'تم توثيق السائق بنجاح! يمكنه الآن قبول الطلبات.',
+        'driver_unverified' => 'تم إلغاء توثيق السائق.',
+
+        // Phone Registration (Mauritania: 8 digits starting with 2, 3, or 4)
+        'phone_example' => '2XXXXXXX',
+        'phone_format_hint' => '8 أرقام تبدأ بـ 2 أو 3 أو 4',
+        'err_phone_invalid' => 'الهاتف يجب أن يكون 8 أرقام تبدأ بـ 2 أو 3 أو 4',
+        'err_phone_exists' => 'رقم الهاتف مسجل بالفعل. الرجاء تسجيل الدخول.',
+        'demo_phone_login' => 'حسابات تجريبية (الهاتف / كلمة المرور):',
+        'profile_completed' => 'تم تحديث الملف الشخصي بنجاح!',
+
+        // Driver Enhanced
+        'go_online' => 'أصبح متصلاً',
+        'go_offline' => 'أصبح غير متصل',
+        'you_are_online' => 'أنت متصل الآن',
+        'you_are_offline' => 'أنت غير متصل',
+        'earnings' => 'الأرباح',
+        'my_earnings' => 'أرباحي',
+        'today_earnings' => 'أرباح اليوم',
+        'week_earnings' => 'أرباح الأسبوع',
+        'month_earnings' => 'أرباح الشهر',
+        'completed_deliveries' => 'التوصيلات المكتملة',
+        'active_deliveries' => 'التوصيلات النشطة',
+        'my_rating' => 'تقييمي',
+        'max_orders_reached' => 'لقد وصلت للحد الأقصى من الطلبات النشطة',
+
+        // Client Enhanced
+        'active_orders' => 'الطلبات النشطة',
+        'track_order' => 'تتبع الطلب',
+        'order_history' => 'سجل الطلبات',
+        'rate_driver' => 'قيّم السائق',
+        'rate_delivery' => 'قيّم التوصيل',
+        'your_rating' => 'تقييمك',
+        'leave_comment' => 'اترك تعليقاً',
+        'submit_rating' => 'إرسال التقييم',
+        'thanks_for_rating' => 'شكراً لتقييمك!',
+
+        // Order Status Enhanced
+        'st_picked_up' => 'تم الاستلام',
+        'finding_driver' => 'جاري البحث عن سائق...',
+        'driver_assigned' => 'تم تعيين سائق',
+        'driver_on_way' => 'السائق في الطريق',
+        'driver_arrived' => 'السائق وصل',
+        'package_picked' => 'تم استلام الطرد',
+        'on_the_way' => 'في الطريق إليك',
+
+        // Tracking
+        'live_tracking' => 'التتبع المباشر',
+        'distance' => 'المسافة',
+        'eta' => 'الوقت المتوقع',
+        'km' => 'كم',
+        'min' => 'دقيقة',
+        'call_driver' => 'اتصل بالسائق',
+        'message_driver' => 'راسل السائق',
+
+        // Stats
+        'this_week' => 'هذا الأسبوع',
+        'this_month' => 'هذا الشهر',
+        'orders_count' => 'عدد الطلبات',
+        'delivery_count' => 'عدد التوصيلات'
     ],
 
     'fr' => [
@@ -422,6 +715,7 @@ $text = [
 
         // Driver
         'driver_accept' => 'Accepter',
+        'driver_pickup' => 'Récupéré',
         'accept_order' => 'Accepter la commande',
         'driver_cost' => 'Coût',
         'cost_per_order' => 'Coût par commande',
@@ -578,7 +872,91 @@ $text = [
         'yesterday' => 'Hier',
         'minutes_ago' => 'Il y a quelques minutes',
         'hours_ago' => 'Il y a quelques heures',
-        'days_ago' => 'Il y a quelques jours'
+        'days_ago' => 'Il y a quelques jours',
+
+        // Enhanced v2.0
+        'serial_no' => 'Numéro de série',
+        'user_id' => 'ID utilisateur',
+        'profile_picture' => 'Photo de profil',
+        'upload_photo' => 'Télécharger photo',
+        'change_photo' => 'Changer la photo',
+        'remove_photo' => 'Supprimer la photo',
+        'phone_required' => 'Numéro de téléphone requis',
+        'phone_not_verified' => 'Veuillez ajouter votre téléphone',
+        'verify_phone' => 'Vérifier le téléphone',
+        'phone_verified' => 'Téléphone vérifié',
+        'add_phone_first' => 'Ajoutez d\'abord votre téléphone',
+
+        // Driver Verification
+        'driver_verified' => 'Chauffeur vérifié',
+        'driver_not_verified' => 'Votre compte doit être vérifié par l\'admin avant d\'accepter des commandes',
+        'pending_verification' => 'En attente de vérification',
+        'verified' => 'Vérifié',
+        'verification' => 'Vérification',
+        'verify_driver' => 'Vérifier le chauffeur',
+        'unverify' => 'Retirer la vérification',
+        'confirm_verify' => 'Vérifier ce chauffeur?',
+        'confirm_unverify' => 'Retirer la vérification?',
+        'driver_verified_success' => 'Chauffeur vérifié avec succès! Il peut maintenant accepter des commandes.',
+        'driver_unverified' => 'Vérification du chauffeur retirée.',
+
+        // Phone Registration (Mauritania: 8 digits starting with 2, 3, or 4)
+        'phone_example' => '2XXXXXXX',
+        'phone_format_hint' => '8 chiffres commençant par 2, 3 ou 4',
+        'err_phone_invalid' => 'Le téléphone doit être 8 chiffres commençant par 2, 3 ou 4',
+        'err_phone_exists' => 'Ce numéro est déjà enregistré. Veuillez vous connecter.',
+        'demo_phone_login' => 'Comptes démo (Téléphone / Mot de passe):',
+        'profile_completed' => 'Profil mis à jour avec succès!',
+
+        // Driver Enhanced
+        'go_online' => 'Passer en ligne',
+        'go_offline' => 'Passer hors ligne',
+        'you_are_online' => 'Vous êtes en ligne',
+        'you_are_offline' => 'Vous êtes hors ligne',
+        'earnings' => 'Gains',
+        'my_earnings' => 'Mes gains',
+        'today_earnings' => 'Gains du jour',
+        'week_earnings' => 'Gains de la semaine',
+        'month_earnings' => 'Gains du mois',
+        'completed_deliveries' => 'Livraisons effectuées',
+        'active_deliveries' => 'Livraisons actives',
+        'my_rating' => 'Ma note',
+        'max_orders_reached' => 'Maximum de commandes actives atteint',
+
+        // Client Enhanced
+        'active_orders' => 'Commandes actives',
+        'track_order' => 'Suivre la commande',
+        'order_history' => 'Historique',
+        'rate_driver' => 'Noter le livreur',
+        'rate_delivery' => 'Noter la livraison',
+        'your_rating' => 'Votre note',
+        'leave_comment' => 'Laisser un commentaire',
+        'submit_rating' => 'Envoyer la note',
+        'thanks_for_rating' => 'Merci pour votre note!',
+
+        // Order Status Enhanced
+        'st_picked_up' => 'Récupéré',
+        'finding_driver' => 'Recherche d\'un livreur...',
+        'driver_assigned' => 'Livreur assigné',
+        'driver_on_way' => 'Livreur en route',
+        'driver_arrived' => 'Livreur arrivé',
+        'package_picked' => 'Colis récupéré',
+        'on_the_way' => 'En route vers vous',
+
+        // Tracking
+        'live_tracking' => 'Suivi en direct',
+        'distance' => 'Distance',
+        'eta' => 'Temps estimé',
+        'km' => 'km',
+        'min' => 'min',
+        'call_driver' => 'Appeler le livreur',
+        'message_driver' => 'Envoyer un message',
+
+        // Stats
+        'this_week' => 'Cette semaine',
+        'this_month' => 'Ce mois',
+        'orders_count' => 'Nombre de commandes',
+        'delivery_count' => 'Nombre de livraisons'
     ]
 ];
 $t = $text[$lang];

@@ -623,6 +623,162 @@ require_once 'actions.php';
             font-size: 2.5rem;
             color: white;
             box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-avatar-edit {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        .profile-avatar:hover .profile-avatar-edit {
+            opacity: 1;
+        }
+
+        /* Online toggle switch */
+        .online-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 16px;
+        }
+        .online-toggle .form-check-input {
+            width: 50px;
+            height: 26px;
+            cursor: pointer;
+        }
+        .online-toggle .form-check-input:checked {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+        .online-status {
+            font-weight: 600;
+        }
+        .online-status.online {
+            color: var(--success-color);
+        }
+        .online-status.offline {
+            color: var(--text-secondary);
+        }
+
+        /* Serial number badge */
+        .serial-badge {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            color: var(--primary-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Verified badge */
+        .verified-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+        }
+        .verified-badge-sm {
+            width: 20px;
+            height: 20px;
+            font-size: 0.6rem;
+            border-width: 2px;
+        }
+        .avatar-with-badge {
+            position: relative;
+            display: inline-block;
+        }
+        .not-verified-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Phone verification badge */
+        .phone-verified {
+            color: var(--success-color);
+        }
+        .phone-not-verified {
+            color: var(--warning-color);
+        }
+
+        /* Stats grid for driver/client */
+        .mini-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .mini-stat {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 12px;
+            border-radius: var(--border-radius-sm);
+            text-align: center;
+        }
+        .mini-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .mini-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* Rating stars */
+        .rating-stars {
+            color: #fbbf24;
+        }
+        .rating-value {
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        /* Order status picked_up */
+        .badge-picked_up {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            color: #3730a3;
+            border: none;
+            font-weight: 600;
         }
 
         /* Section divider */
@@ -689,14 +845,15 @@ require_once 'actions.php';
                     </button>
                 </div>
 
-                <!-- Login Form -->
+                <!-- Login Form (Phone + Password) -->
                 <form method="POST" id="loginForm" class="auth-form active" onsubmit="this.querySelector('button').classList.add('loading')">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['user_ph']; ?></label>
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?></label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                            <input type="text" name="username" class="form-control" placeholder="<?php echo $t['user_ph']; ?>" required autocomplete="username">
+                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
+                            <input type="tel" name="phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" pattern="[234][0-9]{7}">
                         </div>
+                        <small class="text-muted"><?php echo $t['phone_format_hint'] ?? '8 digits starting with 2, 3, or 4'; ?></small>
                     </div>
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?></label>
@@ -710,30 +867,25 @@ require_once 'actions.php';
                     </button>
                 </form>
 
-                <!-- Register Form -->
+                <!-- Register Form (Phone + Password) -->
                 <form method="POST" id="registerForm" class="auth-form" onsubmit="this.querySelector('button').classList.add('loading')">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
+                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" minlength="8" pattern="[234][0-9]{7}">
+                        </div>
+                        <small class="text-muted"><?php echo $t['phone_format_hint'] ?? '8 digits starting with 2, 3, or 4'; ?></small>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-id-card text-muted"></i></span>
+                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
                             <input type="text" name="reg_full_name" class="form-control" placeholder="<?php echo $t['full_name_ph']; ?>">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['user_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                            <input type="text" name="reg_username" class="form-control" placeholder="<?php echo $t['user_ph']; ?>" required minlength="3" autocomplete="username">
-                        </div>
-                        <small class="text-muted"><?php echo $t['err_username_short']; ?></small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-muted fw-normal">(<?php echo $t['optional']; ?>)</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
-                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_ph']; ?>">
-                        </div>
-                    </div>
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?> <span class="text-danger">*</span></label>
                         <div class="input-group">
@@ -742,6 +894,7 @@ require_once 'actions.php';
                         </div>
                         <small class="text-muted"><?php echo $t['err_password_short']; ?></small>
                     </div>
+
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-secondary"><?php echo $t['confirm_pass_ph']; ?> <span class="text-danger">*</span></label>
                         <div class="input-group">
@@ -749,6 +902,7 @@ require_once 'actions.php';
                             <input type="password" name="reg_confirm_password" class="form-control" placeholder="<?php echo $t['confirm_pass_ph']; ?>" required autocomplete="new-password">
                         </div>
                     </div>
+
                     <button name="do_register" class="btn btn-success w-100 py-3 fw-bold rounded-pill">
                         <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus ms-2"></i>
                     </button>
@@ -756,10 +910,11 @@ require_once 'actions.php';
 
                 <div class="mt-4 text-center demo-box p-3">
                     <div class="fw-bold text-secondary mb-2"><i class="fas fa-info-circle me-1"></i> <?php echo $t['demo_accounts']; ?></div>
+                    <small class="text-muted d-block mb-2"><?php echo $t['demo_phone_login'] ?? 'Demo accounts (Phone / Password):'; ?></small>
                     <div class="d-flex flex-wrap justify-content-center gap-2">
-                        <span class="badge bg-danger">admin / 123</span>
-                        <span class="badge bg-info">driver / 123</span>
-                        <span class="badge bg-success">client / 123</span>
+                        <span class="badge bg-danger">20000001 / 123</span>
+                        <span class="badge bg-info">30000002 / 123</span>
+                        <span class="badge bg-success">40000003 / 123</span>
                     </div>
                 </div>
             </div>
@@ -813,19 +968,111 @@ require_once 'actions.php';
                             </a>
                         </div>
                         <div class="card-body p-4">
-                            <form method="POST" onsubmit="this.querySelector('button[type=submit]').classList.add('loading')">
+                            <form method="POST" enctype="multipart/form-data" onsubmit="this.querySelector('button[type=submit]').classList.add('loading')">
                                 <!-- Profile Header -->
                                 <div class="text-center mb-4">
-                                    <div class="profile-avatar mb-3">
-                                        <i class="fas fa-user"></i>
-                                    </div>
+                                    <label for="avatarInput" class="d-inline-block" style="cursor: pointer;">
+                                        <div class="avatar-with-badge">
+                                            <div class="profile-avatar mb-3">
+                                                <?php
+                                                $avatarUrl = getAvatarUrl($u);
+                                                if ($avatarUrl): ?>
+                                                    <img src="<?php echo e($avatarUrl); ?>" alt="Avatar">
+                                                <?php else: ?>
+                                                    <span style="font-size: 2rem;"><?php echo getUserInitials($u); ?></span>
+                                                <?php endif; ?>
+                                                <div class="profile-avatar-edit">
+                                                    <i class="fas fa-camera"></i> <?php echo $t['change_photo'] ?? 'Change'; ?>
+                                                </div>
+                                            </div>
+                                            <?php if($role == 'driver' && !empty($u['is_verified'])): ?>
+                                                <div class="verified-badge" title="<?php echo $t['driver_verified'] ?? 'Verified Driver'; ?>">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </label>
+                                    <input type="file" name="avatar" id="avatarInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="this.form.submit()">
+
                                     <h5 class="fw-bold mb-1"><?php echo e($u['full_name'] ?: $u['username']); ?></h5>
                                     <span class="badge bg-primary rounded-pill px-3"><?php echo $t[$role]; ?></span>
+
+                                    <?php if(!empty($u['serial_no'])): ?>
+                                    <div class="mt-2">
+                                        <span class="serial-badge"><i class="fas fa-id-badge me-1"></i><?php echo e($u['serial_no']); ?></span>
+                                    </div>
+                                    <?php endif; ?>
+
                                     <?php if($role == 'driver'): ?>
+                                    <!-- Driver Verification Status -->
+                                    <?php if(!empty($u['is_verified'])): ?>
+                                        <div class="mt-2">
+                                            <span class="badge bg-success px-3 py-2"><i class="fas fa-certificate me-1"></i> <?php echo $t['driver_verified'] ?? 'Verified Driver'; ?></span>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="mt-2">
+                                            <span class="badge bg-warning text-dark px-3 py-2"><i class="fas fa-clock me-1"></i> <?php echo $t['pending_verification'] ?? 'Pending Verification'; ?></span>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <div class="mt-2">
                                         <span class="badge bg-warning text-dark px-3 py-2">
                                             <i class="fas fa-coins me-1"></i> <?php echo $u['points']; ?> <?php echo $t['pts']; ?>
                                         </span>
+                                        <?php if(!empty($u['rating'])): ?>
+                                        <span class="badge bg-light text-dark px-3 py-2 ms-1">
+                                            <span class="rating-stars"><i class="fas fa-star"></i></span>
+                                            <span class="rating-value"><?php echo number_format($u['rating'], 1); ?></span>
+                                        </span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <?php
+                                    // Get driver stats
+                                    $driverStats = getDriverStats($conn, $uid);
+                                    ?>
+                                    <div class="mini-stats">
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $driverStats['total_delivered']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['completed_orders'] ?? 'Completed'; ?></div>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $driverStats['total_earnings']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['total_earnings'] ?? 'Earnings'; ?></div>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $driverStats['this_month']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['this_month'] ?? 'This Month'; ?></div>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $driverStats['active_orders']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['active_orders'] ?? 'Active'; ?></div>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <?php if($role == 'customer'): ?>
+                                    <?php
+                                    // Get client stats
+                                    $clientStats = getClientStats($conn, $u['username']);
+                                    ?>
+                                    <div class="mini-stats">
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $clientStats['total_orders']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['total_orders'] ?? 'Total Orders'; ?></div>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $clientStats['delivered']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['delivered'] ?? 'Delivered'; ?></div>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $clientStats['active']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['active_orders'] ?? 'Active'; ?></div>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <div class="mini-stat-value"><?php echo $clientStats['this_month']; ?></div>
+                                            <div class="mini-stat-label"><?php echo $t['this_month'] ?? 'This Month'; ?></div>
+                                        </div>
                                     </div>
                                     <?php endif; ?>
                                 </div>
@@ -844,11 +1091,19 @@ require_once 'actions.php';
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?></label>
+                                    <label class="form-label small fw-bold text-secondary">
+                                        <?php echo $t['phone_ph']; ?>
+                                        <?php if(isPhoneVerified($u)): ?>
+                                            <span class="phone-verified ms-2"><i class="fas fa-check-circle"></i> <?php echo $t['phone_verified'] ?? 'Verified'; ?></span>
+                                        <?php elseif(!empty($u['phone'])): ?>
+                                            <span class="phone-not-verified ms-2"><i class="fas fa-exclamation-circle"></i> <?php echo $t['phone_not_verified'] ?? 'Not Verified'; ?></span>
+                                        <?php endif; ?>
+                                    </label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
                                         <input type="tel" name="phone" class="form-control" value="<?php echo e($u['phone']); ?>" placeholder="<?php echo $t['phone_ph']; ?>">
                                     </div>
+                                    <small class="text-muted"><?php echo $t['phone_auto_verify'] ?? 'Phone is auto-verified when added'; ?></small>
                                 </div>
 
                                 <div class="mb-3">
@@ -1026,9 +1281,10 @@ require_once 'actions.php';
                             <table class="table table-hover mb-0">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>ID</th>
-                                        <th><?php echo $t['username']; ?></th>
+                                        <th><?php echo $t['driver'] ?? 'Driver'; ?></th>
+                                        <th><?php echo $t['phone_ph']; ?></th>
                                         <th><?php echo $t['points']; ?></th>
+                                        <th><?php echo $t['verification'] ?? 'Verification'; ?></th>
                                         <th><?php echo $t['status']; ?></th>
                                         <th class="text-end"><?php echo $t['action']; ?></th>
                                     </tr>
@@ -1037,16 +1293,55 @@ require_once 'actions.php';
                                     <?php
                                     $drivers = $conn->query("SELECT * FROM users1 WHERE role='driver' ORDER BY id DESC");
                                     while($driver = $drivers->fetch()):
+                                        $driverAvatarUrl = getAvatarUrl($driver);
+                                        $isVerified = !empty($driver['is_verified']);
                                     ?>
                                     <tr>
-                                        <td><?php echo $driver['id']; ?></td>
                                         <td>
-                                            <strong><?php echo e($driver['username']); ?></strong>
-                                            <?php if($driver['full_name']): ?>
-                                            <br><small class="text-muted"><?php echo e($driver['full_name']); ?></small>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar-with-badge">
+                                                    <div style="width:40px;height:40px;border-radius:50%;background:<?php echo getAvatarColor('driver'); ?>;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:0.9rem;overflow:hidden;">
+                                                        <?php if($driverAvatarUrl): ?>
+                                                            <img src="<?php echo e($driverAvatarUrl); ?>" style="width:100%;height:100%;object-fit:cover;">
+                                                        <?php else: ?>
+                                                            <?php echo getUserInitials($driver); ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <?php if($isVerified): ?>
+                                                        <div class="verified-badge verified-badge-sm" title="<?php echo $t['driver_verified'] ?? 'Verified Driver'; ?>">
+                                                            <i class="fas fa-check"></i>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div>
+                                                    <strong><?php echo e($driver['username']); ?></strong>
+                                                    <?php if($driver['full_name']): ?>
+                                                    <br><small class="text-muted"><?php echo e($driver['full_name']); ?></small>
+                                                    <?php endif; ?>
+                                                    <?php if(!empty($driver['serial_no'])): ?>
+                                                    <br><small class="text-primary"><?php echo e($driver['serial_no']); ?></small>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <?php if(!empty($driver['phone'])): ?>
+                                                <span class="text-dark"><?php echo e($driver['phone']); ?></span>
+                                                <?php if($driver['phone_verified']): ?>
+                                                    <i class="fas fa-check-circle text-success ms-1" title="<?php echo $t['phone_verified'] ?? 'Verified'; ?>"></i>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
                                             <?php endif; ?>
                                         </td>
                                         <td><span class="badge bg-warning text-dark"><?php echo $driver['points']; ?> pts</span></td>
+                                        <td>
+                                            <?php if($isVerified): ?>
+                                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i><?php echo $t['verified'] ?? 'Verified'; ?></span>
+                                            <?php else: ?>
+                                                <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i><?php echo $t['pending_verification'] ?? 'Pending'; ?></span>
+                                            <?php endif; ?>
+                                        </td>
                                         <td>
                                             <?php if($driver['status'] == 'active'): ?>
                                                 <span class="badge bg-success"><?php echo $t['active']; ?></span>
@@ -1055,6 +1350,10 @@ require_once 'actions.php';
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-end table-actions">
+                                            <!-- Verify/Unverify Button -->
+                                            <a href="?toggle_verify=<?php echo $driver['id']; ?>" class="btn btn-sm btn-<?php echo $isVerified ? 'success' : 'outline-success'; ?>" onclick="return confirm('<?php echo $isVerified ? ($t['confirm_unverify'] ?? 'Remove verification?') : ($t['confirm_verify'] ?? 'Verify this driver?'); ?>')" title="<?php echo $isVerified ? ($t['unverify'] ?? 'Remove Verification') : ($t['verify_driver'] ?? 'Verify Driver'); ?>">
+                                                <i class="fas fa-<?php echo $isVerified ? 'certificate' : 'user-check'; ?>"></i>
+                                            </a>
                                             <button class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($driver)); ?>)">
                                                 <i class="fas fa-edit"></i>
                                             </button>
@@ -1356,11 +1655,40 @@ require_once 'actions.php';
                 <!-- LEFT COLUMN -->
                 <div class="col-lg-4 order-lg-last">
                     <?php if($role == 'driver'): ?>
+                    <!-- Online/Offline Toggle -->
+                    <div class="online-toggle mb-3">
+                        <form method="POST" id="onlineToggleForm" class="d-flex align-items-center gap-3 w-100">
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" id="onlineSwitch" name="is_online" value="1"
+                                    <?php echo $u['is_online'] ? 'checked' : ''; ?>
+                                    onchange="document.getElementById('onlineToggleForm').submit();"
+                                    <?php echo !isPhoneVerified($u) ? 'disabled' : ''; ?>>
+                            </div>
+                            <div class="flex-grow-1">
+                                <span class="online-status <?php echo $u['is_online'] ? 'online' : 'offline'; ?>">
+                                    <?php echo $u['is_online'] ? ($t['online'] ?? 'Online') : ($t['offline'] ?? 'Offline'); ?>
+                                </span>
+                                <?php if(!isPhoneVerified($u)): ?>
+                                    <div class="small text-warning"><i class="fas fa-exclamation-circle"></i> <?php echo $t['verify_phone_first'] ?? 'Add phone number to go online'; ?></div>
+                                <?php endif; ?>
+                            </div>
+                            <input type="hidden" name="toggle_online" value="1">
+                        </form>
+                    </div>
+
                     <div class="card stat-card mb-3">
                         <div class="card-body text-center p-4">
                             <h6 class="opacity-75 mb-2"><?php echo $t['balance']; ?></h6>
                             <h1 class="display-4 fw-bold mb-0" id="driverPoints"><?php echo $u['points']; ?></h1>
                             <span class="opacity-75"><?php echo $t['points']; ?></span>
+
+                            <?php if(!empty($u['rating'])): ?>
+                            <div class="mt-2 opacity-75">
+                                <span class="rating-stars"><i class="fas fa-star"></i></span>
+                                <span class="rating-value"><?php echo number_format($u['rating'], 1); ?></span>
+                            </div>
+                            <?php endif; ?>
+
                             <?php if($u['points'] < $points_cost_per_order): ?>
                                 <div class="mt-3 bg-white text-danger rounded p-2 small fw-bold" id="lowBalanceWarning">
                                     <i class="fas fa-exclamation-triangle"></i> <?php echo $t['err_low_bal']; ?>
@@ -1369,6 +1697,23 @@ require_once 'actions.php';
                             <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=Recharge%20User:%20<?php echo $u['username']; ?>" target="_blank" class="btn btn-light text-success w-100 mt-3 fw-bold rounded-pill">
                                 <i class="fab fa-whatsapp"></i> <?php echo $t['recharge_wa']; ?>
                             </a>
+                        </div>
+                    </div>
+
+                    <!-- Driver Quick Stats -->
+                    <?php $driverStats = getDriverStats($conn, $uid); ?>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="stats-box text-center py-3">
+                                <h4 class="mb-0 text-primary"><?php echo $driverStats['active_orders']; ?></h4>
+                                <small class="text-muted"><?php echo $t['active_orders'] ?? 'Active'; ?></small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stats-box text-center py-3">
+                                <h4 class="mb-0 text-success"><?php echo $driverStats['total_delivered']; ?></h4>
+                                <small class="text-muted"><?php echo $t['completed_orders'] ?? 'Completed'; ?></small>
+                            </div>
                         </div>
                     </div>
                     <?php endif; ?>
@@ -1425,8 +1770,8 @@ require_once 'actions.php';
                                 <tbody class="border-top-0">
                                     <?php
                                     $limit = "";
-                                    if($role == 'driver') $limit = "WHERE status IN ('pending', 'accepted') OR driver_id='$uid'";
-                                    if($role == 'customer') $limit = "WHERE customer_name='{$u['username']}'";
+                                    if($role == 'driver') $limit = "WHERE status IN ('pending', 'accepted', 'picked_up') OR driver_id='$uid'";
+                                    if($role == 'customer') $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
 
                                     $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
                                     $res = $conn->query($sql);
@@ -1463,13 +1808,19 @@ require_once 'actions.php';
                                                             <div class="small text-muted mt-1" style="font-size:0.75rem"><?php echo $t['pin_note']; ?></div>
                                                         </div>
                                                     <?php endif; ?>
+
+                                                    <?php if($role == 'driver' && ($st == 'accepted' || $st == 'picked_up') && $row['driver_id'] == $uid): ?>
+                                                        <div class="mt-2 text-muted small">
+                                                            <i class="fas fa-user me-1"></i> <?php echo e($row['customer_name']); ?>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <span class="badge <?php echo $badge; ?> rounded-pill px-3 py-2">
                                                 <i class="fas fa-<?php echo $icon; ?> me-1"></i>
-                                                <?php echo $t['st_'.$st]; ?>
+                                                <?php echo $t['st_'.$st] ?? ucfirst($st); ?>
                                             </span>
                                         </td>
                                         <td class="text-end pe-4">
@@ -1484,11 +1835,30 @@ require_once 'actions.php';
                                                     </form>
 
                                                 <?php elseif($st == 'accepted' && $row['driver_id'] == $uid): ?>
+                                                    <form method="POST" onsubmit="this.querySelector('button').classList.add('loading')">
+                                                        <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
+                                                        <button type="submit" name="pickup_order" class="btn btn-sm btn-info text-white rounded-pill px-3">
+                                                            <i class="fas fa-box me-1"></i> <?php echo $t['driver_pickup'] ?? 'Picked Up'; ?>
+                                                        </button>
+                                                    </form>
+
+                                                <?php elseif($st == 'picked_up' && $row['driver_id'] == $uid): ?>
                                                     <form method="POST" class="d-flex justify-content-end align-items-center gap-2" onsubmit="this.querySelector('button').classList.add('loading')">
                                                         <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
                                                         <input type="text" name="pin" class="form-control form-control-sm text-center fw-bold" style="width:85px; border-color: var(--success-color);" placeholder="<?php echo $t['verify_ph']; ?>" required maxlength="4" pattern="[0-9]{4}" inputmode="numeric">
                                                         <button type="submit" name="finish_job" class="btn btn-sm btn-success rounded-pill px-3" title="<?php echo $t['finish_delivery']; ?>">
                                                             <i class="fas fa-check-double me-1"></i> <?php echo $t['verify_fin']; ?>
+                                                        </button>
+                                                    </form>
+                                                <?php endif; ?>
+
+                                            <?php elseif($role == 'customer'): ?>
+
+                                                <?php if($st == 'pending'): ?>
+                                                    <form method="POST" onsubmit="return confirm('<?php echo $t['confirm_cancel'] ?? 'Cancel this order?'; ?>');">
+                                                        <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
+                                                        <button type="submit" name="customer_cancel" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                            <i class="fas fa-times me-1"></i> <?php echo $t['cancel'] ?? 'Cancel'; ?>
                                                         </button>
                                                     </form>
                                                 <?php endif; ?>
