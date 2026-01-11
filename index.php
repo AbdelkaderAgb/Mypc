@@ -58,6 +58,119 @@ require_once 'actions.php';
             min-height: 100vh;
         }
 
+        /* ==========================================
+           RTL (Right-to-Left) Support for Arabic
+           ========================================== */
+        [dir="rtl"] {
+            text-align: right;
+        }
+
+        /* RTL: Numbers display */
+        [dir="rtl"] .ltr-numbers {
+            direction: ltr;
+            display: inline-block;
+        }
+
+        /* RTL: Flip margins and paddings */
+        [dir="rtl"] .me-1 { margin-right: 0 !important; margin-left: 0.25rem !important; }
+        [dir="rtl"] .me-2 { margin-right: 0 !important; margin-left: 0.5rem !important; }
+        [dir="rtl"] .me-3 { margin-right: 0 !important; margin-left: 1rem !important; }
+        [dir="rtl"] .ms-1 { margin-left: 0 !important; margin-right: 0.25rem !important; }
+        [dir="rtl"] .ms-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+        [dir="rtl"] .ms-3 { margin-left: 0 !important; margin-right: 1rem !important; }
+        [dir="rtl"] .ms-auto { margin-left: 0 !important; margin-right: auto !important; }
+        [dir="rtl"] .me-auto { margin-right: 0 !important; margin-left: auto !important; }
+
+        [dir="rtl"] .pe-1 { padding-right: 0 !important; padding-left: 0.25rem !important; }
+        [dir="rtl"] .pe-2 { padding-right: 0 !important; padding-left: 0.5rem !important; }
+        [dir="rtl"] .pe-3 { padding-right: 0 !important; padding-left: 1rem !important; }
+        [dir="rtl"] .ps-1 { padding-left: 0 !important; padding-right: 0.25rem !important; }
+        [dir="rtl"] .ps-2 { padding-left: 0 !important; padding-right: 0.5rem !important; }
+        [dir="rtl"] .ps-3 { padding-left: 0 !important; padding-right: 1rem !important; }
+        [dir="rtl"] .ps-4 { padding-left: 0 !important; padding-right: 1.5rem !important; }
+
+        /* RTL: Border radius */
+        [dir="rtl"] .rounded-start { border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0 !important; }
+        [dir="rtl"] .rounded-end { border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius) !important; }
+        [dir="rtl"] .rounded-start-3 { border-radius: 0 0.5rem 0.5rem 0 !important; }
+        [dir="rtl"] .rounded-end-3 { border-radius: 0.5rem 0 0 0.5rem !important; }
+
+        /* RTL: Border sides */
+        [dir="rtl"] .border-start { border-left: none !important; border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important; }
+        [dir="rtl"] .border-end { border-right: none !important; border-left: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important; }
+
+        /* RTL: Text alignment */
+        [dir="rtl"] .text-start { text-align: right !important; }
+        [dir="rtl"] .text-end { text-align: left !important; }
+
+        /* RTL: Flexbox */
+        [dir="rtl"] .flex-row { flex-direction: row-reverse !important; }
+        [dir="rtl"] .flex-row-reverse { flex-direction: row !important; }
+
+        /* RTL: Input groups */
+        [dir="rtl"] .input-group { flex-direction: row-reverse; }
+        [dir="rtl"] .input-group > .form-control,
+        [dir="rtl"] .input-group > .form-select {
+            text-align: right;
+        }
+        [dir="rtl"] .input-group-text { border-radius: 0 0.375rem 0.375rem 0; }
+        [dir="rtl"] .input-group > .form-control:last-child { border-radius: 0.375rem 0 0 0.375rem; }
+        [dir="rtl"] .input-group > .form-control:first-child { border-radius: 0 0.375rem 0.375rem 0; }
+
+        /* RTL: Dropdown */
+        [dir="rtl"] .dropdown-menu { text-align: right; }
+        [dir="rtl"] .dropdown-menu-end { right: auto !important; left: 0 !important; }
+
+        /* RTL: Icons positioning */
+        [dir="rtl"] .fa-arrow-left:before { content: "\f061"; }
+        [dir="rtl"] .fa-arrow-right:before { content: "\f060"; }
+        [dir="rtl"] .fa-chevron-left:before { content: "\f054"; }
+        [dir="rtl"] .fa-chevron-right:before { content: "\f053"; }
+
+        /* RTL: Tables */
+        [dir="rtl"] table { direction: rtl; }
+        [dir="rtl"] th, [dir="rtl"] td { text-align: right; }
+
+        /* RTL: Lists */
+        [dir="rtl"] ul, [dir="rtl"] ol { padding-right: 2rem; padding-left: 0; }
+
+        /* RTL: Form labels */
+        [dir="rtl"] .form-label { text-align: right; display: block; }
+        [dir="rtl"] .form-check { padding-left: 0; padding-right: 1.5em; }
+        [dir="rtl"] .form-check-input { float: right; margin-left: 0.5em; margin-right: -1.5em; }
+
+        /* RTL: Modal close button */
+        [dir="rtl"] .btn-close { margin-left: 0; margin-right: auto; }
+        [dir="rtl"] .modal-header .btn-close { margin: -0.5rem auto -0.5rem -0.5rem; }
+
+        /* RTL: Alerts */
+        [dir="rtl"] .alert-dismissible { padding-right: 1rem; padding-left: 3rem; }
+        [dir="rtl"] .alert-dismissible .btn-close { right: auto; left: 0; }
+
+        /* RTL: Badge positioning */
+        [dir="rtl"] .position-absolute.top-0.end-0 { right: auto !important; left: 0 !important; }
+        [dir="rtl"] .position-absolute.top-0.start-0 { left: auto !important; right: 0 !important; }
+
+        /* RTL: Gap utilities - keep consistent */
+        [dir="rtl"] .gap-1, [dir="rtl"] .gap-2, [dir="rtl"] .gap-3 { gap: inherit; }
+
+        /* RTL: Card headers */
+        [dir="rtl"] .card-header { text-align: right; }
+
+        /* RTL: Progress bars */
+        [dir="rtl"] .progress-bar { transform-origin: right; }
+        [dir="rtl"] .progress { direction: rtl; }
+
+        /* RTL: Order tracking steps */
+        [dir="rtl"] .progress-track { flex-direction: row-reverse; }
+        [dir="rtl"] .progress-track::before { left: 10%; right: 10%; }
+
+        /* RTL: Navbar brand */
+        [dir="rtl"] .navbar-brand { margin-right: 0; margin-left: 1rem; }
+
+        /* RTL: Stats and mini-stats */
+        [dir="rtl"] .mini-stats { flex-direction: row-reverse; }
+
         /* Animations */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -2432,6 +2545,56 @@ function createNotificationSound() {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// ==========================================
+// RTL & Arabic Number Support
+// ==========================================
+const isRTL = document.documentElement.dir === 'rtl';
+const currentLang = '<?php echo $lang; ?>';
+
+// Arabic-Indic numerals
+const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+// Convert Western numbers to Arabic numerals
+function toArabicNumbers(str) {
+    if (currentLang !== 'ar') return str;
+    return String(str).replace(/[0-9]/g, d => arabicNumerals[d]);
+}
+
+// Convert Arabic numerals to Western numbers
+function toWesternNumbers(str) {
+    return String(str).replace(/[٠-٩]/g, d => arabicNumerals.indexOf(d));
+}
+
+// Format number with Arabic numerals if Arabic language
+function formatNumber(num) {
+    if (currentLang === 'ar') {
+        return toArabicNumbers(num);
+    }
+    return num;
+}
+
+// Keep phone inputs as LTR for easier input
+document.addEventListener('DOMContentLoaded', function() {
+    // Make phone inputs LTR
+    document.querySelectorAll('input[type="tel"], input[name*="phone"]').forEach(input => {
+        input.style.direction = 'ltr';
+        input.style.textAlign = isRTL ? 'right' : 'left';
+    });
+
+    // Make number inputs LTR
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.style.direction = 'ltr';
+        input.style.textAlign = isRTL ? 'right' : 'left';
+    });
+
+    // Update number displays with Arabic numerals if needed
+    if (currentLang === 'ar') {
+        document.querySelectorAll('.arabic-number').forEach(el => {
+            el.textContent = toArabicNumbers(el.textContent);
+        });
+    }
+});
+
 // Navbar scroll effect
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.app-navbar');
