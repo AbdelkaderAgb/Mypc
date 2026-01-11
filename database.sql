@@ -80,11 +80,11 @@ CREATE TABLE IF NOT EXISTS orders1 (
 CREATE TABLE IF NOT EXISTS serial_counters (
     id INT AUTO_INCREMENT PRIMARY KEY,
     prefix CHAR(2) NOT NULL COMMENT 'CL, DR, AD',
-    year_month CHAR(4) NOT NULL COMMENT 'YYMM format',
+    `year_month` CHAR(4) NOT NULL COMMENT 'YYMM format',
     current_count INT DEFAULT 0,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    UNIQUE KEY unique_prefix_month (prefix, year_month)
+    UNIQUE KEY unique_prefix_month (prefix, `year_month`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================
@@ -100,9 +100,7 @@ CREATE TABLE IF NOT EXISTS ratings (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     INDEX idx_ratee (ratee_id),
-    INDEX idx_order (order_id),
-
-    CONSTRAINT chk_score CHECK (score >= 1 AND score <= 5)
+    INDEX idx_order (order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================
