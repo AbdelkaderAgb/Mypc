@@ -27,8 +27,11 @@ $db_config = [
 // APPLICATION SETTINGS
 // ==========================================
 $whatsapp_number = "22241312931";
+$help_email = "help@barqmr.com";
+$help_phone = "+222 41 31 29 31";
 $points_cost_per_order = 20;
 $driver_max_active_orders = 2;        // Max concurrent orders per driver
+$order_expiry_hours = 3;              // Orders expire after 3 hours without acceptance
 $driver_search_radius_km = 10;        // Radius to search for drivers
 $uploads_dir = __DIR__ . '/uploads';  // Profile pictures directory
 

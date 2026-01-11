@@ -26,9 +26,11 @@ if (isset($_POST['do_register'])) {
     // Clean phone number (remove non-digits)
     $phone = preg_replace('/[^0-9]/', '', $phone);
 
-    // Validation - Mauritanian phone: 8 digits starting with 2, 3, or 4
-    if (!isValidMauritanianPhone($phone)) {
-        setFlash('error', $t['err_phone_invalid'] ?? 'Phone must be 8 digits starting with 2, 3, or 4');
+    // Validation
+    if (strlen($full_name) < 2) {
+        setFlash('error', $t['err_name_required'] ?? 'Full name is required');
+    } elseif (!isValidMauritanianPhone($phone)) {
+        setFlash('error', $t['err_phone_invalid'] ?? 'Please enter a valid phone number');
     } elseif (strlen($password) < 4) {
         setFlash('error', $t['err_password_short'] ?? 'Password must be at least 4 characters');
     } elseif ($password !== $confirm_password) {

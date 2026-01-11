@@ -117,8 +117,13 @@ function getStatusIcon($status) {
  * Get user avatar URL or generate initials avatar
  */
 function getAvatarUrl($user) {
-    if (!empty($user['avatar_url']) && file_exists(__DIR__ . '/' . $user['avatar_url'])) {
-        return $user['avatar_url'];
+    if (!empty($user['avatar_url'])) {
+        $fullPath = __DIR__ . '/' . $user['avatar_url'];
+        if (file_exists($fullPath)) {
+            // Add cache-busting parameter based on file modification time
+            $mtime = filemtime($fullPath);
+            return $user['avatar_url'] . '?v=' . $mtime;
+        }
     }
     // Return null to use initials avatar
     return null;
