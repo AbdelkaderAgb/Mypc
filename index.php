@@ -1334,8 +1334,6 @@ function createNotificationSound() {
                     <small class="text-muted">
                         <?php echo $t['need_help'] ?? 'Need help?'; ?>
                         <a href="mailto:<?php echo $help_email; ?>" class="text-primary"><?php echo $help_email; ?></a>
-                        <br>
-                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" class="text-success"><i class="fab fa-whatsapp"></i> <?php echo $help_phone; ?></a>
                     </small>
                 </div>
             </div>
@@ -2209,22 +2207,6 @@ function createNotificationSound() {
                                     </div>
                                 </div>
 
-                                <!-- Pickup Location -->
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted mb-1">
-                                        <i class="fas fa-store me-1 text-success"></i><?php echo $t['pickup_location'] ?? 'Pickup Location'; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="text" name="pickup_address" id="pickupAddress" class="form-control bg-light border-0"
-                                               placeholder="<?php echo $t['pickup_placeholder'] ?? 'Where to pick up from...'; ?>" required>
-                                        <button type="button" class="btn btn-outline-success border-0 bg-light" onclick="getLocation('pickup')">
-                                            <i class="fas fa-location-crosshairs"></i>
-                                        </button>
-                                    </div>
-                                    <input type="hidden" name="pickup_lat" id="pickupLat">
-                                    <input type="hidden" name="pickup_lng" id="pickupLng">
-                                </div>
-
                                 <!-- Delivery Address -->
                                 <div class="mb-4">
                                     <label class="form-label small text-muted mb-1">
@@ -2233,28 +2215,12 @@ function createNotificationSound() {
                                     <div class="input-group">
                                         <input type="text" name="address" id="deliveryAddress" class="form-control bg-light border-0"
                                                placeholder="<?php echo $t['delivery_placeholder'] ?? 'Where to deliver...'; ?>" required>
-                                        <button type="button" class="btn btn-outline-danger border-0 bg-light" onclick="getLocation('delivery')">
+                                        <button type="button" class="btn btn-outline-danger border-0 bg-light" onclick="getMyLocation()">
                                             <i class="fas fa-location-crosshairs"></i>
                                         </button>
                                     </div>
                                     <input type="hidden" name="delivery_lat" id="deliveryLat">
                                     <input type="hidden" name="delivery_lng" id="deliveryLng">
-                                </div>
-
-                                <!-- Distance Preview (shown when both locations are set) -->
-                                <div id="distancePreview" class="mb-3 p-3 bg-primary bg-opacity-10 rounded-3 text-center" style="display:none;">
-                                    <div class="d-flex justify-content-around align-items-center">
-                                        <div>
-                                            <i class="fas fa-route fa-lg text-primary"></i>
-                                            <div class="small text-muted"><?php echo $t['distance'] ?? 'Distance'; ?></div>
-                                            <div class="fw-bold" id="estimatedDistance">--</div>
-                                        </div>
-                                        <div class="border-start ps-4">
-                                            <i class="fas fa-clock fa-lg text-warning"></i>
-                                            <div class="small text-muted"><?php echo $t['eta'] ?? 'ETA'; ?></div>
-                                            <div class="fw-bold" id="estimatedTime">--</div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <button name="add_order" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-sm btn-lg">
@@ -2768,8 +2734,8 @@ function showOrderTracking(order) {
 // GPS & LOCATION FUNCTIONS
 // ==========================================
 
-// Get current location
-function getLocation(type) {
+// Get my current location (for delivery address)
+function getMyLocation() {
     if (!navigator.geolocation) {
         alert('<?php echo $t['geolocation_not_supported'] ?? 'Geolocation is not supported by your browser'; ?>');
         return;
@@ -2785,23 +2751,15 @@ function getLocation(type) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
 
-            if (type === 'pickup') {
-                document.getElementById('pickupLat').value = lat;
-                document.getElementById('pickupLng').value = lng;
-                reverseGeocode(lat, lng, 'pickupAddress');
-            } else {
-                document.getElementById('deliveryLat').value = lat;
-                document.getElementById('deliveryLng').value = lng;
-                reverseGeocode(lat, lng, 'deliveryAddress');
-            }
+            document.getElementById('deliveryLat').value = lat;
+            document.getElementById('deliveryLng').value = lng;
+            reverseGeocode(lat, lng, 'deliveryAddress');
 
             btn.innerHTML = '<i class="fas fa-check text-success"></i>';
             setTimeout(() => {
                 btn.innerHTML = originalIcon;
                 btn.disabled = false;
             }, 2000);
-
-            calculateDistance();
         },
         (error) => {
             btn.innerHTML = originalIcon;
@@ -2826,12 +2784,10 @@ function getLocation(type) {
 
 // Reverse geocode coordinates to address
 function reverseGeocode(lat, lng, inputId) {
-    // Use Nominatim for reverse geocoding (free, no API key needed)
     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=<?php echo $lang; ?>`)
         .then(response => response.json())
         .then(data => {
             if (data.display_name) {
-                // Shorten the address
                 let address = data.display_name;
                 const parts = address.split(', ');
                 if (parts.length > 3) {
@@ -2841,29 +2797,8 @@ function reverseGeocode(lat, lng, inputId) {
             }
         })
         .catch(() => {
-            // If geocoding fails, just show coordinates
             document.getElementById(inputId).value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
         });
-}
-
-// Calculate distance between pickup and delivery
-function calculateDistance() {
-    const pickupLat = parseFloat(document.getElementById('pickupLat')?.value);
-    const pickupLng = parseFloat(document.getElementById('pickupLng')?.value);
-    const deliveryLat = parseFloat(document.getElementById('deliveryLat')?.value);
-    const deliveryLng = parseFloat(document.getElementById('deliveryLng')?.value);
-
-    if (pickupLat && pickupLng && deliveryLat && deliveryLng) {
-        const distance = haversineDistance(pickupLat, pickupLng, deliveryLat, deliveryLng);
-        const time = Math.ceil(distance / 30 * 60); // Estimate: 30 km/h average speed
-
-        const preview = document.getElementById('distancePreview');
-        if (preview) {
-            preview.style.display = 'block';
-            document.getElementById('estimatedDistance').textContent = distance.toFixed(1) + ' <?php echo $t['km'] ?? 'km'; ?>';
-            document.getElementById('estimatedTime').textContent = time + ' <?php echo $t['min'] ?? 'min'; ?>';
-        }
-    }
 }
 
 // Haversine formula for distance calculation
