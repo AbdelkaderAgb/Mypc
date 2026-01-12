@@ -267,15 +267,8 @@ if (isset($_SESSION['user'])) {
     if (isset($_POST['add_order']) && $u['role'] == 'customer') {
         // Get form data
         $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
-        $address = mb_convert_encoding(trim($_POST['address']), 'UTF-8', 'UTF-8');
-        $pickup_address = mb_convert_encoding(trim($_POST['pickup_address'] ?? ''), 'UTF-8', 'UTF-8');
+        $address = mb_convert_encoding(trim($_POST['address'] ?? $u['address'] ?? ''), 'UTF-8', 'UTF-8');
         $client_phone = preg_replace('/[^0-9]/', '', $_POST['client_phone'] ?? '');
-
-        // GPS coordinates
-        $pickup_lat = floatval($_POST['pickup_lat'] ?? 0);
-        $pickup_lng = floatval($_POST['pickup_lng'] ?? 0);
-        $delivery_lat = floatval($_POST['delivery_lat'] ?? 0);
-        $delivery_lng = floatval($_POST['delivery_lng'] ?? 0);
 
         // Update user phone if provided and not already set
         if ($client_phone && empty($u['phone'])) {
@@ -293,21 +286,16 @@ if (isset($_SESSION['user'])) {
             exit();
         }
 
-        if ($details && $address) {
+        if ($details) {
             $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
-            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, pickup_address, client_phone, pickup_lat, pickup_lng, delivery_lat, delivery_lng, status, delivery_code, points_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, client_phone, status, delivery_code, points_cost) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)");
             $stmt->execute([
                 $uid,
                 $u['username'],
                 $details,
-                $address,
-                $pickup_address,
+                $address ?: 'Not specified',
                 $client_phone ?: $u['phone'],
-                $pickup_lat ?: null,
-                $pickup_lng ?: null,
-                $delivery_lat ?: null,
-                $delivery_lng ?: null,
                 $otp,
                 $points_cost_per_order
             ]);

@@ -672,29 +672,44 @@ require_once 'actions.php';
         .order-row:nth-child(4) { animation-delay: 0.2s; }
         .order-row:nth-child(5) { animation-delay: 0.25s; }
 
+        /* Tablet improvements */
+        @media (max-width: 992px) {
+            .stats-box {
+                padding: 18px;
+            }
+            .content-card {
+                border-radius: var(--border-radius-sm);
+            }
+        }
+
         /* Mobile improvements */
         @media (max-width: 768px) {
             body {
                 background: var(--bg-color);
             }
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
             .login-card {
-                margin: 15px;
+                margin: 10px;
                 border-radius: var(--border-radius-sm);
             }
             .stats-box {
-                padding: 16px;
+                padding: 14px;
             }
             .stats-box h3 {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
             .table-actions .btn {
-                padding: 0.3rem 0.5rem;
-                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
             }
             .nav-tabs {
                 flex-wrap: nowrap;
                 overflow-x: auto;
                 padding-bottom: 2px;
+                -webkit-overflow-scrolling: touch;
             }
             .nav-tabs .nav-link {
                 padding: 10px 14px;
@@ -706,14 +721,102 @@ require_once 'actions.php';
             }
             .form-control, .form-select {
                 padding: 10px 14px;
+                font-size: 16px; /* Prevent iOS zoom */
             }
             .btn {
                 padding: 10px 16px;
             }
             .pin-box {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 letter-spacing: 4px;
                 padding: 8px 12px;
+            }
+            .card-header {
+                padding: 12px 16px !important;
+            }
+            .card-body {
+                padding: 16px !important;
+            }
+            .profile-avatar.avatar-lg {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+            .role-badge {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+            .app-navbar {
+                padding: 8px 0;
+            }
+            .mini-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .mini-stat {
+                padding: 10px;
+            }
+            .mini-stat-value {
+                font-size: 1.2rem;
+            }
+            /* Order status popup mobile */
+            .status-popup-content {
+                padding: 24px;
+                max-width: 300px;
+            }
+            .status-icon-wrapper {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+            .status-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Small mobile */
+        @media (max-width: 480px) {
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .profile-avatar.avatar-sm {
+                width: 38px;
+                height: 38px;
+                font-size: 0.95rem;
+            }
+            .profile-avatar.avatar-lg {
+                width: 90px;
+                height: 90px;
+                font-size: 2.2rem;
+            }
+            .stats-box {
+                padding: 12px;
+            }
+            .stats-box h3 {
+                font-size: 1.2rem;
+            }
+            .stats-box .small {
+                font-size: 0.7rem;
+            }
+            .badge {
+                font-size: 0.7rem;
+            }
+            .btn-sm {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.7rem;
+            }
+            .table td, .table th {
+                padding: 10px 8px;
+                font-size: 0.85rem;
+            }
+            .order-row .text-break {
+                font-size: 0.9rem;
+            }
+            .pin-box {
+                font-size: 1rem;
+                letter-spacing: 3px;
+                padding: 6px 10px;
             }
         }
 
@@ -752,20 +855,22 @@ require_once 'actions.php';
             font-size: 0.85rem;
         }
 
-        /* Profile avatar */
+        /* Profile avatar - Role Based */
         .profile-avatar {
-            width: 90px;
-            height: 90px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: white;
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
             position: relative;
             overflow: hidden;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+        .profile-avatar:hover {
+            transform: scale(1.05);
         }
         .profile-avatar img {
             width: 100%;
@@ -777,16 +882,72 @@ require_once 'actions.php';
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.7);
             color: white;
-            font-size: 0.7rem;
-            padding: 4px;
+            font-size: 0.75rem;
+            padding: 6px;
             cursor: pointer;
             opacity: 0;
             transition: opacity var(--transition-normal);
         }
         .profile-avatar:hover .profile-avatar-edit {
             opacity: 1;
+        }
+
+        /* Role-based avatar colors */
+        .avatar-admin {
+            background: linear-gradient(135deg, #dc2626, #f97316);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.35);
+        }
+        .avatar-driver {
+            background: linear-gradient(135deg, #059669, #10b981);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.35);
+        }
+        .avatar-customer {
+            background: linear-gradient(135deg, #4f46e5, #818cf8);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.35);
+        }
+
+        /* Small avatar for navbar */
+        .avatar-sm {
+            width: 44px;
+            height: 44px;
+            font-size: 1.1rem;
+        }
+        .avatar-md {
+            width: 60px;
+            height: 60px;
+            font-size: 1.6rem;
+        }
+        .avatar-lg {
+            width: 120px;
+            height: 120px;
+            font-size: 3.2rem;
+        }
+
+        /* Role badge */
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .role-badge-admin {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            color: #dc2626;
+        }
+        .role-badge-driver {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            color: #059669;
+        }
+        .role-badge-customer {
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            color: #4f46e5;
         }
 
         /* Online toggle switch */
@@ -1334,8 +1495,6 @@ function createNotificationSound() {
                     <small class="text-muted">
                         <?php echo $t['need_help'] ?? 'Need help?'; ?>
                         <a href="mailto:<?php echo $help_email; ?>" class="text-primary"><?php echo $help_email; ?></a>
-                        <br>
-                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" class="text-success"><i class="fab fa-whatsapp"></i> <?php echo $help_phone; ?></a>
                     </small>
                 </div>
             </div>
@@ -1354,18 +1513,28 @@ function createNotificationSound() {
                 <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 40px; width: auto;">
                 <span class="text-primary d-none d-sm-inline"><?php echo $t['app_name']; ?></span>
             </a>
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 gap-md-3">
                 <?php if($role == 'driver'): ?>
-                <span class="badge bg-warning text-dark px-3 py-2" id="pointsBadge">
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill" id="pointsBadge">
                     <i class="fas fa-coins"></i> <span id="currentPoints"><?php echo $u['points']; ?></span>
                 </span>
                 <?php endif; ?>
-                <div class="d-none d-md-block text-end lh-1 me-2">
-                    <span class="d-block fw-bold small"><?php echo e($u['full_name'] ?: $u['username']); ?></span>
-                    <span class="badge bg-secondary rounded-pill" style="font-size:0.6rem"><?php echo strtoupper($role); ?></span>
-                </div>
-                <a href="?settings=1" class="btn btn-light settings-btn rounded-circle shadow-sm" title="<?php echo $t['settings']; ?>">
-                    <i class="fas fa-cog"></i>
+                <a href="?settings=1" class="d-flex align-items-center gap-2 text-decoration-none" title="<?php echo $t['settings']; ?>">
+                    <div class="profile-avatar avatar-sm avatar-<?php echo $role; ?>">
+                        <?php
+                        $navAvatarUrl = getAvatarUrl($u);
+                        if ($navAvatarUrl): ?>
+                            <img src="<?php echo e($navAvatarUrl); ?>" alt="">
+                        <?php else: ?>
+                            <i class="fas fa-<?php echo $role == 'admin' ? 'crown' : ($role == 'driver' ? 'truck' : 'user'); ?>"></i>
+                        <?php endif; ?>
+                    </div>
+                    <div class="d-none d-md-block text-end lh-1">
+                        <span class="d-block fw-bold small text-dark"><?php echo e($u['full_name'] ?: $u['username']); ?></span>
+                        <span class="role-badge role-badge-<?php echo $role; ?>" style="padding: 2px 8px; font-size: 0.6rem;">
+                            <?php echo $t[$role]; ?>
+                        </span>
+                    </div>
                 </a>
                 <a href="?logout=1" class="btn btn-light text-danger settings-btn rounded-circle shadow-sm" title="<?php echo $t['logout']; ?>">
                     <i class="fas fa-power-off"></i>
@@ -1394,13 +1563,13 @@ function createNotificationSound() {
                                 <div class="text-center mb-4">
                                     <label for="avatarInput" class="d-inline-block" style="cursor: pointer;">
                                         <div class="avatar-with-badge">
-                                            <div class="profile-avatar mb-3">
+                                            <div class="profile-avatar avatar-lg avatar-<?php echo $role; ?> mb-3">
                                                 <?php
                                                 $avatarUrl = getAvatarUrl($u);
                                                 if ($avatarUrl): ?>
                                                     <img src="<?php echo e($avatarUrl); ?>" alt="Avatar">
                                                 <?php else: ?>
-                                                    <span style="font-size: 2rem;"><?php echo getUserInitials($u); ?></span>
+                                                    <i class="fas fa-<?php echo $role == 'admin' ? 'crown' : ($role == 'driver' ? 'truck' : 'user'); ?>"></i>
                                                 <?php endif; ?>
                                                 <div class="profile-avatar-edit">
                                                     <i class="fas fa-camera"></i> <?php echo $t['change_photo'] ?? 'Change'; ?>
@@ -1410,13 +1579,20 @@ function createNotificationSound() {
                                                 <div class="verified-badge" title="<?php echo $t['driver_verified'] ?? 'Verified Driver'; ?>">
                                                     <i class="fas fa-check"></i>
                                                 </div>
+                                            <?php elseif($role == 'admin'): ?>
+                                                <div class="verified-badge" style="background: linear-gradient(135deg, #dc2626, #f97316);" title="Admin">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
                                             <?php endif; ?>
                                         </div>
                                     </label>
                                     <input type="file" name="avatar" id="avatarInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="this.form.submit()">
 
                                     <h5 class="fw-bold mb-1"><?php echo e($u['full_name'] ?: $u['username']); ?></h5>
-                                    <span class="badge bg-primary rounded-pill px-3"><?php echo $t[$role]; ?></span>
+                                    <span class="role-badge role-badge-<?php echo $role; ?>">
+                                        <i class="fas fa-<?php echo $role == 'admin' ? 'crown' : ($role == 'driver' ? 'truck' : 'user'); ?>"></i>
+                                        <?php echo $t[$role]; ?>
+                                    </span>
 
                                     <?php if(!empty($u['serial_no'])): ?>
                                     <div class="mt-2">
@@ -2195,7 +2371,7 @@ function createNotificationSound() {
                                 </div>
 
                                 <!-- Phone Number -->
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <label class="form-label small text-muted mb-1">
                                         <i class="fas fa-phone me-1"></i><?php echo $t['phone_ph'] ?? 'Phone'; ?>
                                     </label>
@@ -2208,54 +2384,7 @@ function createNotificationSound() {
                                                <?php echo !empty($u['phone']) ? '' : 'required'; ?>>
                                     </div>
                                 </div>
-
-                                <!-- Pickup Location -->
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted mb-1">
-                                        <i class="fas fa-store me-1 text-success"></i><?php echo $t['pickup_location'] ?? 'Pickup Location'; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="text" name="pickup_address" id="pickupAddress" class="form-control bg-light border-0"
-                                               placeholder="<?php echo $t['pickup_placeholder'] ?? 'Where to pick up from...'; ?>" required>
-                                        <button type="button" class="btn btn-outline-success border-0 bg-light" onclick="getLocation('pickup')">
-                                            <i class="fas fa-location-crosshairs"></i>
-                                        </button>
-                                    </div>
-                                    <input type="hidden" name="pickup_lat" id="pickupLat">
-                                    <input type="hidden" name="pickup_lng" id="pickupLng">
-                                </div>
-
-                                <!-- Delivery Address -->
-                                <div class="mb-4">
-                                    <label class="form-label small text-muted mb-1">
-                                        <i class="fas fa-map-marker-alt me-1 text-danger"></i><?php echo $t['delivery_address'] ?? 'Delivery Address'; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="text" name="address" id="deliveryAddress" class="form-control bg-light border-0"
-                                               placeholder="<?php echo $t['delivery_placeholder'] ?? 'Where to deliver...'; ?>" required>
-                                        <button type="button" class="btn btn-outline-danger border-0 bg-light" onclick="getLocation('delivery')">
-                                            <i class="fas fa-location-crosshairs"></i>
-                                        </button>
-                                    </div>
-                                    <input type="hidden" name="delivery_lat" id="deliveryLat">
-                                    <input type="hidden" name="delivery_lng" id="deliveryLng">
-                                </div>
-
-                                <!-- Distance Preview (shown when both locations are set) -->
-                                <div id="distancePreview" class="mb-3 p-3 bg-primary bg-opacity-10 rounded-3 text-center" style="display:none;">
-                                    <div class="d-flex justify-content-around align-items-center">
-                                        <div>
-                                            <i class="fas fa-route fa-lg text-primary"></i>
-                                            <div class="small text-muted"><?php echo $t['distance'] ?? 'Distance'; ?></div>
-                                            <div class="fw-bold" id="estimatedDistance">--</div>
-                                        </div>
-                                        <div class="border-start ps-4">
-                                            <i class="fas fa-clock fa-lg text-warning"></i>
-                                            <div class="small text-muted"><?php echo $t['eta'] ?? 'ETA'; ?></div>
-                                            <div class="fw-bold" id="estimatedTime">--</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="hidden" name="address" value="<?php echo e($u['address'] ?? 'Not specified'); ?>">
 
                                 <button name="add_order" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-sm btn-lg">
                                     <i class="fas fa-paper-plane me-2"></i><?php echo $t['btn_publish']; ?>
@@ -2765,106 +2894,8 @@ function showOrderTracking(order) {
 }
 
 // ==========================================
-// GPS & LOCATION FUNCTIONS
+// GPS & LOCATION FUNCTIONS (Driver Tracking Only)
 // ==========================================
-
-// Get current location
-function getLocation(type) {
-    if (!navigator.geolocation) {
-        alert('<?php echo $t['geolocation_not_supported'] ?? 'Geolocation is not supported by your browser'; ?>');
-        return;
-    }
-
-    const btn = event.target.closest('button');
-    const originalIcon = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    btn.disabled = true;
-
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            if (type === 'pickup') {
-                document.getElementById('pickupLat').value = lat;
-                document.getElementById('pickupLng').value = lng;
-                reverseGeocode(lat, lng, 'pickupAddress');
-            } else {
-                document.getElementById('deliveryLat').value = lat;
-                document.getElementById('deliveryLng').value = lng;
-                reverseGeocode(lat, lng, 'deliveryAddress');
-            }
-
-            btn.innerHTML = '<i class="fas fa-check text-success"></i>';
-            setTimeout(() => {
-                btn.innerHTML = originalIcon;
-                btn.disabled = false;
-            }, 2000);
-
-            calculateDistance();
-        },
-        (error) => {
-            btn.innerHTML = originalIcon;
-            btn.disabled = false;
-            let errorMsg = '<?php echo $t['location_error'] ?? 'Error getting location'; ?>';
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMsg = '<?php echo $t['location_denied'] ?? 'Location access denied'; ?>';
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMsg = '<?php echo $t['location_unavailable'] ?? 'Location unavailable'; ?>';
-                    break;
-                case error.TIMEOUT:
-                    errorMsg = '<?php echo $t['location_timeout'] ?? 'Location request timed out'; ?>';
-                    break;
-            }
-            showNotification('<?php echo $t['error'] ?? 'Error'; ?>', errorMsg, 'warning');
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
-    );
-}
-
-// Reverse geocode coordinates to address
-function reverseGeocode(lat, lng, inputId) {
-    // Use Nominatim for reverse geocoding (free, no API key needed)
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=<?php echo $lang; ?>`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.display_name) {
-                // Shorten the address
-                let address = data.display_name;
-                const parts = address.split(', ');
-                if (parts.length > 3) {
-                    address = parts.slice(0, 3).join(', ');
-                }
-                document.getElementById(inputId).value = address;
-            }
-        })
-        .catch(() => {
-            // If geocoding fails, just show coordinates
-            document.getElementById(inputId).value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-        });
-}
-
-// Calculate distance between pickup and delivery
-function calculateDistance() {
-    const pickupLat = parseFloat(document.getElementById('pickupLat')?.value);
-    const pickupLng = parseFloat(document.getElementById('pickupLng')?.value);
-    const deliveryLat = parseFloat(document.getElementById('deliveryLat')?.value);
-    const deliveryLng = parseFloat(document.getElementById('deliveryLng')?.value);
-
-    if (pickupLat && pickupLng && deliveryLat && deliveryLng) {
-        const distance = haversineDistance(pickupLat, pickupLng, deliveryLat, deliveryLng);
-        const time = Math.ceil(distance / 30 * 60); // Estimate: 30 km/h average speed
-
-        const preview = document.getElementById('distancePreview');
-        if (preview) {
-            preview.style.display = 'block';
-            document.getElementById('estimatedDistance').textContent = distance.toFixed(1) + ' <?php echo $t['km'] ?? 'km'; ?>';
-            document.getElementById('estimatedTime').textContent = time + ' <?php echo $t['min'] ?? 'min'; ?>';
-        }
-    }
-}
 
 // Haversine formula for distance calculation
 function haversineDistance(lat1, lon1, lat2, lon2) {
