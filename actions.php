@@ -265,21 +265,52 @@ if (isset($_SESSION['user'])) {
     // CUSTOMER ACTIONS
     // ==========================================
     if (isset($_POST['add_order']) && $u['role'] == 'customer') {
-        // Check phone verification
-        if (!isPhoneVerified($u)) {
+        // Get form data
+        $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
+        $address = mb_convert_encoding(trim($_POST['address']), 'UTF-8', 'UTF-8');
+        $pickup_address = mb_convert_encoding(trim($_POST['pickup_address'] ?? ''), 'UTF-8', 'UTF-8');
+        $client_phone = preg_replace('/[^0-9]/', '', $_POST['client_phone'] ?? '');
+
+        // GPS coordinates
+        $pickup_lat = floatval($_POST['pickup_lat'] ?? 0);
+        $pickup_lng = floatval($_POST['pickup_lng'] ?? 0);
+        $delivery_lat = floatval($_POST['delivery_lat'] ?? 0);
+        $delivery_lng = floatval($_POST['delivery_lng'] ?? 0);
+
+        // Update user phone if provided and not already set
+        if ($client_phone && empty($u['phone'])) {
+            $stmt = $conn->prepare("UPDATE users1 SET phone = ?, phone_verified = 1 WHERE id = ?");
+            $stmt->execute([$client_phone, $uid]);
+            $_SESSION['user']['phone'] = $client_phone;
+            $_SESSION['user']['phone_verified'] = 1;
+            $u = $_SESSION['user'];
+        }
+
+        // Check phone verification (either already verified or just provided)
+        if (empty($u['phone']) && empty($client_phone)) {
             setFlash('error', $t['add_phone_first'] ?? 'Please add your phone number first');
             header("Location: index.php?settings=1");
             exit();
         }
 
-        $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
-        $address = mb_convert_encoding(trim($_POST['address']), 'UTF-8', 'UTF-8');
-
         if ($details && $address) {
             $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
-            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, status, delivery_code, points_cost) VALUES (?, ?, ?, ?, 'pending', ?, ?)");
-            $stmt->execute([$uid, $u['username'], $details, $address, $otp, $points_cost_per_order]);
+            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, pickup_address, client_phone, pickup_lat, pickup_lng, delivery_lat, delivery_lng, status, delivery_code, points_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)");
+            $stmt->execute([
+                $uid,
+                $u['username'],
+                $details,
+                $address,
+                $pickup_address,
+                $client_phone ?: $u['phone'],
+                $pickup_lat ?: null,
+                $pickup_lng ?: null,
+                $delivery_lat ?: null,
+                $delivery_lng ?: null,
+                $otp,
+                $points_cost_per_order
+            ]);
             setFlash('success', $t['success_add']);
             header("Location: index.php");
             exit();
