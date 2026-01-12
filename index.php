@@ -171,6 +171,34 @@ require_once 'actions.php';
         /* RTL: Stats and mini-stats */
         [dir="rtl"] .mini-stats { flex-direction: row-reverse; }
 
+        /* RTL: Phone numbers - always display LTR */
+        [dir="rtl"] .phone-display,
+        [dir="rtl"] .phone-number,
+        [dir="rtl"] [data-phone],
+        [dir="rtl"] a[href^="tel:"],
+        [dir="rtl"] a[href^="https://wa.me"] {
+            direction: ltr;
+            unicode-bidi: embed;
+            display: inline-block;
+        }
+
+        /* RTL: Ensure numbers in badges and stats display correctly */
+        [dir="rtl"] .badge,
+        [dir="rtl"] .mini-stat-value,
+        [dir="rtl"] .stats-box h3 {
+            direction: ltr;
+            unicode-bidi: isolate;
+        }
+
+        /* RTL: Order ID and PIN codes */
+        [dir="rtl"] .order-id,
+        [dir="rtl"] .pin-code,
+        [dir="rtl"] .delivery-code {
+            direction: ltr;
+            unicode-bidi: embed;
+            font-family: 'Courier New', monospace;
+        }
+
         /* Animations */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -2546,36 +2574,13 @@ function createNotificationSound() {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 // ==========================================
-// RTL & Arabic Number Support
+// RTL Support - Phone Numbers Display
 // ==========================================
 const isRTL = document.documentElement.dir === 'rtl';
-const currentLang = '<?php echo $lang; ?>';
 
-// Arabic-Indic numerals
-const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-// Convert Western numbers to Arabic numerals
-function toArabicNumbers(str) {
-    if (currentLang !== 'ar') return str;
-    return String(str).replace(/[0-9]/g, d => arabicNumerals[d]);
-}
-
-// Convert Arabic numerals to Western numbers
-function toWesternNumbers(str) {
-    return String(str).replace(/[٠-٩]/g, d => arabicNumerals.indexOf(d));
-}
-
-// Format number with Arabic numerals if Arabic language
-function formatNumber(num) {
-    if (currentLang === 'ar') {
-        return toArabicNumbers(num);
-    }
-    return num;
-}
-
-// Keep phone inputs as LTR for easier input
+// Keep phone and number inputs LTR for correct display
 document.addEventListener('DOMContentLoaded', function() {
-    // Make phone inputs LTR
+    // Make phone inputs LTR for proper number display
     document.querySelectorAll('input[type="tel"], input[name*="phone"]').forEach(input => {
         input.style.direction = 'ltr';
         input.style.textAlign = isRTL ? 'right' : 'left';
@@ -2587,12 +2592,12 @@ document.addEventListener('DOMContentLoaded', function() {
         input.style.textAlign = isRTL ? 'right' : 'left';
     });
 
-    // Update number displays with Arabic numerals if needed
-    if (currentLang === 'ar') {
-        document.querySelectorAll('.arabic-number').forEach(el => {
-            el.textContent = toArabicNumbers(el.textContent);
-        });
-    }
+    // Ensure phone number displays stay LTR
+    document.querySelectorAll('.phone-display, [data-phone]').forEach(el => {
+        el.style.direction = 'ltr';
+        el.style.unicodeBidi = 'embed';
+        el.style.display = 'inline-block';
+    });
 });
 
 // Navbar scroll effect
