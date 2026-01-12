@@ -1510,7 +1510,7 @@ function createNotificationSound() {
     <nav class="navbar app-navbar sticky-top mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.php">
-                <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 40px; width: auto;">
+                <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 40px; width: auto;" onerror="this.style.display='none'">
                 <span class="text-primary d-none d-sm-inline"><?php echo $t['app_name']; ?></span>
             </a>
             <div class="d-flex align-items-center gap-2 gap-md-3">
