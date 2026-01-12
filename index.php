@@ -1165,6 +1165,198 @@ require_once 'actions.php';
         [dir="rtl"] .fab { right: auto; left: 24px; }
 
         /* ==========================================
+           FLOATING ORDER NOTIFICATION BUBBLE
+           ========================================== */
+        .order-notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            width: calc(100% - 40px);
+        }
+        [dir="rtl"] .order-notification-container {
+            right: auto;
+            left: 20px;
+        }
+
+        .order-bubble {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.1);
+            overflow: hidden;
+            animation: bubbleSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+        .order-bubble.fade-out {
+            animation: bubbleSlideOut 0.4s ease forwards;
+        }
+        @keyframes bubbleSlideIn {
+            from { opacity: 0; transform: translateX(100px) scale(0.8); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes bubbleSlideOut {
+            to { opacity: 0; transform: translateX(100px) scale(0.8); }
+        }
+        [dir="rtl"] .order-bubble {
+            animation-name: bubbleSlideInRtl;
+        }
+        [dir="rtl"] .order-bubble.fade-out {
+            animation-name: bubbleSlideOutRtl;
+        }
+        @keyframes bubbleSlideInRtl {
+            from { opacity: 0; transform: translateX(-100px) scale(0.8); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes bubbleSlideOutRtl {
+            to { opacity: 0; transform: translateX(-100px) scale(0.8); }
+        }
+
+        .order-bubble-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .order-bubble-header .new-order-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .order-bubble-header .new-order-badge i {
+            animation: bellRing 0.5s ease infinite;
+        }
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+        .order-bubble-timer {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .order-bubble-body {
+            padding: 16px;
+        }
+        .order-bubble-distance {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
+            color: #1e40af;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .order-bubble-details {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.5;
+            max-height: 60px;
+            overflow: hidden;
+        }
+        .order-bubble-address {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .order-bubble-address i {
+            color: var(--danger);
+            margin-top: 2px;
+        }
+        .order-bubble-phone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gray-50);
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+        .order-bubble-phone i {
+            color: var(--success);
+        }
+        .order-bubble-phone a {
+            color: var(--dark);
+            font-weight: 600;
+            text-decoration: none;
+            direction: ltr;
+        }
+
+        .order-bubble-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .order-bubble-actions .btn {
+            flex: 1;
+            padding: 12px;
+            font-weight: 700;
+            border-radius: var(--radius);
+        }
+        .btn-accept {
+            background: linear-gradient(135deg, var(--success), #16a34a);
+            color: white;
+            border: none;
+        }
+        .btn-accept:hover {
+            background: linear-gradient(135deg, #16a34a, var(--success));
+            color: white;
+            transform: translateY(-2px);
+        }
+        .btn-decline {
+            background: var(--gray-100);
+            color: var(--gray-600);
+            border: 1px solid var(--gray-200);
+        }
+        .btn-decline:hover {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .order-bubble-progress {
+            height: 4px;
+            background: var(--gray-200);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .order-bubble-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.1s linear;
+        }
+
+        @media (max-width: 480px) {
+            .order-notification-container {
+                top: 70px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: none;
+            }
+            .order-bubble-body { padding: 12px; }
+            .order-bubble-actions .btn { padding: 10px; font-size: 0.9rem; }
+        }
+
+        /* ==========================================
            RESPONSIVE
            ========================================== */
         @media (max-width: 992px) {
@@ -1314,6 +1506,11 @@ function createNotificationSound() {
 
 <!-- Notification Toast Container -->
 <div id="notificationContainer" class="notification-toast <?php echo $dir == 'rtl' ? 'rtl' : ''; ?>"></div>
+
+<!-- Order Notification Bubbles Container (for drivers) -->
+<?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
+<div id="orderBubbleContainer" class="order-notification-container"></div>
+<?php endif; ?>
 
 <?php if (!isset($_SESSION['user'])): ?>
     <!-- ================= LOGIN/REGISTER SCREEN ================= -->
@@ -3022,6 +3219,230 @@ function updateMyLocation() {
 <?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
 setInterval(updateMyLocation, 60000); // Update every minute
 updateMyLocation(); // Initial update
+
+// ==========================================
+// DRIVER ORDER NOTIFICATION BUBBLES
+// ==========================================
+
+// Track displayed order IDs to prevent duplicates
+let displayedOrderIds = new Set();
+let driverLat = null;
+let driverLng = null;
+
+// Play notification ring sound
+function playOrderRingSound() {
+    try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+
+        // Create a pleasant ring tone
+        for (let i = 0; i < 3; i++) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now + i * 0.3); // A5 note
+            osc.frequency.setValueAtTime(1100, now + i * 0.3 + 0.1); // C#6 note
+
+            gain.gain.setValueAtTime(0.3, now + i * 0.3);
+            gain.gain.exponentialDecayTo(0.01, now + i * 0.3 + 0.25);
+
+            osc.start(now + i * 0.3);
+            osc.stop(now + i * 0.3 + 0.3);
+        }
+    } catch(e) {
+        console.log('Sound not available');
+    }
+}
+
+// Create order bubble HTML
+function createOrderBubble(order) {
+    const bubble = document.createElement('div');
+    bubble.className = 'order-bubble';
+    bubble.id = `order-bubble-${order.id}`;
+    bubble.dataset.orderId = order.id;
+
+    const distanceText = order.distance ? `${parseFloat(order.distance).toFixed(1)} <?php echo $t['km'] ?? 'km'; ?>` : '---';
+    const phone = order.client_phone || '<?php echo $t['no_phone'] ?? 'No phone'; ?>';
+
+    bubble.innerHTML = `
+        <div class="order-bubble-header">
+            <div class="new-order-badge">
+                <i class="fas fa-bell"></i>
+                <?php echo $t['new_order_nearby'] ?? 'New Order Nearby!'; ?>
+            </div>
+            <div class="order-bubble-timer"><span class="timer-seconds">10</span>s</div>
+        </div>
+        <div class="order-bubble-body">
+            <div class="order-bubble-distance">
+                <i class="fas fa-route"></i>
+                ${distanceText}
+            </div>
+            <div class="order-bubble-details">${escapeHtml(order.details)}</div>
+            <div class="order-bubble-address">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>${escapeHtml(order.address)}</span>
+            </div>
+            <div class="order-bubble-phone">
+                <i class="fas fa-phone"></i>
+                <a href="tel:+222${phone}" dir="ltr">+222 ${phone}</a>
+            </div>
+            <div class="order-bubble-actions">
+                <button class="btn btn-accept" onclick="acceptOrderFromBubble(${order.id}, this)">
+                    <i class="fas fa-check me-2"></i><?php echo $t['accept'] ?? 'Accept'; ?>
+                </button>
+                <button class="btn btn-decline" onclick="declineOrderBubble(${order.id})">
+                    <i class="fas fa-times me-2"></i><?php echo $t['decline'] ?? 'Decline'; ?>
+                </button>
+            </div>
+        </div>
+        <div class="order-bubble-progress">
+            <div class="order-bubble-progress-bar" style="width: 100%"></div>
+        </div>
+    `;
+
+    return bubble;
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+}
+
+// Show order bubble with countdown
+function showOrderBubble(order) {
+    if (displayedOrderIds.has(order.id)) return;
+
+    displayedOrderIds.add(order.id);
+
+    const container = document.getElementById('orderBubbleContainer');
+    if (!container) return;
+
+    const bubble = createOrderBubble(order);
+    container.appendChild(bubble);
+
+    // Play ring sound
+    playOrderRingSound();
+
+    // Start countdown
+    let secondsLeft = 10;
+    const timerSpan = bubble.querySelector('.timer-seconds');
+    const progressBar = bubble.querySelector('.order-bubble-progress-bar');
+
+    const countdown = setInterval(() => {
+        secondsLeft--;
+        if (timerSpan) timerSpan.textContent = secondsLeft;
+        if (progressBar) progressBar.style.width = (secondsLeft / 10 * 100) + '%';
+
+        if (secondsLeft <= 0) {
+            clearInterval(countdown);
+            removeBubble(order.id);
+        }
+    }, 1000);
+
+    // Store countdown reference
+    bubble.dataset.countdown = countdown;
+}
+
+// Accept order from bubble
+function acceptOrderFromBubble(orderId, btn) {
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    // Submit accept request
+    fetch('actions.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `accept_order=1&oid=${orderId}`
+    })
+    .then(response => {
+        if (response.redirected || response.ok) {
+            // Success - remove bubble and reload page
+            removeBubble(orderId);
+            showNotification('<?php echo $t['success'] ?? 'Success'; ?>', '<?php echo $t['order_accepted'] ?? 'Order accepted!'; ?>', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+    })
+    .catch(() => {
+        btn.innerHTML = '<i class="fas fa-check me-2"></i><?php echo $t['accept'] ?? 'Accept'; ?>';
+        btn.disabled = false;
+        showNotification('<?php echo $t['error'] ?? 'Error'; ?>', '<?php echo $t['try_again'] ?? 'Please try again'; ?>', 'warning');
+    });
+}
+
+// Decline order bubble (just dismiss it)
+function declineOrderBubble(orderId) {
+    removeBubble(orderId);
+    // Keep in set for this session to avoid showing again
+}
+
+// Remove bubble with animation
+function removeBubble(orderId) {
+    const bubble = document.getElementById(`order-bubble-${orderId}`);
+    if (bubble) {
+        // Clear countdown
+        if (bubble.dataset.countdown) {
+            clearInterval(parseInt(bubble.dataset.countdown));
+        }
+
+        bubble.classList.add('fade-out');
+        setTimeout(() => bubble.remove(), 400);
+    }
+}
+
+// Fetch nearby orders for driver
+function fetchNearbyOrders() {
+    if (!driverLat || !driverLng) {
+        // Get current position first
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    driverLat = pos.coords.latitude;
+                    driverLng = pos.coords.longitude;
+                    doFetchNearbyOrders();
+                },
+                () => {}
+            );
+        }
+        return;
+    }
+    doFetchNearbyOrders();
+}
+
+function doFetchNearbyOrders() {
+    fetch(`api.php?action=get_nearby_orders&lat=${driverLat}&lng=${driverLng}&max_distance=7`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.orders && data.orders.length > 0) {
+                data.orders.forEach(order => {
+                    showOrderBubble(order);
+                });
+            }
+        })
+        .catch(() => {});
+}
+
+// Initialize driver GPS and start polling
+navigator.geolocation.getCurrentPosition(
+    (pos) => {
+        driverLat = pos.coords.latitude;
+        driverLng = pos.coords.longitude;
+
+        // Start polling for new orders every 15 seconds
+        fetchNearbyOrders();
+        setInterval(fetchNearbyOrders, 15000);
+    },
+    () => {
+        console.log('GPS not available - order notifications disabled');
+    },
+    { enableHighAccuracy: true }
+);
+
 <?php endif; ?>
 
 // ==========================================
