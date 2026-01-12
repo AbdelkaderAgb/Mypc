@@ -2285,7 +2285,7 @@ function createNotificationSound() {
                                 </div>
 
                                 <!-- Phone Number -->
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <label class="form-label small text-muted mb-1">
                                         <i class="fas fa-phone me-1"></i><?php echo $t['phone_ph'] ?? 'Phone'; ?>
                                     </label>
@@ -2298,7 +2298,23 @@ function createNotificationSound() {
                                                <?php echo !empty($u['phone']) ? '' : 'required'; ?>>
                                     </div>
                                 </div>
-                                <input type="hidden" name="address" value="<?php echo e($u['address'] ?? 'Not specified'); ?>">
+
+                                <!-- GPS Pickup Location -->
+                                <div class="mb-4">
+                                    <label class="form-label small text-muted mb-1">
+                                        <i class="fas fa-map-marker-alt me-1 text-danger"></i><?php echo $t['pickup_location'] ?? 'Pickup Location'; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" name="address" id="pickupAddress" class="form-control bg-light border-0"
+                                               placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" required readonly>
+                                        <button type="button" class="btn btn-success border-0 px-4" onclick="getPickupLocation()" id="gpsBtn">
+                                            <i class="fas fa-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="pickup_lat" id="pickupLat" required>
+                                    <input type="hidden" name="pickup_lng" id="pickupLng" required>
+                                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i><?php echo $t['gps_required'] ?? 'GPS location is required for drivers to find you'; ?></small>
+                                </div>
 
                                 <button name="add_order" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-sm btn-lg">
                                     <i class="fas fa-paper-plane me-2"></i><?php echo $t['btn_publish']; ?>
@@ -2335,21 +2351,64 @@ function createNotificationSound() {
                                 </thead>
                                 <tbody class="border-top-0">
                                     <?php
-                                    $limit = "";
-                                    if($role == 'driver') $limit = "WHERE status IN ('pending', 'accepted', 'picked_up') OR driver_id='$uid'";
-                                    if($role == 'customer') $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
+                                    // Get driver's location for distance filtering
+                                    $driverLat = $u['last_lat'] ?? null;
+                                    $driverLng = $u['last_lng'] ?? null;
+                                    $maxDistance = 7; // 7km radius for drivers
 
-                                    $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
-                                    $res = $conn->query($sql);
+                                    if($role == 'driver') {
+                                        // Driver sees: their accepted/picked_up orders OR pending orders within 7km
+                                        if ($driverLat && $driverLng) {
+                                            // Haversine formula in SQL for distance calculation
+                                            $sql = "SELECT *,
+                                                    (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) AS distance
+                                                    FROM orders1
+                                                    WHERE (driver_id = ? AND status IN ('accepted', 'picked_up'))
+                                                    OR (status = 'pending' AND pickup_lat IS NOT NULL
+                                                        AND (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) <= ?)
+                                                    ORDER BY CASE WHEN driver_id = ? THEN 0 ELSE 1 END, distance ASC, id DESC
+                                                    LIMIT 50";
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute([$driverLat, $driverLng, $driverLat, $uid, $driverLat, $driverLng, $driverLat, $maxDistance, $uid]);
+                                            $res = $stmt;
+                                        } else {
+                                            // No GPS - only show driver's own orders
+                                            $sql = "SELECT * FROM orders1 WHERE driver_id = ? AND status IN ('accepted', 'picked_up') ORDER BY id DESC LIMIT 50";
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute([$uid]);
+                                            $res = $stmt;
+                                        }
+                                    } elseif($role == 'customer') {
+                                        $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
+                                        $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
+                                        $res = $conn->query($sql);
+                                    } else {
+                                        $sql = "SELECT * FROM orders1 ORDER BY id DESC LIMIT 50";
+                                        $res = $conn->query($sql);
+                                    }
 
-                                    if($res->rowCount() == 0):
+                                    if($role == 'driver' && !$driverLat):
                                     ?>
+                                    <tr>
+                                        <td colspan="3" class="p-4">
+                                            <div class="alert alert-warning mb-0 d-flex align-items-center gap-3">
+                                                <i class="fas fa-location-crosshairs fa-2x"></i>
+                                                <div>
+                                                    <strong><?php echo $t['enable_gps'] ?? 'Enable GPS to see nearby orders'; ?></strong>
+                                                    <p class="mb-0 small"><?php echo $t['gps_driver_note'] ?? 'Turn on your GPS to find orders within 7km of your location'; ?></p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endif;
+
+                                    if($res->rowCount() == 0): ?>
                                     <tr>
                                         <td colspan="3" class="empty-state">
                                             <i class="fas fa-box-open"></i>
                                             <h5><?php echo $t['no_orders']; ?></h5>
                                             <p class="text-muted small mb-0">
-                                                <?php echo ($role == 'driver') ? $t['no_pending_orders'] : $t['check_back_later']; ?>
+                                                <?php echo ($role == 'driver') ? ($driverLat ? $t['no_nearby_orders'] ?? 'No orders nearby (7km radius)' : $t['enable_gps_first'] ?? 'Enable GPS first') : $t['check_back_later']; ?>
                                             </p>
                                         </td>
                                     </tr>
@@ -2357,6 +2416,7 @@ function createNotificationSound() {
                                         $st = $row['status'];
                                         $badge = getStatusBadge($st);
                                         $icon = getStatusIcon($st);
+                                        $orderDistance = isset($row['distance']) ? round($row['distance'], 1) : null;
                                     ?>
                                     <tr class="order-row">
                                         <td class="ps-4 py-3">
@@ -2366,6 +2426,14 @@ function createNotificationSound() {
                                                     <small class="text-muted"><?php echo fmtDate($row['created_at']); ?></small>
                                                     <div class="fw-bold text-dark text-break"><?php echo e($row['details']); ?></div>
                                                     <small class="text-secondary"><i class="fas fa-map-marker-alt text-danger me-1"></i> <?php echo e($row['address']); ?></small>
+
+                                                    <?php if($role == 'driver' && $st == 'pending' && $orderDistance !== null): ?>
+                                                        <div class="mt-1">
+                                                            <span class="badge bg-info text-white">
+                                                                <i class="fas fa-route me-1"></i><?php echo $orderDistance; ?> <?php echo $t['km'] ?? 'km'; ?>
+                                                            </span>
+                                                        </div>
+                                                    <?php endif; ?>
 
                                                     <?php if($role == 'customer' && $st != 'delivered' && $st != 'cancelled'): ?>
                                                         <div class="mt-2 bg-warning bg-opacity-10 p-2 rounded border border-warning border-opacity-25">
@@ -2378,6 +2446,9 @@ function createNotificationSound() {
                                                     <?php if($role == 'driver' && ($st == 'accepted' || $st == 'picked_up') && $row['driver_id'] == $uid): ?>
                                                         <div class="mt-2 text-muted small">
                                                             <i class="fas fa-user me-1"></i> <?php echo e($row['customer_name']); ?>
+                                                            <?php if($row['client_phone']): ?>
+                                                            - <a href="tel:+222<?php echo $row['client_phone']; ?>" class="text-primary"><i class="fas fa-phone"></i></a>
+                                                            <?php endif; ?>
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>
@@ -2808,8 +2879,67 @@ function showOrderTracking(order) {
 }
 
 // ==========================================
-// GPS & LOCATION FUNCTIONS (Driver Tracking Only)
+// GPS & LOCATION FUNCTIONS
 // ==========================================
+
+// Get pickup location for customer orders
+function getPickupLocation() {
+    if (!navigator.geolocation) {
+        alert('<?php echo $t['geolocation_not_supported'] ?? 'Geolocation is not supported by your browser'; ?>');
+        return;
+    }
+
+    const btn = document.getElementById('gpsBtn');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            document.getElementById('pickupLat').value = lat;
+            document.getElementById('pickupLng').value = lng;
+
+            // Reverse geocode to get address
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=<?php echo $lang; ?>`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        let address = data.display_name.split(', ').slice(0, 3).join(', ');
+                        document.getElementById('pickupAddress').value = address;
+                    } else {
+                        document.getElementById('pickupAddress').value = lat.toFixed(5) + ', ' + lng.toFixed(5);
+                    }
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-primary');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.classList.remove('btn-primary');
+                        btn.classList.add('btn-success');
+                        btn.disabled = false;
+                    }, 2000);
+                })
+                .catch(() => {
+                    document.getElementById('pickupAddress').value = lat.toFixed(5) + ', ' + lng.toFixed(5);
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
+                    btn.disabled = false;
+                });
+        },
+        (error) => {
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
+            let msg = '<?php echo $t['location_error'] ?? 'Error getting location'; ?>';
+            if (error.code === error.PERMISSION_DENIED) {
+                msg = '<?php echo $t['location_denied'] ?? 'Location access denied. Please enable GPS.'; ?>';
+            }
+            alert(msg);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+}
 
 // Haversine formula for distance calculation
 function haversineDistance(lat1, lon1, lat2, lon2) {
