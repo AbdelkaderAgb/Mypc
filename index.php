@@ -94,14 +94,15 @@ require_once 'actions.php';
 
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             background-attachment: fixed;
             color: var(--dark);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Background Pattern */
+        /* Enhanced Background Pattern */
         body::before {
             content: '';
             position: fixed;
@@ -110,11 +111,34 @@ require_once 'actions.php';
             right: 0;
             bottom: 0;
             background:
-                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.1) 0%, transparent 30%);
             pointer-events: none;
             z-index: 0;
+        }
+
+        /* Animated Background Orbs */
+        body::after {
+            content: '';
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            top: -250px;
+            right: -250px;
+            animation: floatOrb 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-100px, 100px) scale(1.1); }
+            50% { transform: translate(-50px, 200px) scale(0.9); }
+            75% { transform: translate(50px, 100px) scale(1.05); }
         }
 
         /* ==========================================
@@ -333,30 +357,36 @@ require_once 'actions.php';
            GLASSMORPHISM CARDS
            ========================================== */
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.6) inset;
         }
 
         .glass-card-dark {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         /* Login Card */
         .login-card {
-            max-width: 460px;
-            margin: 20px auto;
+            max-width: 480px;
+            margin: 30px auto;
             border-radius: var(--radius-xl);
             border: none;
             animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            box-shadow: var(--shadow-lg), 0 0 80px rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.6) inset;
             overflow: hidden;
             position: relative;
         }
@@ -366,21 +396,21 @@ require_once 'actions.php';
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 5px;
             background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
         /* App Navbar - Enhanced */
         .app-navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
             transition: var(--transition);
             position: relative;
             z-index: 100;
-            padding: 12px 0;
+            padding: 16px 0;
         }
         .app-navbar::before {
             content: '';
@@ -388,7 +418,7 @@ require_once 'actions.php';
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
             background-size: 300% 100%;
             animation: gradientShift 8s ease infinite;
@@ -398,12 +428,13 @@ require_once 'actions.php';
             50% { background-position: 100% 50%; }
         }
         .app-navbar.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
-            padding: 8px 0;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.18);
+            padding: 12px 0;
         }
         .app-navbar .navbar-brand {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
+            font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -411,41 +442,54 @@ require_once 'actions.php';
             transition: var(--transition);
         }
         .app-navbar .navbar-brand:hover {
-            transform: scale(1.02);
+            transform: scale(1.05);
+            filter: brightness(1.1);
         }
         .app-navbar .navbar-brand img {
             transition: var(--transition);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
         }
         .app-navbar .navbar-brand:hover img {
-            transform: scale(1.05);
+            transform: scale(1.08) rotate(2deg);
         }
 
         /* Content Cards */
         .content-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255,255,255,0.4) inset;
             overflow: hidden;
             transition: var(--transition);
+            position: relative;
+        }
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(236, 72, 153, 0.02) 100%);
+            pointer-events: none;
         }
         .content-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255,255,255,0.6) inset;
         }
 
         /* Stats Box */
         .stats-box {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255,255,255,0.3) inset;
             transition: var(--transition);
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--gray-100);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
         }
         .stats-box::before {
             content: '';
@@ -454,7 +498,7 @@ require_once 'actions.php';
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(99, 102, 241, 0.03) 100%);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, rgba(236, 72, 153, 0.04) 100%);
             pointer-events: none;
         }
         .stats-box::after {
@@ -463,39 +507,42 @@ require_once 'actions.php';
             bottom: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
             transform: scaleX(0);
             transform-origin: left;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .stats-box:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.5) inset;
         }
         .stats-box:hover::after {
             transform: scaleX(1);
         }
         .stats-box h3 {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 2.2rem;
+            font-weight: 900;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 8px;
         }
         .stats-box .icon-wrapper {
-            width: 56px;
-            height: 56px;
-            border-radius: var(--radius);
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             transition: var(--transition);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
         }
         .stats-box:hover .icon-wrapper {
-            transform: scale(1.1) rotate(5deg);
+            transform: scale(1.15) rotate(8deg);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.15));
         }
 
         /* ==========================================
@@ -558,13 +605,14 @@ require_once 'actions.php';
            BUTTONS
            ========================================== */
         .btn {
-            font-weight: 600;
-            border-radius: var(--radius);
-            padding: 12px 24px;
+            font-weight: 700;
+            border-radius: var(--radius-lg);
+            padding: 14px 28px;
             transition: var(--transition);
             position: relative;
             overflow: hidden;
             border: none;
+            letter-spacing: 0.3px;
         }
         .btn::before {
             content: '';
@@ -585,52 +633,64 @@ require_once 'actions.php';
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
         .btn-primary:hover {
             background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(99, 102, 241, 0.5);
             color: white;
         }
         .btn-success {
             background: linear-gradient(135deg, var(--success), #16a34a);
             color: white;
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
         }
         .btn-success:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(34, 197, 94, 0.5);
             color: white;
         }
         .btn-warning {
             background: linear-gradient(135deg, var(--warning), #d97706);
             color: white;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
         }
         .btn-warning:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(245, 158, 11, 0.5);
             color: white;
         }
         .btn-danger {
             background: linear-gradient(135deg, var(--danger), #dc2626);
             color: white;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+        .btn-danger:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(239, 68, 68, 0.5);
+            color: white;
         }
         .btn-info {
             background: linear-gradient(135deg, var(--accent), #0891b2);
             color: white;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        }
+        .btn-info:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(6, 182, 212, 0.5);
+            color: white;
         }
         .btn-light {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
         .btn-light:hover {
-            background: var(--gray-50);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
         .btn-outline-primary {
             border: 2px solid var(--primary);
@@ -640,7 +700,8 @@ require_once 'actions.php';
         .btn-outline-primary:hover {
             background: var(--primary);
             color: white;
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
         .btn-outline-success {
             border: 2px solid var(--success);
@@ -650,56 +711,46 @@ require_once 'actions.php';
         .btn-outline-success:hover {
             background: var(--success);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
         }
 
         /* WhatsApp Button */
         .btn-whatsapp {
             background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
             border: none;
         }
         .btn-whatsapp:hover {
             background: linear-gradient(135deg, #128C7E, #25D366);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(37, 211, 102, 0.5);
             color: white;
         }
         .btn-whatsapp i {
-            font-size: 1.1em;
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+        .btn-whatsapp:hover i {
+            transform: scale(1.2) rotate(5deg);
         }
 
         /* Gradient Button */
         .btn-gradient {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 100%;
             color: white;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.35);
             border: none;
             position: relative;
             z-index: 1;
         }
-        .btn-gradient::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
         .btn-gradient:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            background-position: 100% 0;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.45);
             color: white;
-        }
-        .btn-gradient:hover::after {
-            opacity: 1;
         }
 
         /* Enhanced Button Focus States */
@@ -1125,79 +1176,112 @@ require_once 'actions.php';
         .gps-toggle {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 18px;
-            background: linear-gradient(135deg, var(--gray-50), var(--white));
-            border-radius: var(--radius);
-            margin-bottom: 16px;
-            border: 1px solid var(--gray-100);
+            gap: 16px;
+            padding: 20px 24px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             transition: var(--transition);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255,255,255,0.3) inset;
         }
         .gps-toggle:hover {
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.4) inset;
+            transform: translateY(-2px);
         }
         .gps-toggle.active {
-            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            background: linear-gradient(135deg, rgba(236, 253, 245, 0.98), rgba(209, 250, 229, 0.98));
+            backdrop-filter: blur(20px);
             border-color: var(--success);
+            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.2), 0 0 0 1px rgba(34, 197, 94, 0.3) inset;
+        }
+        .gps-toggle.active:hover {
+            box-shadow: 0 12px 40px rgba(34, 197, 94, 0.25), 0 0 0 1px rgba(34, 197, 94, 0.4) inset;
         }
         .gps-toggle-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 48px;
-            height: 48px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             cursor: pointer;
             transition: var(--transition);
             position: relative;
+            flex-shrink: 0;
         }
         .gps-toggle-btn.off {
-            background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+            background: linear-gradient(135deg, var(--gray-300), var(--gray-400));
             color: var(--gray-600);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .gps-toggle-btn.off:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--gray-400), var(--gray-500));
         }
         .gps-toggle-btn.on {
             background: linear-gradient(135deg, var(--success), #16a34a);
             color: white;
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-            animation: gpsPulse 2s infinite;
+            box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
+            animation: gpsPulse 2.5s infinite;
+        }
+        .gps-toggle-btn.on:hover {
+            transform: scale(1.05);
         }
         .gps-toggle-btn.loading {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
         }
         .gps-toggle-btn.loading i {
             animation: spin 1s linear infinite;
         }
         @keyframes gpsPulse {
-            0%, 100% { box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); }
-            50% { box-shadow: 0 4px 25px rgba(34, 197, 94, 0.6), 0 0 0 8px rgba(34, 197, 94, 0.1); }
+            0%, 100% {
+                box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
+            }
+            50% {
+                box-shadow: 0 6px 35px rgba(34, 197, 94, 0.7), 0 0 0 12px rgba(34, 197, 94, 0.15);
+            }
         }
         .gps-status-info {
             flex-grow: 1;
         }
         .gps-status-label {
-            font-weight: 700;
-            font-size: 0.95rem;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
         }
-        .gps-status-label.on { color: var(--success); }
-        .gps-status-label.off { color: var(--gray-500); }
-        .gps-status-detail {
-            font-size: 0.75rem;
+        .gps-status-label.on {
+            color: var(--success);
+            background: linear-gradient(135deg, var(--success), #16a34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gps-status-label.off {
             color: var(--gray-500);
-            margin-top: 2px;
+        }
+        .gps-status-detail {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+            font-weight: 500;
         }
         .gps-accuracy-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
+            gap: 6px;
+            padding: 6px 14px;
             border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 700;
             background: linear-gradient(135deg, #dbeafe, #93c5fd);
             color: #1e40af;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
         }
 
         /* ==========================================
@@ -1661,13 +1745,15 @@ require_once 'actions.php';
 
         /* Footer - Enhanced */
         .app-footer {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-soft) 100%);
-            backdrop-filter: blur(20px);
-            border-top: 3px solid transparent;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            backdrop-filter: blur(30px);
+            border-top: 4px solid transparent;
             border-image: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)) 1;
             color: var(--gray-300);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.3);
+            margin-top: 80px;
         }
         .app-footer::before {
             content: '';
@@ -1677,8 +1763,19 @@ require_once 'actions.php';
             right: 0;
             bottom: 0;
             background:
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .app-footer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.2) 100%);
             pointer-events: none;
         }
         .footer-content {
@@ -1686,24 +1783,28 @@ require_once 'actions.php';
             z-index: 1;
         }
         .footer-brand {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light), var(--accent-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 2px 10px rgba(99, 102, 241, 0.3));
         }
         .footer-section-title {
             color: var(--white);
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 16px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .footer-section-title i {
             color: var(--primary-light);
+            font-size: 1.2rem;
         }
         .footer-link {
             color: var(--gray-400);
@@ -1711,126 +1812,137 @@ require_once 'actions.php';
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 0;
+            gap: 10px;
+            padding: 8px 0;
+            font-weight: 500;
         }
         .footer-link:hover {
             color: var(--white);
-            transform: translateX(4px);
+            transform: translateX(6px);
         }
         [dir="rtl"] .footer-link:hover {
-            transform: translateX(-4px);
+            transform: translateX(-6px);
         }
         .footer-link i {
-            width: 20px;
+            width: 24px;
             text-align: center;
+            transition: var(--transition);
+        }
+        .footer-link:hover i {
+            transform: scale(1.2);
         }
         .footer-social {
             display: flex;
-            gap: 12px;
+            gap: 14px;
             flex-wrap: wrap;
         }
         .footer-social a {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius);
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             transition: var(--transition);
             background: rgba(255, 255, 255, 0.1);
             color: var(--gray-300);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         .footer-social a:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px) scale(1.1);
             color: var(--white);
+            background: rgba(255, 255, 255, 0.15);
         }
         .footer-social .whatsapp-link {
             background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
         }
         .footer-social .whatsapp-link:hover {
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            box-shadow: 0 10px 35px rgba(37, 211, 102, 0.5);
         }
         .footer-social .phone-link {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
         }
         .footer-social .phone-link:hover {
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 35px rgba(99, 102, 241, 0.5);
         }
         .footer-social .email-link {
             background: linear-gradient(135deg, var(--secondary), #be185d);
             color: white;
         }
         .footer-social .email-link:hover {
-            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+            box-shadow: 0 10px 35px rgba(236, 72, 153, 0.5);
         }
         .footer-whatsapp-cta {
             background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
-            padding: 14px 28px;
+            padding: 16px 32px;
             border-radius: var(--radius-full);
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 700;
+            gap: 12px;
+            font-weight: 800;
             text-decoration: none;
             transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+            letter-spacing: 0.3px;
+            font-size: 1.05rem;
         }
         .footer-whatsapp-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6);
             color: white;
         }
         .footer-whatsapp-cta i {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             animation: pulse 2s ease-in-out infinite;
         }
         .footer-divider {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin: 24px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            margin: 32px 0 24px;
         }
         .footer-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 20px;
         }
         .footer-copyright {
             color: var(--gray-500);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
         .footer-copyright i {
             color: var(--primary-light);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         /* WhatsApp Floating Button */
         .whatsapp-float {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 60px;
-            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
             background: linear-gradient(135deg, #25D366, #128C7E);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.8rem;
-            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
+            font-size: 2rem;
+            box-shadow: 0 8px 35px rgba(37, 211, 102, 0.6);
             z-index: 9998;
             transition: var(--transition);
             text-decoration: none;
             animation: float 3s ease-in-out infinite;
         }
         .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6);
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 12px 50px rgba(37, 211, 102, 0.7);
             color: white;
         }
         .whatsapp-float::before {
@@ -1840,22 +1952,22 @@ require_once 'actions.php';
             height: 100%;
             border-radius: 50%;
             background: inherit;
-            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+            animation: ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
             opacity: 0;
         }
         @keyframes ping {
             75%, 100% {
-                transform: scale(1.5);
+                transform: scale(1.6);
                 opacity: 0;
             }
             0% {
                 transform: scale(1);
-                opacity: 0.3;
+                opacity: 0.35;
             }
         }
         [dir="rtl"] .whatsapp-float {
             right: auto;
-            left: 24px;
+            left: 30px;
         }
     </style>
 </head>
