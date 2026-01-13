@@ -270,6 +270,17 @@ if (isset($_SESSION['user'])) {
         $address = mb_convert_encoding(trim($_POST['address'] ?? $u['address'] ?? ''), 'UTF-8', 'UTF-8');
         $client_phone = preg_replace('/[^0-9]/', '', $_POST['client_phone'] ?? '');
 
+        // GPS pickup coordinates
+        $pickup_lat = !empty($_POST['pickup_lat']) ? floatval($_POST['pickup_lat']) : null;
+        $pickup_lng = !empty($_POST['pickup_lng']) ? floatval($_POST['pickup_lng']) : null;
+
+        // Validate GPS location is provided
+        if (!$pickup_lat || !$pickup_lng) {
+            setFlash('error', $t['gps_required'] ?? 'Please set your GPS location for pickup');
+            header("Location: index.php");
+            exit();
+        }
+
         // Update user phone if provided and not already set
         if ($client_phone && empty($u['phone'])) {
             $stmt = $conn->prepare("UPDATE users1 SET phone = ?, phone_verified = 1 WHERE id = ?");
@@ -289,13 +300,15 @@ if (isset($_SESSION['user'])) {
         if ($details) {
             $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
-            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, client_phone, status, delivery_code, points_cost) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, client_phone, pickup_lat, pickup_lng, status, delivery_code, points_cost) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)");
             $stmt->execute([
                 $uid,
                 $u['username'],
                 $details,
-                $address ?: 'Not specified',
+                $address ?: 'GPS Location',
                 $client_phone ?: $u['phone'],
+                $pickup_lat,
+                $pickup_lng,
                 $otp,
                 $points_cost_per_order
             ]);

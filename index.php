@@ -30,32 +30,91 @@ require_once 'actions.php';
 
     <style>
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --primary-light: #eef2ff;
-            --secondary-color: #818cf8;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --bg-color: #f8fafc;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --card-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --transition-fast: 0.15s ease;
-            --transition-normal: 0.3s ease;
-            --border-radius: 16px;
-            --border-radius-sm: 10px;
+            /* New Vibrant Color Palette */
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary: #ec4899;
+            --secondary-light: #f9a8d4;
+            --accent: #06b6d4;
+            --accent-light: #67e8f9;
+
+            --success: #22c55e;
+            --success-light: #86efac;
+            --warning: #f59e0b;
+            --warning-light: #fcd34d;
+            --danger: #ef4444;
+            --danger-light: #fca5a5;
+
+            --dark: #0f172a;
+            --dark-soft: #1e293b;
+            --gray-900: #111827;
+            --gray-800: #1f2937;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-200: #e5e7eb;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --white: #ffffff;
+
+            /* Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            --shadow-glow: 0 0 40px var(--primary-glow);
+
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.15s ease;
+            --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-full: 9999px;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, var(--bg-color) 0%, #e2e8f0 100%);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            color: var(--dark);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* ==========================================
@@ -199,13 +258,15 @@ require_once 'actions.php';
             font-family: 'Courier New', monospace;
         }
 
-        /* Animations */
+        /* ==========================================
+           ANIMATIONS
+           ========================================== */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeIn {
@@ -213,93 +274,180 @@ require_once 'actions.php';
             to { opacity: 1; }
         }
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(30px); }
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
             to { opacity: 1; transform: translateX(0); }
         }
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px var(--primary-glow); }
+            50% { box-shadow: 0 0 40px var(--primary-glow), 0 0 60px var(--primary-glow); }
         }
         @keyframes shimmer {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
         }
 
-        .animate-fadeInUp { animation: fadeInUp 0.5s ease forwards; }
-        .animate-fadeInDown { animation: fadeInDown 0.5s ease forwards; }
-        .animate-fadeIn { animation: fadeIn 0.4s ease forwards; }
-        .animate-slideInRight { animation: slideInRight 0.4s ease forwards; }
+        .animate-fadeInUp { animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animate-fadeInDown { animation: fadeInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animate-fadeIn { animation: fadeIn 0.5s ease forwards; }
+        .animate-slideInRight { animation: slideInRight 0.5s ease forwards; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-pulse { animation: pulse 2s ease-in-out infinite; }
+        .animate-glow { animation: glow 2s ease-in-out infinite; }
+
+        /* ==========================================
+           GLASSMORPHISM CARDS
+           ========================================== */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
         /* Login Card */
         .login-card {
-            max-width: 440px;
-            margin: 30px auto;
-            border-radius: var(--border-radius);
+            max-width: 460px;
+            margin: 20px auto;
+            border-radius: var(--radius-xl);
             border: none;
-            animation: fadeInUp 0.6s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        /* App Navbar */
-        .app-navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            transition: var(--transition-normal);
-        }
-        .app-navbar.scrolled {
-            box-shadow: var(--card-shadow);
-        }
-
-        /* Cards */
-        .stat-card {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            border-radius: var(--border-radius);
-            border: none;
-            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
-            position: relative;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-lg), 0 0 80px rgba(99, 102, 241, 0.15);
             overflow: hidden;
+            position: relative;
         }
-        .stat-card::before {
+        .login-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--card-shadow-hover);
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
+        /* App Navbar - Enhanced */
+        .app-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            position: relative;
+            z-index: 100;
+            padding: 12px 0;
+        }
+        .app-navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            background-size: 300% 100%;
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .app-navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+            padding: 8px 0;
+        }
+        .app-navbar .navbar-brand {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: var(--transition);
+        }
+        .app-navbar .navbar-brand:hover {
+            transform: scale(1.02);
+        }
+        .app-navbar .navbar-brand img {
+            transition: var(--transition);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .app-navbar .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Content Cards */
         .content-card {
-            border: none;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
             overflow: hidden;
-            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            transition: var(--transition);
         }
         .content-card:hover {
-            box-shadow: var(--card-shadow-lg);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
         }
 
+        /* Stats Box */
         .stats-box {
-            background: white;
-            border-radius: var(--border-radius-sm);
+            background: var(--white);
+            border-radius: var(--radius-lg);
             padding: 24px;
-            box-shadow: var(--card-shadow);
-            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--gray-100);
+        }
+        .stats-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(99, 102, 241, 0.03) 100%);
+            pointer-events: none;
         }
         .stats-box::after {
             content: '';
@@ -307,269 +455,442 @@ require_once 'actions.php';
             bottom: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             transform: scaleX(0);
-            transition: transform var(--transition-normal);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .stats-box:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--card-shadow-lg);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
         }
         .stats-box:hover::after {
             transform: scaleX(1);
         }
-        .stats-box i {
-            transition: transform var(--transition-normal);
+        .stats-box h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .stats-box:hover i {
-            transform: scale(1.1);
+        .stats-box .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+        .stats-box:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
         }
 
-        /* Status Badges */
+        /* ==========================================
+           STATUS BADGES
+           ========================================== */
+        .badge {
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+        }
         .badge-pending {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             color: #92400e;
-            border: none;
-            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
         }
         .badge-accepted {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
             color: #1e40af;
-            border: none;
-            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+        }
+        .badge-picked_up {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            color: #4338ca;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
         }
         .badge-delivered {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            background: linear-gradient(135deg, #d1fae5, #86efac);
             color: #065f46;
-            border: none;
-            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(34, 197, 94, 0.3);
         }
         .badge-cancelled {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            background: linear-gradient(135deg, #fee2e2, #fca5a5);
             color: #991b1b;
-            border: none;
-            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
         }
 
         /* PIN Box */
         .pin-box {
             font-family: 'Courier New', monospace;
-            letter-spacing: 6px;
-            font-weight: bold;
-            font-size: 1.4rem;
+            letter-spacing: 8px;
+            font-weight: 800;
+            font-size: 1.5rem;
             background: linear-gradient(135deg, #fef3c7, #fde68a);
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 14px 24px;
+            border-radius: var(--radius);
             user-select: all;
             display: inline-block;
-            border: 2px dashed #f59e0b;
-            transition: transform var(--transition-fast);
+            border: 2px dashed var(--warning);
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
         }
         .pin-box:hover {
-            transform: scale(1.02);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
         }
 
-        /* Buttons */
+        /* ==========================================
+           BUTTONS
+           ========================================== */
         .btn {
             font-weight: 600;
-            transition: all var(--transition-normal);
+            border-radius: var(--radius);
+            padding: 12px 24px;
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
+            border: none;
         }
-        .btn::after {
+        .btn::before {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-        .btn:active::after {
-            width: 300px;
-            height: 300px;
+        .btn:active::before {
+            width: 400px;
+            height: 400px;
         }
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            color: white;
         }
         .btn-success {
-            background: linear-gradient(135deg, var(--success-color), #34d399);
-            border: none;
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, var(--success), #16a34a);
+            color: white;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
         }
         .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5);
+            color: white;
         }
         .btn-warning {
-            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
         }
         .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+            color: white;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+        .btn-info {
+            background: linear-gradient(135deg, var(--accent), #0891b2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+        }
+        .btn-light {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            color: var(--dark);
+        }
+        .btn-light:hover {
+            background: var(--gray-50);
             transform: translateY(-2px);
         }
-        .btn-outline-primary:hover, .btn-outline-success:hover {
+        .btn-outline-primary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
             transform: translateY(-2px);
+        }
+        .btn-outline-success {
+            border: 2px solid var(--success);
+            color: var(--success);
+            background: transparent;
+        }
+        .btn-outline-success:hover {
+            background: var(--success);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
         }
 
-        /* Form Controls */
+        /* WhatsApp Button */
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            border: none;
+        }
+        .btn-whatsapp:hover {
+            background: linear-gradient(135deg, #128C7E, #25D366);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+        .btn-whatsapp i {
+            font-size: 1.1em;
+        }
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            border: none;
+            position: relative;
+            z-index: 1;
+        }
+        .btn-gradient::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            color: white;
+        }
+        .btn-gradient:hover::after {
+            opacity: 1;
+        }
+
+        /* Enhanced Button Focus States */
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+        }
+        .btn-success:focus {
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+        }
+        .btn-danger:focus {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
+        }
+        .btn-whatsapp:focus {
+            box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.25);
+        }
+
+        /* Button with Icon */
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-icon i {
+            transition: transform 0.3s ease;
+        }
+        .btn-icon:hover i {
+            transform: scale(1.15);
+        }
+
+        /* Large Button */
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: var(--radius-lg);
+        }
+
+        /* Small Button Enhancement */
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        /* ==========================================
+           FORM CONTROLS
+           ========================================== */
         .form-control, .form-select {
-            border-radius: var(--border-radius-sm);
-            border: 2px solid #e2e8f0;
-            padding: 12px 16px;
-            transition: all var(--transition-normal);
+            border-radius: var(--radius);
+            border: 2px solid var(--gray-200);
+            padding: 14px 18px;
+            transition: var(--transition);
             font-size: 1rem;
+            background: var(--white);
         }
         .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            outline: none;
         }
-        .form-floating > .form-control {
-            padding-top: 1.625rem;
-            padding-bottom: 0.625rem;
+        .form-control::placeholder {
+            color: var(--gray-400);
         }
-        .form-floating > label {
-            padding: 1rem 1rem;
-            color: var(--text-secondary);
-        }
-
-        /* Input Group */
         .input-group-text {
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--gray-200);
             border-right: none;
+            background: var(--gray-50);
+            color: var(--gray-600);
+            font-weight: 600;
         }
         .input-group .form-control {
             border-left: none;
         }
         .input-group:focus-within .input-group-text {
-            border-color: var(--primary-color);
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--primary);
         }
         .input-group:focus-within .form-control {
-            border-color: var(--primary-color);
+            border-color: var(--primary);
+        }
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
         }
 
-        /* Auth form toggle */
+        /* Auth Toggle */
         .auth-toggle {
             display: flex;
-            background: #e5e7eb;
-            border-radius: var(--border-radius-sm);
-            padding: 5px;
-            margin-bottom: 24px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 6px;
+            margin-bottom: 28px;
         }
         .auth-toggle button {
             flex: 1;
             border: none;
             background: transparent;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all var(--transition-normal);
-            color: var(--text-secondary);
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            transition: var(--transition);
+            color: var(--gray-500);
         }
         .auth-toggle button:hover:not(.active) {
             background: rgba(255, 255, 255, 0.5);
+            color: var(--gray-700);
         }
         .auth-toggle button.active {
-            background: white;
-            box-shadow: var(--card-shadow);
-            color: var(--primary-color);
+            background: var(--white);
+            box-shadow: var(--shadow);
+            color: var(--primary);
         }
         .auth-form {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.4s ease;
         }
         .auth-form.active {
             display: block;
         }
 
-        /* Modals */
+        /* ==========================================
+           TABLES
+           ========================================== */
+        .table {
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table thead th {
+            background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+            border-bottom: 2px solid var(--gray-200);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            color: var(--gray-600);
+            padding: 18px;
+        }
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(236, 72, 153, 0.03));
+        }
+        .table tbody td {
+            padding: 18px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        /* Order Row Animation */
+        .order-row {
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+        .order-row:nth-child(1) { animation-delay: 0.05s; }
+        .order-row:nth-child(2) { animation-delay: 0.1s; }
+        .order-row:nth-child(3) { animation-delay: 0.15s; }
+        .order-row:nth-child(4) { animation-delay: 0.2s; }
+        .order-row:nth-child(5) { animation-delay: 0.25s; }
+
+        /* ==========================================
+           MODALS
+           ========================================== */
         .modal-content {
-            border-radius: var(--border-radius);
+            border-radius: var(--radius-xl);
             border: none;
-            box-shadow: var(--card-shadow-lg);
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
         }
         .modal-header {
-            border-bottom: 1px solid #f1f5f9;
-            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-100);
+            padding: 24px;
         }
         .modal-body {
             padding: 24px;
         }
         .modal-footer {
-            border-top: 1px solid #f1f5f9;
-            padding: 16px 24px;
+            border-top: 1px solid var(--gray-100);
+            padding: 20px 24px;
         }
 
-        /* Tables */
-        .table {
-            margin-bottom: 0;
-        }
-        .table thead th {
-            border-bottom: 2px solid #e2e8f0;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-            color: var(--text-secondary);
-            padding: 16px;
-        }
-        .table tbody tr {
-            transition: background-color var(--transition-fast);
-        }
-        .table tbody tr:hover {
-            background-color: #f8fafc;
-        }
-        .table tbody td {
-            padding: 16px;
-            vertical-align: middle;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .table-actions .btn {
-            margin: 2px;
-            padding: 6px 10px;
-        }
-
-        /* Notification toast */
-        .notification-toast {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 9999;
-            max-width: 380px;
-        }
-        .notification-toast.rtl {
-            right: auto;
-            left: 20px;
-        }
-        .notification-toast .toast {
-            border-radius: var(--border-radius-sm);
-            border: none;
-            box-shadow: var(--card-shadow-lg);
-            animation: slideInRight 0.4s ease;
-        }
-
-        /* Nav Tabs */
+        /* ==========================================
+           NAV TABS
+           ========================================== */
         .nav-tabs {
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid var(--gray-200);
             gap: 8px;
         }
         .nav-tabs .nav-link {
             border: none;
-            border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
-            padding: 12px 20px;
-            color: var(--text-secondary);
+            border-radius: var(--radius) var(--radius) 0 0;
+            padding: 14px 24px;
+            color: var(--gray-500);
             font-weight: 600;
-            transition: all var(--transition-normal);
+            transition: var(--transition);
             position: relative;
         }
         .nav-tabs .nav-link::after {
@@ -579,283 +900,26 @@ require_once 'actions.php';
             left: 0;
             right: 0;
             height: 3px;
-            background: var(--primary-color);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             transform: scaleX(0);
-            transition: transform var(--transition-normal);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 3px 3px 0 0;
         }
         .nav-tabs .nav-link:hover {
-            background: var(--primary-light);
-            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--primary);
         }
         .nav-tabs .nav-link.active {
-            background: var(--primary-light);
-            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
         }
         .nav-tabs .nav-link.active::after {
             transform: scaleX(1);
         }
 
-        /* Notification badge pulse */
-        .pulse-badge {
-            animation: pulse 2s infinite;
-        }
-
-        /* Settings button */
-        .settings-btn {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-normal);
-        }
-        .settings-btn:hover {
-            transform: rotate(30deg);
-        }
-        .settings-btn.text-danger:hover {
-            transform: scale(1.1) rotate(0);
-        }
-
-        /* Points Badge */
-        .points-badge {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            animation: bounce 2s infinite;
-        }
-
-        /* Loading state for buttons */
-        .btn.loading {
-            pointer-events: none;
-            position: relative;
-            color: transparent !important;
-        }
-        .btn.loading::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Empty state */
-        .empty-state {
-            padding: 60px 20px;
-            text-align: center;
-        }
-        .empty-state i {
-            font-size: 4rem;
-            color: #cbd5e1;
-            margin-bottom: 20px;
-        }
-        .empty-state h5 {
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        /* Order row animations */
-        .order-row {
-            animation: fadeInUp 0.4s ease forwards;
-            opacity: 0;
-        }
-        .order-row:nth-child(1) { animation-delay: 0.05s; }
-        .order-row:nth-child(2) { animation-delay: 0.1s; }
-        .order-row:nth-child(3) { animation-delay: 0.15s; }
-        .order-row:nth-child(4) { animation-delay: 0.2s; }
-        .order-row:nth-child(5) { animation-delay: 0.25s; }
-
-        /* Tablet improvements */
-        @media (max-width: 992px) {
-            .stats-box {
-                padding: 18px;
-            }
-            .content-card {
-                border-radius: var(--border-radius-sm);
-            }
-        }
-
-        /* Mobile improvements */
-        @media (max-width: 768px) {
-            body {
-                background: var(--bg-color);
-            }
-            .container {
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-            .login-card {
-                margin: 10px;
-                border-radius: var(--border-radius-sm);
-            }
-            .stats-box {
-                padding: 14px;
-            }
-            .stats-box h3 {
-                font-size: 1.3rem;
-            }
-            .table-actions .btn {
-                padding: 0.25rem 0.5rem;
-                font-size: 0.75rem;
-            }
-            .nav-tabs {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                padding-bottom: 2px;
-                -webkit-overflow-scrolling: touch;
-            }
-            .nav-tabs .nav-link {
-                padding: 10px 14px;
-                font-size: 0.85rem;
-                white-space: nowrap;
-            }
-            .content-card {
-                border-radius: var(--border-radius-sm);
-            }
-            .form-control, .form-select {
-                padding: 10px 14px;
-                font-size: 16px; /* Prevent iOS zoom */
-            }
-            .btn {
-                padding: 10px 16px;
-            }
-            .pin-box {
-                font-size: 1.1rem;
-                letter-spacing: 4px;
-                padding: 8px 12px;
-            }
-            .card-header {
-                padding: 12px 16px !important;
-            }
-            .card-body {
-                padding: 16px !important;
-            }
-            .profile-avatar.avatar-lg {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5rem;
-            }
-            .role-badge {
-                font-size: 0.7rem;
-                padding: 4px 10px;
-            }
-            .app-navbar {
-                padding: 8px 0;
-            }
-            .mini-stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-            .mini-stat {
-                padding: 10px;
-            }
-            .mini-stat-value {
-                font-size: 1.2rem;
-            }
-            /* Order status popup mobile */
-            .status-popup-content {
-                padding: 24px;
-                max-width: 300px;
-            }
-            .status-icon-wrapper {
-                width: 80px;
-                height: 80px;
-                font-size: 32px;
-            }
-            .status-title {
-                font-size: 1.3rem;
-            }
-        }
-
-        /* Small mobile */
-        @media (max-width: 480px) {
-            .container {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            .profile-avatar.avatar-sm {
-                width: 38px;
-                height: 38px;
-                font-size: 0.95rem;
-            }
-            .profile-avatar.avatar-lg {
-                width: 90px;
-                height: 90px;
-                font-size: 2.2rem;
-            }
-            .stats-box {
-                padding: 12px;
-            }
-            .stats-box h3 {
-                font-size: 1.2rem;
-            }
-            .stats-box .small {
-                font-size: 0.7rem;
-            }
-            .badge {
-                font-size: 0.7rem;
-            }
-            .btn-sm {
-                padding: 0.2rem 0.4rem;
-                font-size: 0.7rem;
-            }
-            .table td, .table th {
-                padding: 10px 8px;
-                font-size: 0.85rem;
-            }
-            .order-row .text-break {
-                font-size: 0.9rem;
-            }
-            .pin-box {
-                font-size: 1rem;
-                letter-spacing: 3px;
-                padding: 6px 10px;
-            }
-        }
-
-        /* Dark scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Language switcher */
-        .lang-switcher .btn {
-            padding: 6px 14px;
-            font-size: 0.85rem;
-        }
-        .lang-switcher .btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        /* Demo accounts box */
-        .demo-box {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border: 1px dashed #cbd5e1;
-            border-radius: var(--border-radius-sm);
-            font-size: 0.85rem;
-        }
-
-        /* Profile avatar - Role Based */
+        /* ==========================================
+           AVATARS
+           ========================================== */
         .profile-avatar {
             width: 100px;
             height: 100px;
@@ -863,14 +927,15 @@ require_once 'actions.php';
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: white;
             position: relative;
             overflow: hidden;
-            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            transition: var(--transition);
+            border: 4px solid rgba(255, 255, 255, 0.5);
         }
         .profile-avatar:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
         .profile-avatar img {
             width: 100%;
@@ -882,13 +947,13 @@ require_once 'actions.php';
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0,0,0,0.7);
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
             color: white;
             font-size: 0.75rem;
-            padding: 6px;
+            padding: 10px 6px 6px;
             cursor: pointer;
             opacity: 0;
-            transition: opacity var(--transition-normal);
+            transition: var(--transition);
         }
         .profile-avatar:hover .profile-avatar-edit {
             opacity: 1;
@@ -896,42 +961,29 @@ require_once 'actions.php';
 
         /* Role-based avatar colors */
         .avatar-admin {
-            background: linear-gradient(135deg, #dc2626, #f97316);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.35);
+            background: linear-gradient(135deg, #f43f5e, #ec4899);
+            box-shadow: 0 8px 30px rgba(244, 63, 94, 0.4);
         }
         .avatar-driver {
-            background: linear-gradient(135deg, #059669, #10b981);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.35);
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
         }
         .avatar-customer {
-            background: linear-gradient(135deg, #4f46e5, #818cf8);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.35);
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
         }
 
-        /* Small avatar for navbar */
-        .avatar-sm {
-            width: 44px;
-            height: 44px;
-            font-size: 1.1rem;
-        }
-        .avatar-md {
-            width: 60px;
-            height: 60px;
-            font-size: 1.6rem;
-        }
-        .avatar-lg {
-            width: 120px;
-            height: 120px;
-            font-size: 3.2rem;
-        }
+        .avatar-sm { width: 48px; height: 48px; font-size: 1.2rem; border-width: 3px; }
+        .avatar-md { width: 64px; height: 64px; font-size: 1.6rem; }
+        .avatar-lg { width: 120px; height: 120px; font-size: 3rem; }
 
-        /* Role badge */
+        /* Role Badges */
         .role-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -939,7 +991,7 @@ require_once 'actions.php';
         }
         .role-badge-admin {
             background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            color: #dc2626;
+            color: #e11d48;
         }
         .role-badge-driver {
             background: linear-gradient(135deg, #ecfdf5, #d1fae5);
@@ -947,361 +999,283 @@ require_once 'actions.php';
         }
         .role-badge-customer {
             background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-            color: #4f46e5;
+            color: var(--primary);
         }
 
-        /* Online toggle switch */
-        .online-toggle {
+        .avatar-with-badge { position: relative; display: inline-block; }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-radius: var(--border-radius-sm);
-            margin-bottom: 16px;
+            justify-content: center;
+            font-size: 0.85rem;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
         }
-        .online-toggle .form-check-input {
-            width: 50px;
-            height: 26px;
-            cursor: pointer;
-        }
-        .online-toggle .form-check-input:checked {
-            background-color: var(--success-color);
-            border-color: var(--success-color);
-        }
-        .online-status {
-            font-weight: 600;
-        }
-        .online-status.online {
-            color: var(--success-color);
-        }
-        .online-status.offline {
-            color: var(--text-secondary);
+        .verified-badge-sm { width: 22px; height: 22px; font-size: 0.65rem; border-width: 2px; }
+
+        .not-verified-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
 
-        /* Serial number badge */
+        /* ==========================================
+           STATS & BADGES
+           ========================================== */
         .serial-badge {
             font-family: 'Courier New', monospace;
             font-size: 0.85rem;
             background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-            color: var(--primary-color);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 600;
+            color: var(--primary);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
         }
 
-        /* Verified badge */
-        .verified-badge {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-        }
-        .verified-badge-sm {
-            width: 20px;
-            height: 20px;
-            font-size: 0.6rem;
-            border-width: 2px;
-        }
-        .avatar-with-badge {
-            position: relative;
-            display: inline-block;
-        }
-        .not-verified-badge {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
-        }
-
-        /* Phone verification badge */
-        .phone-verified {
-            color: var(--success-color);
-        }
-        .phone-not-verified {
-            color: var(--warning-color);
-        }
-
-        /* Stats grid for driver/client */
         .mini-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-top: 16px;
+            margin-top: 20px;
         }
         .mini-stat {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            padding: 12px;
-            border-radius: var(--border-radius-sm);
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            padding: 16px;
+            border-radius: var(--radius);
             text-align: center;
+            border: 1px solid var(--gray-100);
+            transition: var(--transition);
+        }
+        .mini-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
         .mini-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .mini-stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+            font-size: 0.7rem;
+            color: var(--gray-500);
             text-transform: uppercase;
-        }
-
-        /* Rating stars */
-        .rating-stars {
-            color: #fbbf24;
-        }
-        .rating-value {
-            font-weight: 700;
-            margin-left: 4px;
-        }
-
-        /* Order status picked_up */
-        .badge-picked_up {
-            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-            color: #3730a3;
-            border: none;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        /* Section divider */
-        .section-divider {
+        .rating-stars { color: #fbbf24; }
+        .rating-value { font-weight: 700; margin-left: 4px; }
+
+        /* Online Toggle */
+        .online-toggle {
             display: flex;
             align-items: center;
-            margin: 24px 0;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            gap: 12px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            border: 1px solid var(--gray-100);
         }
-        .section-divider::before,
-        .section-divider::after {
+        .online-toggle .form-check-input {
+            width: 54px;
+            height: 28px;
+            cursor: pointer;
+        }
+        .online-toggle .form-check-input:checked {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        .online-status { font-weight: 700; }
+        .online-status.online { color: var(--success); }
+        .online-status.offline { color: var(--gray-400); }
+
+        /* ==========================================
+           MISC COMPONENTS
+           ========================================== */
+        .settings-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+        .settings-btn:hover {
+            transform: scale(1.1);
+            background: var(--gray-100);
+        }
+        .settings-btn.text-danger:hover {
+            background: #fef2f2;
+        }
+
+        .pulse-badge { animation: pulse 2s infinite; }
+        .points-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            animation: bounce 2s infinite;
+        }
+
+        .btn.loading {
+            pointer-events: none;
+            color: transparent !important;
+        }
+        .btn.loading::after {
             content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
-        .section-divider::before { margin-right: 16px; }
-        .section-divider::after { margin-left: 16px; }
 
-        /* Footer */
-        .app-footer {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-top: 1px solid #e2e8f0;
+        .empty-state {
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .empty-state i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
+            display: block;
+        }
+        .empty-state h5 {
+            color: var(--gray-500);
+            font-weight: 700;
         }
 
-        /* Order Status Popup */
+        .demo-box {
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border: 2px dashed var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+        }
+
+        .lang-switcher .btn {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .lang-switcher .btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        [dir="rtl"] .notification-toast { right: auto; left: 20px; }
+        .notification-toast .toast {
+            border-radius: var(--radius);
+            border: none;
+            box-shadow: var(--shadow-lg);
+            animation: slideInRight 0.4s ease;
+        }
+
+        /* ==========================================
+           ORDER STATUS POPUP
+           ========================================== */
         .order-status-popup {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(15, 23, 42, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10000;
             animation: fadeIn 0.3s ease;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
         }
         .order-status-popup.fade-out {
             animation: fadeOut 0.5s ease forwards;
         }
-        @keyframes fadeOut {
-            to { opacity: 0; }
-        }
+        @keyframes fadeOut { to { opacity: 0; } }
+
         .status-popup-content {
-            background: white;
-            border-radius: 24px;
-            padding: 40px;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 48px;
             text-align: center;
-            max-width: 340px;
+            max-width: 380px;
             width: 90%;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            box-shadow: var(--shadow-lg);
+            animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .status-icon-wrapper {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
+            margin: 0 auto 24px;
+            font-size: 48px;
         }
-        .status-icon-wrapper.pulse {
-            animation: pulseIcon 2s ease-in-out infinite;
-        }
-        .status-icon-wrapper.bounce {
-            animation: bounceIcon 1s ease infinite;
-        }
-        .status-icon-wrapper.celebrate {
-            animation: celebrateIcon 0.6s ease;
-        }
-        .status-icon-wrapper.shake {
-            animation: shakeIcon 0.5s ease;
-        }
-        @keyframes pulseIcon {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        @keyframes bounceIcon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        @keyframes celebrateIcon {
-            0% { transform: scale(0.5) rotate(-10deg); }
-            50% { transform: scale(1.2) rotate(10deg); }
-            100% { transform: scale(1) rotate(0); }
-        }
-        @keyframes shakeIcon {
+        .status-icon-wrapper.pulse { animation: pulse 2s ease-in-out infinite; }
+        .status-icon-wrapper.bounce { animation: bounce 1s ease infinite; }
+        .status-icon-wrapper.celebrate { animation: scaleIn 0.6s ease; }
+        .status-icon-wrapper.shake { animation: shake 0.5s ease; }
+        @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
-        .status-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-        .status-order-id {
-            color: var(--text-secondary);
-            margin-bottom: 5px;
-        }
-        .status-driver {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
+
+        .status-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; color: var(--dark); }
+        .status-order-id { color: var(--gray-500); margin-bottom: 8px; }
+        .status-driver { color: var(--gray-500); font-size: 0.9rem; }
         .status-progress {
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 3px;
-            margin-top: 20px;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: var(--radius-full);
+            margin-top: 24px;
             overflow: hidden;
         }
         .progress-bar-animated {
             height: 100%;
-            border-radius: 3px;
+            border-radius: var(--radius-full);
             transition: width 0.5s ease;
-            animation: progressGlow 1.5s ease-in-out infinite;
-        }
-        @keyframes progressGlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Enhanced Button Styles */
-        .btn-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .btn-icon:hover {
-            transform: translateY(-2px);
-        }
-        .btn-icon-sm {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-        }
-
-        /* Enhanced Form Inputs */
-        .form-control-modern {
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px 16px;
-            transition: all 0.2s ease;
-        }
-        .form-control-modern:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-        }
-
-        /* GPS Location Button Animation */
-        .location-btn {
-            transition: all 0.3s ease;
-        }
-        .location-btn:hover {
-            transform: scale(1.05);
-        }
-        .location-btn.locating {
-            animation: locatingPulse 1s ease infinite;
-        }
-        @keyframes locatingPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-        }
-
-        /* Enhanced Card Hover Effects */
-        .card-hover-lift {
-            transition: all 0.3s ease;
-        }
-        .card-hover-lift:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        /* Status Indicator Animations */
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
-        .status-dot.active {
-            animation: statusPulse 1.5s ease-in-out infinite;
-        }
-        @keyframes statusPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        /* Modern Icon Buttons */
-        .icon-circle {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary-light), #fff);
-            color: var(--primary-color);
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        .icon-circle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            animation: shimmer 2s infinite;
+            background-size: 200% 100%;
         }
 
         /* Floating Action Button */
@@ -1309,26 +1283,490 @@ require_once 'actions.php';
             position: fixed;
             bottom: 24px;
             right: 24px;
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition-bounce);
             z-index: 1000;
         }
         .fab:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+            transform: scale(1.15) rotate(90deg);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
         }
-        [dir="rtl"] .fab {
+        [dir="rtl"] .fab { right: auto; left: 24px; }
+
+        /* ==========================================
+           FLOATING ORDER NOTIFICATION BUBBLE
+           ========================================== */
+        .order-notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            width: calc(100% - 40px);
+        }
+        [dir="rtl"] .order-notification-container {
+            right: auto;
+            left: 20px;
+        }
+
+        .order-bubble {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.1);
+            overflow: hidden;
+            animation: bubbleSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+        .order-bubble.fade-out {
+            animation: bubbleSlideOut 0.4s ease forwards;
+        }
+        @keyframes bubbleSlideIn {
+            from { opacity: 0; transform: translateX(100px) scale(0.8); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes bubbleSlideOut {
+            to { opacity: 0; transform: translateX(100px) scale(0.8); }
+        }
+        [dir="rtl"] .order-bubble {
+            animation-name: bubbleSlideInRtl;
+        }
+        [dir="rtl"] .order-bubble.fade-out {
+            animation-name: bubbleSlideOutRtl;
+        }
+        @keyframes bubbleSlideInRtl {
+            from { opacity: 0; transform: translateX(-100px) scale(0.8); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes bubbleSlideOutRtl {
+            to { opacity: 0; transform: translateX(-100px) scale(0.8); }
+        }
+
+        .order-bubble-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .order-bubble-header .new-order-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .order-bubble-header .new-order-badge i {
+            animation: bellRing 0.5s ease infinite;
+        }
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+        .order-bubble-timer {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .order-bubble-body {
+            padding: 16px;
+        }
+        .order-bubble-distance {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
+            color: #1e40af;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .order-bubble-details {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.5;
+            max-height: 60px;
+            overflow: hidden;
+        }
+        .order-bubble-address {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .order-bubble-address i {
+            color: var(--danger);
+            margin-top: 2px;
+        }
+        .order-bubble-phone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gray-50);
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+        .order-bubble-phone i {
+            color: var(--success);
+        }
+        .order-bubble-phone a {
+            color: var(--dark);
+            font-weight: 600;
+            text-decoration: none;
+            direction: ltr;
+        }
+
+        .order-bubble-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .order-bubble-actions .btn {
+            flex: 1;
+            padding: 12px;
+            font-weight: 700;
+            border-radius: var(--radius);
+        }
+        .btn-accept {
+            background: linear-gradient(135deg, var(--success), #16a34a);
+            color: white;
+            border: none;
+        }
+        .btn-accept:hover {
+            background: linear-gradient(135deg, #16a34a, var(--success));
+            color: white;
+            transform: translateY(-2px);
+        }
+        .btn-decline {
+            background: var(--gray-100);
+            color: var(--gray-600);
+            border: 1px solid var(--gray-200);
+        }
+        .btn-decline:hover {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .order-bubble-progress {
+            height: 4px;
+            background: var(--gray-200);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .order-bubble-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.1s linear;
+        }
+
+        @media (max-width: 480px) {
+            .order-notification-container {
+                top: 70px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: none;
+            }
+            .order-bubble-body { padding: 12px; }
+            .order-bubble-actions .btn { padding: 10px; font-size: 0.9rem; }
+        }
+
+        /* ==========================================
+           RESPONSIVE
+           ========================================== */
+        @media (max-width: 992px) {
+            .stats-box { padding: 20px; }
+            .content-card { border-radius: var(--radius); }
+        }
+
+        @media (max-width: 768px) {
+            body { background-size: 200% 200%; }
+            .container { padding-left: 16px; padding-right: 16px; }
+            .login-card { margin: 16px; border-radius: var(--radius-lg); }
+            .stats-box { padding: 16px; }
+            .stats-box h3 { font-size: 1.5rem; }
+            .nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .nav-tabs .nav-link { padding: 12px 16px; font-size: 0.85rem; white-space: nowrap; }
+            .content-card { border-radius: var(--radius); }
+            .form-control, .form-select { padding: 12px 16px; font-size: 16px; }
+            .btn { padding: 12px 20px; }
+            .pin-box { font-size: 1.2rem; letter-spacing: 5px; padding: 12px 18px; }
+            .profile-avatar.avatar-lg { width: 100px; height: 100px; font-size: 2.5rem; }
+            .role-badge { font-size: 0.7rem; padding: 6px 12px; }
+            .app-navbar { padding: 10px 0; }
+            .mini-stats { gap: 10px; }
+            .mini-stat { padding: 14px; }
+            .mini-stat-value { font-size: 1.3rem; }
+            .status-popup-content { padding: 32px; max-width: 320px; }
+            .status-icon-wrapper { width: 90px; height: 90px; font-size: 40px; }
+            .status-title { font-size: 1.4rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding-left: 12px; padding-right: 12px; }
+            .profile-avatar.avatar-sm { width: 40px; height: 40px; font-size: 1rem; }
+            .profile-avatar.avatar-lg { width: 90px; height: 90px; font-size: 2.2rem; }
+            .stats-box { padding: 14px; }
+            .stats-box h3 { font-size: 1.3rem; }
+            .badge { font-size: 0.7rem; padding: 6px 12px; }
+            .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
+            .table td, .table th { padding: 12px 10px; font-size: 0.85rem; }
+            .pin-box { font-size: 1.1rem; letter-spacing: 4px; padding: 10px 14px; }
+            .fab { width: 56px; height: 56px; font-size: 1.4rem; bottom: 16px; right: 16px; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--gray-100); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+        /* Phone Verification */
+        .phone-verified { color: var(--success); }
+        .phone-not-verified { color: var(--warning); }
+
+        /* Section Divider */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            margin: 28px 0;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .section-divider::before, .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gray-200), transparent);
+        }
+        .section-divider::before { margin-right: 16px; }
+        .section-divider::after { margin-left: 16px; }
+
+        /* Footer - Enhanced */
+        .app-footer {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-soft) 100%);
+            backdrop-filter: blur(20px);
+            border-top: 3px solid transparent;
+            border-image: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)) 1;
+            color: var(--gray-300);
+            position: relative;
+            overflow: hidden;
+        }
+        .app-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .footer-section-title {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-section-title i {
+            color: var(--primary-light);
+        }
+        .footer-link {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+        }
+        .footer-link:hover {
+            color: var(--white);
+            transform: translateX(4px);
+        }
+        [dir="rtl"] .footer-link:hover {
+            transform: translateX(-4px);
+        }
+        .footer-link i {
+            width: 20px;
+            text-align: center;
+        }
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .footer-social a {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--gray-300);
+        }
+        .footer-social a:hover {
+            transform: translateY(-4px);
+            color: var(--white);
+        }
+        .footer-social .whatsapp-link {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+        }
+        .footer-social .whatsapp-link:hover {
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+        .footer-social .phone-link {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        .footer-social .phone-link:hover {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        .footer-social .email-link {
+            background: linear-gradient(135deg, var(--secondary), #be185d);
+            color: white;
+        }
+        .footer-social .email-link:hover {
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
+        .footer-whatsapp-cta {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 14px 28px;
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+        .footer-whatsapp-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+        .footer-whatsapp-cta i {
+            font-size: 1.3rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 24px 0;
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-copyright {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+        .footer-copyright i {
+            color: var(--primary-light);
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
+            z-index: 9998;
+            transition: var(--transition);
+            text-decoration: none;
+            animation: float 3s ease-in-out infinite;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6);
+            color: white;
+        }
+        .whatsapp-float::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+            opacity: 0;
+        }
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+            0% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+        }
+        [dir="rtl"] .whatsapp-float {
             right: auto;
             left: 24px;
         }
@@ -1400,6 +1838,11 @@ function createNotificationSound() {
 
 <!-- Notification Toast Container -->
 <div id="notificationContainer" class="notification-toast <?php echo $dir == 'rtl' ? 'rtl' : ''; ?>"></div>
+
+<!-- Order Notification Bubbles Container (for drivers) -->
+<?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
+<div id="orderBubbleContainer" class="order-notification-container"></div>
+<?php endif; ?>
 
 <?php if (!isset($_SESSION['user'])): ?>
     <!-- ================= LOGIN/REGISTER SCREEN ================= -->
@@ -1510,7 +1953,7 @@ function createNotificationSound() {
     <nav class="navbar app-navbar sticky-top mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.php">
-                <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 40px; width: auto;">
+                <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 40px; width: auto;" onerror="this.style.display='none'">
                 <span class="text-primary d-none d-sm-inline"><?php echo $t['app_name']; ?></span>
             </a>
             <div class="d-flex align-items-center gap-2 gap-md-3">
@@ -2371,7 +2814,7 @@ function createNotificationSound() {
                                 </div>
 
                                 <!-- Phone Number -->
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <label class="form-label small text-muted mb-1">
                                         <i class="fas fa-phone me-1"></i><?php echo $t['phone_ph'] ?? 'Phone'; ?>
                                     </label>
@@ -2384,7 +2827,23 @@ function createNotificationSound() {
                                                <?php echo !empty($u['phone']) ? '' : 'required'; ?>>
                                     </div>
                                 </div>
-                                <input type="hidden" name="address" value="<?php echo e($u['address'] ?? 'Not specified'); ?>">
+
+                                <!-- GPS Pickup Location -->
+                                <div class="mb-4">
+                                    <label class="form-label small text-muted mb-1">
+                                        <i class="fas fa-map-marker-alt me-1 text-danger"></i><?php echo $t['pickup_location'] ?? 'Pickup Location'; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" name="address" id="pickupAddress" class="form-control bg-light border-0"
+                                               placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" required readonly>
+                                        <button type="button" class="btn btn-success border-0 px-4" onclick="getPickupLocation()" id="gpsBtn">
+                                            <i class="fas fa-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="pickup_lat" id="pickupLat" required>
+                                    <input type="hidden" name="pickup_lng" id="pickupLng" required>
+                                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i><?php echo $t['gps_required'] ?? 'GPS location is required for drivers to find you'; ?></small>
+                                </div>
 
                                 <button name="add_order" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-sm btn-lg">
                                     <i class="fas fa-paper-plane me-2"></i><?php echo $t['btn_publish']; ?>
@@ -2421,21 +2880,64 @@ function createNotificationSound() {
                                 </thead>
                                 <tbody class="border-top-0">
                                     <?php
-                                    $limit = "";
-                                    if($role == 'driver') $limit = "WHERE status IN ('pending', 'accepted', 'picked_up') OR driver_id='$uid'";
-                                    if($role == 'customer') $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
+                                    // Get driver's location for distance filtering
+                                    $driverLat = $u['last_lat'] ?? null;
+                                    $driverLng = $u['last_lng'] ?? null;
+                                    $maxDistance = 7; // 7km radius for drivers
 
-                                    $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
-                                    $res = $conn->query($sql);
+                                    if($role == 'driver') {
+                                        // Driver sees: their accepted/picked_up orders OR pending orders within 7km
+                                        if ($driverLat && $driverLng) {
+                                            // Haversine formula in SQL for distance calculation
+                                            $sql = "SELECT *,
+                                                    (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) AS distance
+                                                    FROM orders1
+                                                    WHERE (driver_id = ? AND status IN ('accepted', 'picked_up'))
+                                                    OR (status = 'pending' AND pickup_lat IS NOT NULL
+                                                        AND (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) <= ?)
+                                                    ORDER BY CASE WHEN driver_id = ? THEN 0 ELSE 1 END, distance ASC, id DESC
+                                                    LIMIT 50";
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute([$driverLat, $driverLng, $driverLat, $uid, $driverLat, $driverLng, $driverLat, $maxDistance, $uid]);
+                                            $res = $stmt;
+                                        } else {
+                                            // No GPS - only show driver's own orders
+                                            $sql = "SELECT * FROM orders1 WHERE driver_id = ? AND status IN ('accepted', 'picked_up') ORDER BY id DESC LIMIT 50";
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute([$uid]);
+                                            $res = $stmt;
+                                        }
+                                    } elseif($role == 'customer') {
+                                        $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
+                                        $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
+                                        $res = $conn->query($sql);
+                                    } else {
+                                        $sql = "SELECT * FROM orders1 ORDER BY id DESC LIMIT 50";
+                                        $res = $conn->query($sql);
+                                    }
 
-                                    if($res->rowCount() == 0):
+                                    if($role == 'driver' && !$driverLat):
                                     ?>
+                                    <tr>
+                                        <td colspan="3" class="p-4">
+                                            <div class="alert alert-warning mb-0 d-flex align-items-center gap-3">
+                                                <i class="fas fa-location-crosshairs fa-2x"></i>
+                                                <div>
+                                                    <strong><?php echo $t['enable_gps'] ?? 'Enable GPS to see nearby orders'; ?></strong>
+                                                    <p class="mb-0 small"><?php echo $t['gps_driver_note'] ?? 'Turn on your GPS to find orders within 7km of your location'; ?></p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endif;
+
+                                    if($res->rowCount() == 0): ?>
                                     <tr>
                                         <td colspan="3" class="empty-state">
                                             <i class="fas fa-box-open"></i>
                                             <h5><?php echo $t['no_orders']; ?></h5>
                                             <p class="text-muted small mb-0">
-                                                <?php echo ($role == 'driver') ? $t['no_pending_orders'] : $t['check_back_later']; ?>
+                                                <?php echo ($role == 'driver') ? ($driverLat ? $t['no_nearby_orders'] ?? 'No orders nearby (7km radius)' : $t['enable_gps_first'] ?? 'Enable GPS first') : $t['check_back_later']; ?>
                                             </p>
                                         </td>
                                     </tr>
@@ -2443,6 +2945,7 @@ function createNotificationSound() {
                                         $st = $row['status'];
                                         $badge = getStatusBadge($st);
                                         $icon = getStatusIcon($st);
+                                        $orderDistance = isset($row['distance']) ? round($row['distance'], 1) : null;
                                     ?>
                                     <tr class="order-row">
                                         <td class="ps-4 py-3">
@@ -2452,6 +2955,14 @@ function createNotificationSound() {
                                                     <small class="text-muted"><?php echo fmtDate($row['created_at']); ?></small>
                                                     <div class="fw-bold text-dark text-break"><?php echo e($row['details']); ?></div>
                                                     <small class="text-secondary"><i class="fas fa-map-marker-alt text-danger me-1"></i> <?php echo e($row['address']); ?></small>
+
+                                                    <?php if($role == 'driver' && $st == 'pending' && $orderDistance !== null): ?>
+                                                        <div class="mt-1">
+                                                            <span class="badge bg-info text-white">
+                                                                <i class="fas fa-route me-1"></i><?php echo $orderDistance; ?> <?php echo $t['km'] ?? 'km'; ?>
+                                                            </span>
+                                                        </div>
+                                                    <?php endif; ?>
 
                                                     <?php if($role == 'customer' && $st != 'delivered' && $st != 'cancelled'): ?>
                                                         <div class="mt-2 bg-warning bg-opacity-10 p-2 rounded border border-warning border-opacity-25">
@@ -2464,6 +2975,9 @@ function createNotificationSound() {
                                                     <?php if($role == 'driver' && ($st == 'accepted' || $st == 'picked_up') && $row['driver_id'] == $uid): ?>
                                                         <div class="mt-2 text-muted small">
                                                             <i class="fas fa-user me-1"></i> <?php echo e($row['customer_name']); ?>
+                                                            <?php if($row['client_phone']): ?>
+                                                            - <a href="tel:+222<?php echo $row['client_phone']; ?>" class="text-primary"><i class="fas fa-phone"></i></a>
+                                                            <?php endif; ?>
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>
@@ -2690,12 +3204,100 @@ function createNotificationSound() {
         <?php endif; ?>
     </div>
 
-    <footer class="app-footer text-center text-muted py-4 mt-5">
-        <div class="container">
-            <p class="mb-0 small">
-                <i class="fas fa-bolt text-primary me-1"></i>
-                &copy; <?php echo date('Y'); ?> <?php echo $t['app_name']; ?>. <?php echo $t['all_rights']; ?>.
-            </p>
+    <!-- WhatsApp Floating Help Button -->
+    <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>"
+       target="_blank"
+       class="whatsapp-float"
+       title="<?php echo $t['need_help'] ?? 'Need Help?'; ?>">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer class="app-footer py-5 mt-5">
+        <div class="container footer-content">
+            <div class="row g-4">
+                <!-- Brand & Description -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 36px; width: auto; filter: brightness(0) invert(1);" onerror="this.style.display='none'">
+                        <span class="footer-brand"><?php echo $t['app_name']; ?></span>
+                    </div>
+                    <p class="text-gray-400 mb-4" style="line-height: 1.7;">
+                        <?php echo $t['fast_delivery'] ?? 'Fast and reliable delivery service for all your needs.'; ?>
+                    </p>
+                    <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>"
+                       target="_blank"
+                       class="footer-whatsapp-cta">
+                        <i class="fab fa-whatsapp"></i>
+                        <?php echo $t['need_help'] ?? 'Need Help?'; ?>
+                    </a>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-section-title">
+                        <i class="fas fa-headset"></i>
+                        <?php echo $t['contact_us'] ?? 'Contact Us'; ?>
+                    </h6>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="footer-link">
+                            <i class="fab fa-whatsapp text-success"></i>
+                            <span class="phone-display">+222 41 31 29 31</span>
+                        </a>
+                        <a href="tel:+22241312931" class="footer-link">
+                            <i class="fas fa-phone"></i>
+                            <span class="phone-display">+222 41 31 29 31</span>
+                        </a>
+                        <a href="mailto:<?php echo $help_email; ?>" class="footer-link">
+                            <i class="fas fa-envelope"></i>
+                            <?php echo $help_email; ?>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Social & Quick Contact -->
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="footer-section-title">
+                        <i class="fas fa-share-alt"></i>
+                        <?php echo $t['connect_with_us'] ?? 'Connect With Us'; ?>
+                    </h6>
+                    <div class="footer-social">
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="whatsapp-link" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="tel:+22241312931" class="phone-link" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                        <a href="mailto:<?php echo $help_email; ?>" class="email-link" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <div class="mt-4 p-3 rounded-3" style="background: rgba(255,255,255,0.05);">
+                        <p class="mb-1 small text-gray-400">
+                            <i class="fas fa-clock me-2"></i>
+                            <?php echo $t['available_24_7'] ?? 'Available 24/7'; ?>
+                        </p>
+                        <p class="mb-0 small text-gray-400">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <?php echo $t['location_mauritania'] ?? 'Nouakchott, Mauritania'; ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright mb-0">
+                    <i class="fas fa-bolt me-1"></i>
+                    &copy; <?php echo date('Y'); ?> <?php echo $t['app_name']; ?>. <?php echo $t['all_rights']; ?>.
+                </p>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-success bg-opacity-25 text-success-emphasis px-3 py-2 rounded-pill">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        <?php echo $t['secure_service'] ?? 'Secure Service'; ?>
+                    </span>
+                </div>
+            </div>
         </div>
     </footer>
 <?php endif; ?>
@@ -2894,8 +3496,67 @@ function showOrderTracking(order) {
 }
 
 // ==========================================
-// GPS & LOCATION FUNCTIONS (Driver Tracking Only)
+// GPS & LOCATION FUNCTIONS
 // ==========================================
+
+// Get pickup location for customer orders
+function getPickupLocation() {
+    if (!navigator.geolocation) {
+        alert('<?php echo $t['geolocation_not_supported'] ?? 'Geolocation is not supported by your browser'; ?>');
+        return;
+    }
+
+    const btn = document.getElementById('gpsBtn');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            document.getElementById('pickupLat').value = lat;
+            document.getElementById('pickupLng').value = lng;
+
+            // Reverse geocode to get address
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=<?php echo $lang; ?>`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        let address = data.display_name.split(', ').slice(0, 3).join(', ');
+                        document.getElementById('pickupAddress').value = address;
+                    } else {
+                        document.getElementById('pickupAddress').value = lat.toFixed(5) + ', ' + lng.toFixed(5);
+                    }
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-primary');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.classList.remove('btn-primary');
+                        btn.classList.add('btn-success');
+                        btn.disabled = false;
+                    }, 2000);
+                })
+                .catch(() => {
+                    document.getElementById('pickupAddress').value = lat.toFixed(5) + ', ' + lng.toFixed(5);
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
+                    btn.disabled = false;
+                });
+        },
+        (error) => {
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
+            let msg = '<?php echo $t['location_error'] ?? 'Error getting location'; ?>';
+            if (error.code === error.PERMISSION_DENIED) {
+                msg = '<?php echo $t['location_denied'] ?? 'Location access denied. Please enable GPS.'; ?>';
+            }
+            alert(msg);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+}
 
 // Haversine formula for distance calculation
 function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -2978,6 +3639,230 @@ function updateMyLocation() {
 <?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
 setInterval(updateMyLocation, 60000); // Update every minute
 updateMyLocation(); // Initial update
+
+// ==========================================
+// DRIVER ORDER NOTIFICATION BUBBLES
+// ==========================================
+
+// Track displayed order IDs to prevent duplicates
+let displayedOrderIds = new Set();
+let driverLat = null;
+let driverLng = null;
+
+// Play notification ring sound
+function playOrderRingSound() {
+    try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+
+        // Create a pleasant ring tone
+        for (let i = 0; i < 3; i++) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now + i * 0.3); // A5 note
+            osc.frequency.setValueAtTime(1100, now + i * 0.3 + 0.1); // C#6 note
+
+            gain.gain.setValueAtTime(0.3, now + i * 0.3);
+            gain.gain.exponentialDecayTo(0.01, now + i * 0.3 + 0.25);
+
+            osc.start(now + i * 0.3);
+            osc.stop(now + i * 0.3 + 0.3);
+        }
+    } catch(e) {
+        console.log('Sound not available');
+    }
+}
+
+// Create order bubble HTML
+function createOrderBubble(order) {
+    const bubble = document.createElement('div');
+    bubble.className = 'order-bubble';
+    bubble.id = `order-bubble-${order.id}`;
+    bubble.dataset.orderId = order.id;
+
+    const distanceText = order.distance ? `${parseFloat(order.distance).toFixed(1)} <?php echo $t['km'] ?? 'km'; ?>` : '---';
+    const phone = order.client_phone || '<?php echo $t['no_phone'] ?? 'No phone'; ?>';
+
+    bubble.innerHTML = `
+        <div class="order-bubble-header">
+            <div class="new-order-badge">
+                <i class="fas fa-bell"></i>
+                <?php echo $t['new_order_nearby'] ?? 'New Order Nearby!'; ?>
+            </div>
+            <div class="order-bubble-timer"><span class="timer-seconds">10</span>s</div>
+        </div>
+        <div class="order-bubble-body">
+            <div class="order-bubble-distance">
+                <i class="fas fa-route"></i>
+                ${distanceText}
+            </div>
+            <div class="order-bubble-details">${escapeHtml(order.details)}</div>
+            <div class="order-bubble-address">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>${escapeHtml(order.address)}</span>
+            </div>
+            <div class="order-bubble-phone">
+                <i class="fas fa-phone"></i>
+                <a href="tel:+222${phone}" dir="ltr">+222 ${phone}</a>
+            </div>
+            <div class="order-bubble-actions">
+                <button class="btn btn-accept" onclick="acceptOrderFromBubble(${order.id}, this)">
+                    <i class="fas fa-check me-2"></i><?php echo $t['accept'] ?? 'Accept'; ?>
+                </button>
+                <button class="btn btn-decline" onclick="declineOrderBubble(${order.id})">
+                    <i class="fas fa-times me-2"></i><?php echo $t['decline'] ?? 'Decline'; ?>
+                </button>
+            </div>
+        </div>
+        <div class="order-bubble-progress">
+            <div class="order-bubble-progress-bar" style="width: 100%"></div>
+        </div>
+    `;
+
+    return bubble;
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+}
+
+// Show order bubble with countdown
+function showOrderBubble(order) {
+    if (displayedOrderIds.has(order.id)) return;
+
+    displayedOrderIds.add(order.id);
+
+    const container = document.getElementById('orderBubbleContainer');
+    if (!container) return;
+
+    const bubble = createOrderBubble(order);
+    container.appendChild(bubble);
+
+    // Play ring sound
+    playOrderRingSound();
+
+    // Start countdown
+    let secondsLeft = 10;
+    const timerSpan = bubble.querySelector('.timer-seconds');
+    const progressBar = bubble.querySelector('.order-bubble-progress-bar');
+
+    const countdown = setInterval(() => {
+        secondsLeft--;
+        if (timerSpan) timerSpan.textContent = secondsLeft;
+        if (progressBar) progressBar.style.width = (secondsLeft / 10 * 100) + '%';
+
+        if (secondsLeft <= 0) {
+            clearInterval(countdown);
+            removeBubble(order.id);
+        }
+    }, 1000);
+
+    // Store countdown reference
+    bubble.dataset.countdown = countdown;
+}
+
+// Accept order from bubble
+function acceptOrderFromBubble(orderId, btn) {
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    // Submit accept request
+    fetch('actions.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `accept_order=1&oid=${orderId}`
+    })
+    .then(response => {
+        if (response.redirected || response.ok) {
+            // Success - remove bubble and reload page
+            removeBubble(orderId);
+            showNotification('<?php echo $t['success'] ?? 'Success'; ?>', '<?php echo $t['order_accepted'] ?? 'Order accepted!'; ?>', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+    })
+    .catch(() => {
+        btn.innerHTML = '<i class="fas fa-check me-2"></i><?php echo $t['accept'] ?? 'Accept'; ?>';
+        btn.disabled = false;
+        showNotification('<?php echo $t['error'] ?? 'Error'; ?>', '<?php echo $t['try_again'] ?? 'Please try again'; ?>', 'warning');
+    });
+}
+
+// Decline order bubble (just dismiss it)
+function declineOrderBubble(orderId) {
+    removeBubble(orderId);
+    // Keep in set for this session to avoid showing again
+}
+
+// Remove bubble with animation
+function removeBubble(orderId) {
+    const bubble = document.getElementById(`order-bubble-${orderId}`);
+    if (bubble) {
+        // Clear countdown
+        if (bubble.dataset.countdown) {
+            clearInterval(parseInt(bubble.dataset.countdown));
+        }
+
+        bubble.classList.add('fade-out');
+        setTimeout(() => bubble.remove(), 400);
+    }
+}
+
+// Fetch nearby orders for driver
+function fetchNearbyOrders() {
+    if (!driverLat || !driverLng) {
+        // Get current position first
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    driverLat = pos.coords.latitude;
+                    driverLng = pos.coords.longitude;
+                    doFetchNearbyOrders();
+                },
+                () => {}
+            );
+        }
+        return;
+    }
+    doFetchNearbyOrders();
+}
+
+function doFetchNearbyOrders() {
+    fetch(`api.php?action=get_nearby_orders&lat=${driverLat}&lng=${driverLng}&max_distance=7`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.orders && data.orders.length > 0) {
+                data.orders.forEach(order => {
+                    showOrderBubble(order);
+                });
+            }
+        })
+        .catch(() => {});
+}
+
+// Initialize driver GPS and start polling
+navigator.geolocation.getCurrentPosition(
+    (pos) => {
+        driverLat = pos.coords.latitude;
+        driverLng = pos.coords.longitude;
+
+        // Start polling for new orders every 15 seconds
+        fetchNearbyOrders();
+        setInterval(fetchNearbyOrders, 15000);
+    },
+    () => {
+        console.log('GPS not available - order notifications disabled');
+    },
+    { enableHighAccuracy: true }
+);
+
 <?php endif; ?>
 
 // ==========================================
