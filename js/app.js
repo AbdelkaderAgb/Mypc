@@ -213,7 +213,7 @@ function editOrder(order) {
 // ==========================================
 // ORDER TRACKING FOR CUSTOMERS
 // ==========================================
-function showOrderTracking(order, translations) {
+function _showOrderTracking(order, translations) {
     // Reset all steps
     document.querySelectorAll('.progress-step').forEach(step => {
         step.classList.remove('completed', 'active');
@@ -650,7 +650,7 @@ function doFetchNearbyOrders(translations) {
 let gpsEnabled = false;
 let gpsWatchId = null;
 
-function toggleDriverGPS(translations) {
+function _toggleDriverGPS(translations) {
     const btn = document.getElementById('gpsToggleBtn');
     const toggle = document.getElementById('gpsToggle');
     const label = document.getElementById('gpsStatusLabel');
@@ -747,7 +747,7 @@ function toggleDriverGPS(translations) {
 // ==========================================
 // GET PICKUP LOCATION FOR CUSTOMER ORDERS
 // ==========================================
-function getPickupLocation(translations, lang) {
+function _getPickupLocation(translations, lang) {
     if (!navigator.geolocation) {
         alert(translations.geolocation_not_supported || 'Geolocation is not supported by your browser');
         return;
@@ -808,7 +808,7 @@ function getPickupLocation(translations, lang) {
 // ==========================================
 // ACCEPT ORDER FROM BUBBLE (FOR DRIVERS)
 // ==========================================
-function acceptOrderFromBubble(orderId, btn, translations) {
+function _acceptOrderFromBubble(orderId, btn, translations) {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     btn.disabled = true;
 
@@ -900,7 +900,7 @@ function initDriverFeatures(translations, hasExistingLocation) {
     if (hasExistingLocation) {
         setTimeout(() => {
             if (!gpsEnabled) {
-                toggleDriverGPS(translations);
+                _toggleDriverGPS(translations);
             }
         }, 1000);
     }

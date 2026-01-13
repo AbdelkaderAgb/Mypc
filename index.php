@@ -1516,15 +1516,19 @@ const AppConfig = {
 
 // Override functions that need translations
 window.getPickupLocation = function() {
-    getPickupLocation(AppTranslations, AppConfig.lang);
+    _getPickupLocation(AppTranslations, AppConfig.lang);
 };
 
 window.toggleDriverGPS = function() {
-    toggleDriverGPS(AppTranslations);
+    _toggleDriverGPS(AppTranslations);
 };
 
 window.acceptOrderFromBubble = function(orderId, btn) {
-    acceptOrderFromBubble(orderId, btn, AppTranslations);
+    _acceptOrderFromBubble(orderId, btn, AppTranslations);
+};
+
+window.showOrderTracking = function(order) {
+    _showOrderTracking(order, AppTranslations);
 };
 
 <?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
