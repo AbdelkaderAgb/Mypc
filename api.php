@@ -89,7 +89,7 @@ switch ($action) {
 
         if ($lat && $lng) {
             try {
-                $stmt = $conn->prepare("UPDATE users1 SET last_lat = ?, last_lng = ?, last_location_update = NOW() WHERE id = ?");
+                $stmt = $conn->prepare("UPDATE users1 SET last_lat = ?, last_lng = ?, location_updated_at = NOW() WHERE id = ?");
                 $stmt->execute([$lat, $lng, $user['id']]);
                 echo json_encode(['success' => true]);
             } catch (Exception $e) {
@@ -97,6 +97,43 @@ switch ($action) {
             }
         } else {
             echo json_encode(['success' => false, 'error' => 'Invalid coordinates']);
+        }
+        break;
+
+    // ==========================================
+    // GET NEARBY ORDERS FOR DRIVER
+    // ==========================================
+    case 'get_nearby_orders':
+        if ($user['role'] !== 'driver') {
+            echo json_encode(['success' => false, 'error' => 'Not a driver']);
+            exit();
+        }
+
+        $lat = floatval($_GET['lat'] ?? 0);
+        $lng = floatval($_GET['lng'] ?? 0);
+        $maxDistance = floatval($_GET['max_distance'] ?? 7);
+
+        if (!$lat || !$lng) {
+            echo json_encode(['success' => false, 'error' => 'Location required']);
+            exit();
+        }
+
+        try {
+            // Get pending orders within the specified radius using Haversine formula
+            $sql = "SELECT id, details, address, client_phone, pickup_lat, pickup_lng,
+                    (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) AS distance
+                    FROM orders1
+                    WHERE status = 'pending' AND pickup_lat IS NOT NULL
+                    HAVING distance <= ?
+                    ORDER BY distance ASC
+                    LIMIT 5";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$lat, $lng, $lat, $maxDistance]);
+            $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode(['success' => true, 'orders' => $orders]);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
         }
         break;
 
@@ -112,7 +149,7 @@ switch ($action) {
         }
 
         try {
-            $stmt = $conn->prepare("SELECT last_lat, last_lng, last_location_update FROM users1 WHERE id = ? AND role = 'driver'");
+            $stmt = $conn->prepare("SELECT last_lat, last_lng, location_updated_at FROM users1 WHERE id = ? AND role = 'driver'");
             $stmt->execute([$driverId]);
             $driver = $stmt->fetch();
 
@@ -121,7 +158,7 @@ switch ($action) {
                     'success' => true,
                     'lat' => floatval($driver['last_lat']),
                     'lng' => floatval($driver['last_lng']),
-                    'updated' => $driver['last_location_update']
+                    'updated' => $driver['location_updated_at']
                 ]);
             } else {
                 echo json_encode(['success' => false, 'error' => 'Location not available']);
