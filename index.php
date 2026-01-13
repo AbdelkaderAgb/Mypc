@@ -362,9 +362,9 @@ require_once 'actions.php';
             background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
-        /* App Navbar */
+        /* App Navbar - Enhanced */
         .app-navbar {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
@@ -372,6 +372,45 @@ require_once 'actions.php';
             transition: var(--transition);
             position: relative;
             z-index: 100;
+            padding: 12px 0;
+        }
+        .app-navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            background-size: 300% 100%;
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .app-navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+            padding: 8px 0;
+        }
+        .app-navbar .navbar-brand {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: var(--transition);
+        }
+        .app-navbar .navbar-brand:hover {
+            transform: scale(1.02);
+        }
+        .app-navbar .navbar-brand img {
+            transition: var(--transition);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .app-navbar .navbar-brand:hover img {
+            transform: scale(1.05);
         }
 
         /* Content Cards */
@@ -594,6 +633,107 @@ require_once 'actions.php';
             background: var(--primary);
             color: white;
             transform: translateY(-2px);
+        }
+        .btn-outline-success {
+            border: 2px solid var(--success);
+            color: var(--success);
+            background: transparent;
+        }
+        .btn-outline-success:hover {
+            background: var(--success);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        /* WhatsApp Button */
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            border: none;
+        }
+        .btn-whatsapp:hover {
+            background: linear-gradient(135deg, #128C7E, #25D366);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+        .btn-whatsapp i {
+            font-size: 1.1em;
+        }
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            border: none;
+            position: relative;
+            z-index: 1;
+        }
+        .btn-gradient::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            color: white;
+        }
+        .btn-gradient:hover::after {
+            opacity: 1;
+        }
+
+        /* Enhanced Button Focus States */
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+        }
+        .btn-success:focus {
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+        }
+        .btn-danger:focus {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
+        }
+        .btn-whatsapp:focus {
+            box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.25);
+        }
+
+        /* Button with Icon */
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-icon i {
+            transition: transform 0.3s ease;
+        }
+        .btn-icon:hover i {
+            transform: scale(1.15);
+        }
+
+        /* Large Button */
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: var(--radius-lg);
+        }
+
+        /* Small Button Enhancement */
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.85rem;
         }
 
         /* ==========================================
@@ -1432,11 +1572,203 @@ require_once 'actions.php';
         .section-divider::before { margin-right: 16px; }
         .section-divider::after { margin-left: 16px; }
 
-        /* Footer */
+        /* Footer - Enhanced */
         .app-footer {
-            background: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-soft) 100%);
             backdrop-filter: blur(20px);
-            border-top: 1px solid var(--gray-200);
+            border-top: 3px solid transparent;
+            border-image: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)) 1;
+            color: var(--gray-300);
+            position: relative;
+            overflow: hidden;
+        }
+        .app-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .footer-section-title {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-section-title i {
+            color: var(--primary-light);
+        }
+        .footer-link {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+        }
+        .footer-link:hover {
+            color: var(--white);
+            transform: translateX(4px);
+        }
+        [dir="rtl"] .footer-link:hover {
+            transform: translateX(-4px);
+        }
+        .footer-link i {
+            width: 20px;
+            text-align: center;
+        }
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .footer-social a {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--gray-300);
+        }
+        .footer-social a:hover {
+            transform: translateY(-4px);
+            color: var(--white);
+        }
+        .footer-social .whatsapp-link {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+        }
+        .footer-social .whatsapp-link:hover {
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+        .footer-social .phone-link {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        .footer-social .phone-link:hover {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        .footer-social .email-link {
+            background: linear-gradient(135deg, var(--secondary), #be185d);
+            color: white;
+        }
+        .footer-social .email-link:hover {
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
+        .footer-whatsapp-cta {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 14px 28px;
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+        .footer-whatsapp-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+        .footer-whatsapp-cta i {
+            font-size: 1.3rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 24px 0;
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-copyright {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+        .footer-copyright i {
+            color: var(--primary-light);
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
+            z-index: 9998;
+            transition: var(--transition);
+            text-decoration: none;
+            animation: float 3s ease-in-out infinite;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6);
+            color: white;
+        }
+        .whatsapp-float::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+            opacity: 0;
+        }
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+            0% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+        }
+        [dir="rtl"] .whatsapp-float {
+            right: auto;
+            left: 24px;
         }
     </style>
 </head>
@@ -2872,12 +3204,100 @@ function createNotificationSound() {
         <?php endif; ?>
     </div>
 
-    <footer class="app-footer text-center text-muted py-4 mt-5">
-        <div class="container">
-            <p class="mb-0 small">
-                <i class="fas fa-bolt text-primary me-1"></i>
-                &copy; <?php echo date('Y'); ?> <?php echo $t['app_name']; ?>. <?php echo $t['all_rights']; ?>.
-            </p>
+    <!-- WhatsApp Floating Help Button -->
+    <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>"
+       target="_blank"
+       class="whatsapp-float"
+       title="<?php echo $t['need_help'] ?? 'Need Help?'; ?>">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer class="app-footer py-5 mt-5">
+        <div class="container footer-content">
+            <div class="row g-4">
+                <!-- Brand & Description -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 36px; width: auto; filter: brightness(0) invert(1);" onerror="this.style.display='none'">
+                        <span class="footer-brand"><?php echo $t['app_name']; ?></span>
+                    </div>
+                    <p class="text-gray-400 mb-4" style="line-height: 1.7;">
+                        <?php echo $t['fast_delivery'] ?? 'Fast and reliable delivery service for all your needs.'; ?>
+                    </p>
+                    <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>"
+                       target="_blank"
+                       class="footer-whatsapp-cta">
+                        <i class="fab fa-whatsapp"></i>
+                        <?php echo $t['need_help'] ?? 'Need Help?'; ?>
+                    </a>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-section-title">
+                        <i class="fas fa-headset"></i>
+                        <?php echo $t['contact_us'] ?? 'Contact Us'; ?>
+                    </h6>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="footer-link">
+                            <i class="fab fa-whatsapp text-success"></i>
+                            <span class="phone-display">+222 41 31 29 31</span>
+                        </a>
+                        <a href="tel:+22241312931" class="footer-link">
+                            <i class="fas fa-phone"></i>
+                            <span class="phone-display">+222 41 31 29 31</span>
+                        </a>
+                        <a href="mailto:<?php echo $help_email; ?>" class="footer-link">
+                            <i class="fas fa-envelope"></i>
+                            <?php echo $help_email; ?>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Social & Quick Contact -->
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="footer-section-title">
+                        <i class="fas fa-share-alt"></i>
+                        <?php echo $t['connect_with_us'] ?? 'Connect With Us'; ?>
+                    </h6>
+                    <div class="footer-social">
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="whatsapp-link" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="tel:+22241312931" class="phone-link" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                        <a href="mailto:<?php echo $help_email; ?>" class="email-link" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <div class="mt-4 p-3 rounded-3" style="background: rgba(255,255,255,0.05);">
+                        <p class="mb-1 small text-gray-400">
+                            <i class="fas fa-clock me-2"></i>
+                            <?php echo $t['available_24_7'] ?? 'Available 24/7'; ?>
+                        </p>
+                        <p class="mb-0 small text-gray-400">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <?php echo $t['location_mauritania'] ?? 'Nouakchott, Mauritania'; ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright mb-0">
+                    <i class="fas fa-bolt me-1"></i>
+                    &copy; <?php echo date('Y'); ?> <?php echo $t['app_name']; ?>. <?php echo $t['all_rights']; ?>.
+                </p>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-success bg-opacity-25 text-success-emphasis px-3 py-2 rounded-pill">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        <?php echo $t['secure_service'] ?? 'Secure Service'; ?>
+                    </span>
+                </div>
+            </div>
         </div>
     </footer>
 <?php endif; ?>

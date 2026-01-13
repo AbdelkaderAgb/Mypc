@@ -645,8 +645,15 @@ $text = [
         'orders_count' => 'عدد الطلبات',
         'delivery_count' => 'عدد التوصيلات',
 
-        // Help
-        'need_help' => 'تحتاج مساعدة؟'
+        // Help & Footer
+        'need_help' => 'تحتاج مساعدة؟',
+        'contact_us' => 'اتصل بنا',
+        'connect_with_us' => 'تواصل معنا',
+        'call_us' => 'اتصل بنا',
+        'fast_delivery' => 'خدمة توصيل سريعة وموثوقة لجميع احتياجاتك.',
+        'available_24_7' => 'متاح على مدار الساعة',
+        'location_mauritania' => 'نواكشوط، موريتانيا',
+        'secure_service' => 'خدمة آمنة'
     ],
 
     'fr' => [
@@ -966,8 +973,15 @@ $text = [
         'orders_count' => 'Nombre de commandes',
         'delivery_count' => 'Nombre de livraisons',
 
-        // Help
-        'need_help' => 'Besoin d\'aide?'
+        // Help & Footer
+        'need_help' => 'Besoin d\'aide?',
+        'contact_us' => 'Contactez-nous',
+        'connect_with_us' => 'Connectez avec nous',
+        'call_us' => 'Appelez-nous',
+        'fast_delivery' => 'Service de livraison rapide et fiable pour tous vos besoins.',
+        'available_24_7' => 'Disponible 24h/24',
+        'location_mauritania' => 'Nouakchott, Mauritanie',
+        'secure_service' => 'Service sécurisé'
     ]
 ];
 $t = $text[$lang];
