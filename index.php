@@ -22,7 +22,9 @@ require_once 'actions.php';
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title><?php echo $t['app_name']; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.<?php echo $lang=='ar'?'rtl.':''; ?>min.css">
@@ -104,6 +106,10 @@ require_once 'actions.php';
             overflow-x: hidden;
             position: relative;
             padding-bottom: 120px;
+            /* iPhone Notch Safe Area Support */
+            padding-top: env(safe-area-inset-top);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
             /* Subtle Mesh Gradient Background */
             background-image:
                 radial-gradient(circle at 0% 0%, rgba(88, 75, 246, 0.08) 0%, transparent 50%),
@@ -2200,9 +2206,9 @@ require_once 'actions.php';
            ========================================== */
         .glass-nav {
             position: fixed;
-            bottom: 25px;
-            left: 20px;
-            right: 20px;
+            bottom: calc(25px + env(safe-area-inset-bottom));
+            left: calc(20px + env(safe-area-inset-left));
+            right: calc(20px + env(safe-area-inset-right));
             height: 75px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
@@ -2270,6 +2276,26 @@ require_once 'actions.php';
             text-align: center;
             font-weight: bold;
             font-size: 1.1rem;
+        }
+
+        /* ==========================================
+           ADMIN CARDS GRID - Mobile Friendly
+           ========================================== */
+        .admin-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            .admin-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .admin-card {
+            margin-bottom: 0;
+        }
+        .admin-card .card-inner {
+            padding: 16px;
         }
     </style>
 </head>
@@ -2460,7 +2486,7 @@ function createNotificationSound() {
             <div class="d-flex align-items-center gap-2 gap-md-3">
                 <?php if($role == 'driver'): ?>
                 <span class="badge bg-warning text-dark px-3 py-2 rounded-pill" id="pointsBadge">
-                    <i class="fas fa-coins"></i> <span id="currentPoints"><?php echo $u['points']; ?></span>
+                    <i class="fas fa-coins"></i> <span id="currentPoints"><?php echo $u['points'] ?? 0; ?></span>
                 </span>
                 <?php endif; ?>
                 <a href="?settings=1" class="d-flex align-items-center gap-2 text-decoration-none" title="<?php echo $t['settings']; ?>">
@@ -2558,7 +2584,7 @@ function createNotificationSound() {
 
                                     <div class="mt-2">
                                         <span class="badge bg-warning text-dark px-3 py-2">
-                                            <i class="fas fa-coins me-1"></i> <?php echo $u['points']; ?> <?php echo $t['pts']; ?>
+                                            <i class="fas fa-coins me-1"></i> <?php echo $u['points'] ?? 0; ?> <?php echo $t['pts']; ?>
                                         </span>
                                         <?php if(!empty($u['rating'])): ?>
                                         <span class="badge bg-light text-dark px-3 py-2 ms-1">
@@ -2758,53 +2784,64 @@ function createNotificationSound() {
                                 <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
                             </button>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th><?php echo $t['username']; ?></th>
-                                        <th class="d-none d-md-table-cell"><?php echo $t['phone_ph']; ?></th>
-                                        <th><?php echo $t['status']; ?></th>
-                                        <th class="text-end"><?php echo $t['action']; ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $users = $conn->query("SELECT * FROM users1 WHERE role='customer' ORDER BY id DESC");
-                                    while($user = $users->fetch()):
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $user['id']; ?></td>
-                                        <td>
-                                            <strong><?php echo e($user['username']); ?></strong>
-                                            <?php if($user['full_name']): ?>
-                                            <br><small class="text-muted"><?php echo e($user['full_name']); ?></small>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="d-none d-md-table-cell"><?php echo e($user['phone']); ?></td>
-                                        <td>
-                                            <?php if($user['status'] == 'active'): ?>
-                                                <span class="badge bg-success"><?php echo $t['active']; ?></span>
-                                            <?php else: ?>
-                                                <span class="badge bg-danger"><?php echo $t['banned']; ?></span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-end table-actions">
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <a href="?toggle_ban=<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-<?php echo $user['status']=='active'?'warning':'success'; ?>" onclick="return confirm('Confirm?')">
-                                                <i class="fas fa-<?php echo $user['status']=='active'?'ban':'check'; ?>"></i>
-                                            </a>
-                                            <a href="?delete_user=<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete permanently?')">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                        <div class="card-body p-3">
+                            <div class="admin-cards-grid">
+                                <?php
+                                $users = $conn->query("SELECT * FROM users1 WHERE role='customer' ORDER BY id DESC");
+                                if($users->rowCount() == 0): ?>
+                                <div class="text-center py-4 text-muted">
+                                    <i class="fas fa-users fa-2x mb-2"></i>
+                                    <p><?php echo $t['no_users'] ?? 'No customers yet'; ?></p>
+                                </div>
+                                <?php else: while($user = $users->fetch()):
+                                    $userAvatarUrl = getAvatarUrl($user);
+                                ?>
+                                <div class="ultra-card admin-card">
+                                    <div class="card-inner">
+                                        <div class="d-flex align-items-start gap-3">
+                                            <div class="profile-avatar avatar-sm avatar-customer">
+                                                <?php if($userAvatarUrl): ?>
+                                                    <img src="<?php echo e($userAvatarUrl); ?>" alt="">
+                                                <?php else: ?>
+                                                    <i class="fas fa-user"></i>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold"><?php echo e($user['full_name'] ?? $user['username']); ?></h6>
+                                                        <small class="text-muted">@<?php echo e($user['username']); ?> #<?php echo $user['id']; ?></small>
+                                                    </div>
+                                                    <?php if($user['status'] == 'active'): ?>
+                                                        <span class="badge bg-success"><?php echo $t['active']; ?></span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-danger"><?php echo $t['banned']; ?></span>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <?php if(!empty($user['phone'])): ?>
+                                                <div class="mb-2">
+                                                    <a href="tel:+222<?php echo $user['phone']; ?>" class="text-primary small">
+                                                        <i class="fas fa-phone me-1"></i>+222 <?php echo e($user['phone']); ?>
+                                                    </a>
+                                                </div>
+                                                <?php endif; ?>
+                                                <div class="d-flex gap-2 mt-2">
+                                                    <button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
+                                                        <i class="fas fa-edit me-1"></i><?php echo $t['edit'] ?? 'Edit'; ?>
+                                                    </button>
+                                                    <a href="?toggle_ban=<?php echo $user['id']; ?>" class="btn btn-sm btn-<?php echo $user['status']=='active'?'warning':'success'; ?>" onclick="return confirm('Confirm?')">
+                                                        <i class="fas fa-<?php echo $user['status']=='active'?'ban':'check'; ?>"></i>
+                                                    </a>
+                                                    <a href="?delete_user=<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete permanently?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endwhile; endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2818,97 +2855,91 @@ function createNotificationSound() {
                                 <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
                             </button>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th><?php echo $t['driver'] ?? 'Driver'; ?></th>
-                                        <th><?php echo $t['phone_ph']; ?></th>
-                                        <th><?php echo $t['points']; ?></th>
-                                        <th><?php echo $t['verification'] ?? 'Verification'; ?></th>
-                                        <th><?php echo $t['status']; ?></th>
-                                        <th class="text-end"><?php echo $t['action']; ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $drivers = $conn->query("SELECT * FROM users1 WHERE role='driver' ORDER BY id DESC");
-                                    while($driver = $drivers->fetch()):
-                                        $driverAvatarUrl = getAvatarUrl($driver);
-                                        $isVerified = !empty($driver['is_verified']);
-                                    ?>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar-with-badge">
-                                                    <div style="width:40px;height:40px;border-radius:50%;background:<?php echo getAvatarColor('driver'); ?>;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:0.9rem;overflow:hidden;">
-                                                        <?php if($driverAvatarUrl): ?>
-                                                            <img src="<?php echo e($driverAvatarUrl); ?>" style="width:100%;height:100%;object-fit:cover;">
-                                                        <?php else: ?>
-                                                            <?php echo getUserInitials($driver); ?>
+                        <div class="card-body p-3">
+                            <div class="admin-cards-grid">
+                                <?php
+                                $drivers = $conn->query("SELECT * FROM users1 WHERE role='driver' ORDER BY id DESC");
+                                if($drivers->rowCount() == 0): ?>
+                                <div class="text-center py-4 text-muted">
+                                    <i class="fas fa-motorcycle fa-2x mb-2"></i>
+                                    <p><?php echo $t['no_drivers'] ?? 'No drivers yet'; ?></p>
+                                </div>
+                                <?php else: while($driver = $drivers->fetch()):
+                                    $driverAvatarUrl = getAvatarUrl($driver);
+                                    $isVerified = !empty($driver['is_verified']);
+                                ?>
+                                <div class="ultra-card admin-card">
+                                    <div class="card-inner">
+                                        <div class="d-flex align-items-start gap-3">
+                                            <div class="avatar-with-badge">
+                                                <div class="profile-avatar avatar-sm avatar-driver">
+                                                    <?php if($driverAvatarUrl): ?>
+                                                        <img src="<?php echo e($driverAvatarUrl); ?>" alt="">
+                                                    <?php else: ?>
+                                                        <?php echo getUserInitials($driver); ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <?php if($isVerified): ?>
+                                                    <div class="verified-badge verified-badge-sm" title="<?php echo $t['driver_verified'] ?? 'Verified'; ?>">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold"><?php echo e($driver['full_name'] ?? $driver['username']); ?></h6>
+                                                        <small class="text-muted">@<?php echo e($driver['username']); ?></small>
+                                                        <?php if(!empty($driver['serial_no'])): ?>
+                                                        <br><small class="text-primary fw-bold"><?php echo e($driver['serial_no']); ?></small>
                                                         <?php endif; ?>
                                                     </div>
+                                                    <div class="text-end">
+                                                        <?php if($driver['status'] == 'active'): ?>
+                                                            <span class="badge bg-success mb-1"><?php echo $t['active']; ?></span>
+                                                        <?php else: ?>
+                                                            <span class="badge bg-danger mb-1"><?php echo $t['banned']; ?></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                    <span class="badge bg-warning text-dark"><i class="fas fa-coins me-1"></i><?php echo $driver['points'] ?? 0; ?> pts</span>
                                                     <?php if($isVerified): ?>
-                                                        <div class="verified-badge verified-badge-sm" title="<?php echo $t['driver_verified'] ?? 'Verified Driver'; ?>">
-                                                            <i class="fas fa-check"></i>
-                                                        </div>
+                                                        <span class="badge bg-success"><i class="fas fa-certificate me-1"></i><?php echo $t['verified'] ?? 'Verified'; ?></span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-secondary"><i class="fas fa-clock me-1"></i><?php echo $t['pending_verification'] ?? 'Pending'; ?></span>
                                                     <?php endif; ?>
                                                 </div>
-                                                <div>
-                                                    <strong><?php echo e($driver['username']); ?></strong>
-                                                    <?php if($driver['full_name']): ?>
-                                                    <br><small class="text-muted"><?php echo e($driver['full_name']); ?></small>
-                                                    <?php endif; ?>
-                                                    <?php if(!empty($driver['serial_no'])): ?>
-                                                    <br><small class="text-primary"><?php echo e($driver['serial_no']); ?></small>
-                                                    <?php endif; ?>
+                                                <?php if(!empty($driver['phone'])): ?>
+                                                <div class="mb-2">
+                                                    <a href="tel:+222<?php echo $driver['phone']; ?>" class="text-primary small">
+                                                        <i class="fas fa-phone me-1"></i>+222 <?php echo e($driver['phone']); ?>
+                                                        <?php if(!empty($driver['phone_verified'])): ?>
+                                                            <i class="fas fa-check-circle text-success"></i>
+                                                        <?php endif; ?>
+                                                    </a>
+                                                </div>
+                                                <?php endif; ?>
+                                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                                    <a href="?toggle_verify=<?php echo $driver['id']; ?>" class="btn btn-sm btn-<?php echo $isVerified ? 'success' : 'outline-success'; ?>" onclick="return confirm('<?php echo $isVerified ? ($t['confirm_unverify'] ?? 'Remove verification?') : ($t['confirm_verify'] ?? 'Verify this driver?'); ?>')">
+                                                        <i class="fas fa-<?php echo $isVerified ? 'certificate' : 'user-check'; ?> me-1"></i><?php echo $isVerified ? ($t['verified'] ?? 'Verified') : ($t['verify'] ?? 'Verify'); ?>
+                                                    </a>
+                                                    <button class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($driver)); ?>)">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <a href="?toggle_ban=<?php echo $driver['id']; ?>" class="btn btn-sm btn-<?php echo $driver['status']=='active'?'warning':'success'; ?>" onclick="return confirm('Confirm?')">
+                                                        <i class="fas fa-<?php echo $driver['status']=='active'?'ban':'check'; ?>"></i>
+                                                    </a>
+                                                    <a href="?delete_user=<?php echo $driver['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete permanently?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <?php if(!empty($driver['phone'])): ?>
-                                                <span class="text-dark"><?php echo e($driver['phone']); ?></span>
-                                                <?php if($driver['phone_verified']): ?>
-                                                    <i class="fas fa-check-circle text-success ms-1" title="<?php echo $t['phone_verified'] ?? 'Verified'; ?>"></i>
-                                                <?php endif; ?>
-                                            <?php else: ?>
-                                                <span class="text-muted">-</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td><span class="badge bg-warning text-dark"><?php echo $driver['points']; ?> pts</span></td>
-                                        <td>
-                                            <?php if($isVerified): ?>
-                                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i><?php echo $t['verified'] ?? 'Verified'; ?></span>
-                                            <?php else: ?>
-                                                <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i><?php echo $t['pending_verification'] ?? 'Pending'; ?></span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <?php if($driver['status'] == 'active'): ?>
-                                                <span class="badge bg-success"><?php echo $t['active']; ?></span>
-                                            <?php else: ?>
-                                                <span class="badge bg-danger"><?php echo $t['banned']; ?></span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-end table-actions">
-                                            <!-- Verify/Unverify Button -->
-                                            <a href="?toggle_verify=<?php echo $driver['id']; ?>" class="btn btn-sm btn-<?php echo $isVerified ? 'success' : 'outline-success'; ?>" onclick="return confirm('<?php echo $isVerified ? ($t['confirm_unverify'] ?? 'Remove verification?') : ($t['confirm_verify'] ?? 'Verify this driver?'); ?>')" title="<?php echo $isVerified ? ($t['unverify'] ?? 'Remove Verification') : ($t['verify_driver'] ?? 'Verify Driver'); ?>">
-                                                <i class="fas fa-<?php echo $isVerified ? 'certificate' : 'user-check'; ?>"></i>
-                                            </a>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($driver)); ?>)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <a href="?toggle_ban=<?php echo $driver['id']; ?>" class="btn btn-sm btn-outline-<?php echo $driver['status']=='active'?'warning':'success'; ?>" onclick="return confirm('Confirm?')">
-                                                <i class="fas fa-<?php echo $driver['status']=='active'?'ban':'check'; ?>"></i>
-                                            </a>
-                                            <a href="?delete_user=<?php echo $driver['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete permanently?')">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endwhile; endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2922,51 +2953,81 @@ function createNotificationSound() {
                                 <i class="fas fa-plus"></i> <?php echo $t['add_order']; ?>
                             </button>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th><?php echo $t['order_details']; ?></th>
-                                        <th class="d-none d-md-table-cell">Customer</th>
-                                        <th><?php echo $t['status']; ?></th>
-                                        <th>PIN</th>
-                                        <th class="text-end"><?php echo $t['action']; ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $orders = $conn->query("SELECT o.*, u.username as driver_name FROM orders1 o LEFT JOIN users1 u ON o.driver_id=u.id ORDER BY o.id DESC LIMIT 100");
-                                    while($order = $orders->fetch()):
-                                        $st = $order['status'];
-                                        $badge = ($st=='pending')?'badge-pending':(($st=='accepted')?'badge-accepted':(($st=='cancelled')?'badge-cancelled':'badge-delivered'));
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $order['id']; ?></td>
-                                        <td>
-                                            <div class="fw-bold text-truncate" style="max-width:150px;"><?php echo e($order['details']); ?></div>
-                                            <small class="text-muted"><i class="fas fa-map-marker-alt"></i> <?php echo e($order['address']); ?></small>
-                                        </td>
-                                        <td class="d-none d-md-table-cell"><?php echo e($order['customer_name']); ?></td>
-                                        <td><span class="badge <?php echo $badge; ?>"><?php echo $t['st_'.$st]; ?></span></td>
-                                        <td><code><?php echo $order['delivery_code']; ?></code></td>
-                                        <td class="text-end table-actions">
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editOrder(<?php echo htmlspecialchars(json_encode($order)); ?>)">
-                                                <i class="fas fa-edit"></i>
+                        <div class="card-body p-3">
+                            <div class="admin-cards-grid">
+                                <?php
+                                $orders = $conn->query("SELECT o.*, u.username as driver_name FROM orders1 o LEFT JOIN users1 u ON o.driver_id=u.id ORDER BY o.id DESC LIMIT 100");
+                                if($orders->rowCount() == 0): ?>
+                                <div class="text-center py-4 text-muted">
+                                    <i class="fas fa-box-open fa-2x mb-2"></i>
+                                    <p><?php echo $t['no_orders'] ?? 'No orders yet'; ?></p>
+                                </div>
+                                <?php else: while($order = $orders->fetch()):
+                                    $st = $order['status'] ?? 'pending';
+                                    $statusTagClass = ($st == 'pending') ? 'tag-pending' : (($st == 'accepted') ? 'tag-accepted' : (($st == 'picked_up') ? 'tag-picked' : (($st == 'cancelled') ? 'badge-cancelled' : 'tag-delivered')));
+                                ?>
+                                <div class="ultra-card admin-card">
+                                    <div class="card-inner">
+                                        <!-- Card Header -->
+                                        <div class="c-header">
+                                            <div class="price-tag">#<?php echo $order['id']; ?></div>
+                                            <div class="tag-new <?php echo $statusTagClass; ?>">
+                                                <i class="fas fa-<?php echo getStatusIcon($st); ?>"></i>
+                                                <?php echo $t['st_'.$st] ?? ucfirst($st); ?>
+                                            </div>
+                                        </div>
+
+                                        <!-- Route Visual -->
+                                        <div class="route-row">
+                                            <div class="visual-connector">
+                                                <div class="dot-circle dot-p"></div>
+                                                <div class="line-dashed"></div>
+                                                <div class="dot-circle dot-d"></div>
+                                            </div>
+                                            <div class="text-info-route">
+                                                <div>
+                                                    <div class="loc-title"><?php echo e($order['details'] ?? ''); ?></div>
+                                                    <div class="loc-sub"><?php echo e($order['customer_name'] ?? ''); ?></div>
+                                                </div>
+                                                <div>
+                                                    <div class="loc-title"><i class="fas fa-map-marker-alt text-danger me-1"></i><?php echo e($order['address'] ?? ''); ?></div>
+                                                    <?php if(!empty($order['client_phone'])): ?>
+                                                    <div class="loc-sub">
+                                                        <a href="tel:+222<?php echo $order['client_phone']; ?>" class="text-primary">
+                                                            <i class="fas fa-phone me-1"></i>+222 <?php echo $order['client_phone']; ?>
+                                                        </a>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Meta Info -->
+                                        <div class="d-flex flex-wrap gap-2 mb-3">
+                                            <span class="badge bg-light text-dark border"><i class="fas fa-key me-1"></i>PIN: <?php echo $order['delivery_code'] ?? '----'; ?></span>
+                                            <?php if(!empty($order['driver_name'])): ?>
+                                            <span class="badge bg-info text-white"><i class="fas fa-motorcycle me-1"></i><?php echo e($order['driver_name']); ?></span>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <!-- Actions -->
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="editOrder(<?php echo htmlspecialchars(json_encode($order)); ?>)">
+                                                <i class="fas fa-edit me-1"></i><?php echo $t['edit'] ?? 'Edit'; ?>
                                             </button>
                                             <?php if($st == 'pending' || $st == 'accepted'): ?>
-                                                <a href="?cancel_order=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-warning" onclick="return confirm('Cancel this order?')">
-                                                    <i class="fas fa-times"></i>
-                                                </a>
+                                            <a href="?cancel_order=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-warning" onclick="return confirm('Cancel this order?')">
+                                                <i class="fas fa-times"></i>
+                                            </a>
                                             <?php endif; ?>
                                             <a href="?delete_order=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete permanently?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endwhile; endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3271,7 +3332,7 @@ function createNotificationSound() {
                 <div class="stat-card-new card-purple">
                     <i class="fa-solid fa-wallet stat-icon-new"></i>
                     <div>
-                        <div class="stat-num-new" id="driverPoints"><?php echo number_format($u['points']); ?></div>
+                        <div class="stat-num-new" id="driverPoints"><?php echo number_format($u['points'] ?? 0); ?></div>
                         <div class="stat-label-new"><?php echo $t['balance'] ?? 'الأرباح'; ?> (<?php echo $t['pts'] ?? 'نقطة'; ?>)</div>
                     </div>
                     <div style="position:absolute; top:-10px; left:-10px; width:60px; height:60px; background:rgba(255,255,255,0.1); border-radius:50%;"></div>
@@ -3281,7 +3342,7 @@ function createNotificationSound() {
                 <div class="stat-card-new card-new-white">
                     <i class="fa-solid fa-star stat-icon-new" style="color:#FFD700"></i>
                     <div>
-                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo number_format($u['rating'], 1); ?></div>
+                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo number_format($u['rating'] ?? 0, 1); ?></div>
                         <div class="stat-label-new"><?php echo $t['rating'] ?? 'التقييم'; ?></div>
                     </div>
                 </div>
@@ -3316,11 +3377,11 @@ function createNotificationSound() {
 
             <!-- Online Toggle Form (Hidden) -->
             <form method="POST" id="onlineToggleForm" style="display:none;">
-                <input type="checkbox" id="onlineSwitch" name="is_online" value="1" <?php echo $u['is_online'] ? 'checked' : ''; ?>>
+                <input type="checkbox" id="onlineSwitch" name="is_online" value="1" <?php echo ($u['is_online'] ?? 0) ? 'checked' : ''; ?>>
                 <input type="hidden" name="toggle_online" value="1">
             </form>
 
-            <?php if($u['points'] < $points_cost_per_order): ?>
+            <?php if(($u['points'] ?? 0) < $points_cost_per_order): ?>
             <div class="orders-container mb-3">
                 <div class="alert alert-danger d-flex align-items-center gap-2" id="lowBalanceWarning">
                     <i class="fas fa-exclamation-triangle"></i>
