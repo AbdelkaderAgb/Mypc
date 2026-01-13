@@ -1743,182 +1743,6 @@ require_once 'actions.php';
         .section-divider::before { margin-right: 16px; }
         .section-divider::after { margin-left: 16px; }
 
-        /* Footer - Enhanced */
-        .app-footer {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            backdrop-filter: blur(30px);
-            border-top: 4px solid transparent;
-            border-image: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)) 1;
-            color: var(--gray-300);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.3);
-            margin-top: 80px;
-        }
-        .app-footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .app-footer::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.2) 100%);
-            pointer-events: none;
-        }
-        .footer-content {
-            position: relative;
-            z-index: 1;
-        }
-        .footer-brand {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light), var(--accent-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 2px 10px rgba(99, 102, 241, 0.3));
-        }
-        .footer-section-title {
-            color: var(--white);
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .footer-section-title i {
-            color: var(--primary-light);
-            font-size: 1.2rem;
-        }
-        .footer-link {
-            color: var(--gray-400);
-            text-decoration: none;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-weight: 500;
-        }
-        .footer-link:hover {
-            color: var(--white);
-            transform: translateX(6px);
-        }
-        [dir="rtl"] .footer-link:hover {
-            transform: translateX(-6px);
-        }
-        .footer-link i {
-            width: 24px;
-            text-align: center;
-            transition: var(--transition);
-        }
-        .footer-link:hover i {
-            transform: scale(1.2);
-        }
-        .footer-social {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
-        .footer-social a {
-            width: 50px;
-            height: 50px;
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            transition: var(--transition);
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--gray-300);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-        .footer-social a:hover {
-            transform: translateY(-6px) scale(1.1);
-            color: var(--white);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        .footer-social .whatsapp-link {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-        }
-        .footer-social .whatsapp-link:hover {
-            box-shadow: 0 10px 35px rgba(37, 211, 102, 0.5);
-        }
-        .footer-social .phone-link {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-        .footer-social .phone-link:hover {
-            box-shadow: 0 10px 35px rgba(99, 102, 241, 0.5);
-        }
-        .footer-social .email-link {
-            background: linear-gradient(135deg, var(--secondary), #be185d);
-            color: white;
-        }
-        .footer-social .email-link:hover {
-            box-shadow: 0 10px 35px rgba(236, 72, 153, 0.5);
-        }
-        .footer-whatsapp-cta {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-            padding: 16px 32px;
-            border-radius: var(--radius-full);
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 800;
-            text-decoration: none;
-            transition: var(--transition);
-            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
-            letter-spacing: 0.3px;
-            font-size: 1.05rem;
-        }
-        .footer-whatsapp-cta:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6);
-            color: white;
-        }
-        .footer-whatsapp-cta i {
-            font-size: 1.4rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        .footer-divider {
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            margin: 32px 0 24px;
-        }
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .footer-copyright {
-            color: var(--gray-500);
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-        .footer-copyright i {
-            color: var(--primary-light);
-            animation: pulse 2s ease-in-out infinite;
-        }
 
         /* WhatsApp Floating Button */
         .whatsapp-float {
@@ -1968,6 +1792,499 @@ require_once 'actions.php';
         [dir="rtl"] .whatsapp-float {
             right: auto;
             left: 30px;
+        }
+
+        /* ==========================================
+           RESPONSIVE DESIGN - MOBILE FIRST
+           ========================================== */
+
+        /* Extra Large Devices (desktops, 1200px and up) */
+        @media (max-width: 1400px) {
+            .container {
+                max-width: 1140px;
+            }
+        }
+
+        /* Large Devices (desktops, 992px and up) */
+        @media (max-width: 1199px) {
+            .container {
+                max-width: 960px;
+            }
+
+            .stats-box h3 {
+                font-size: 1.8rem;
+            }
+
+            .app-navbar .navbar-brand {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Medium Devices (tablets, 768px and up) */
+        @media (max-width: 991px) {
+            .container {
+                max-width: 720px;
+                padding: 0 20px;
+            }
+
+            .app-navbar {
+                padding: 12px 0;
+            }
+
+            .app-navbar .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .login-card {
+                max-width: 420px;
+                margin: 20px auto;
+            }
+
+            .stats-box {
+                padding: 24px;
+            }
+
+            .stats-box h3 {
+                font-size: 1.6rem;
+            }
+
+            .stats-box .icon-wrapper {
+                width: 56px;
+                height: 56px;
+                font-size: 1.5rem;
+            }
+
+            .btn-lg {
+                padding: 14px 28px;
+                font-size: 1rem;
+            }
+
+            .modal-dialog {
+                max-width: 90%;
+                margin: 1rem auto;
+            }
+        }
+
+        /* Small Devices (phones landscape, 576px and up) */
+        @media (max-width: 767px) {
+            body {
+                padding-bottom: 80px; /* Extra padding for floating button */
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+
+            /* Navbar Mobile */
+            .app-navbar {
+                padding: 10px 0;
+            }
+
+            .app-navbar .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .app-navbar .navbar-brand {
+                font-size: 1.1rem;
+            }
+
+            /* Login Card Mobile */
+            .login-card {
+                max-width: 100%;
+                margin: 15px;
+                padding: 20px;
+                border-radius: var(--radius-lg);
+            }
+
+            /* Buttons Mobile */
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            .btn-lg {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+
+            .btn-sm {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            /* Stats Box Mobile */
+            .stats-box {
+                padding: 20px;
+            }
+
+            .stats-box h3 {
+                font-size: 1.4rem;
+            }
+
+            .stats-box .icon-wrapper {
+                width: 48px;
+                height: 48px;
+                font-size: 1.3rem;
+            }
+
+            /* Mini Stats Mobile */
+            .mini-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .mini-stat {
+                padding: 12px;
+            }
+
+            .mini-stat-value {
+                font-size: 1.3rem;
+            }
+
+            .mini-stat-label {
+                font-size: 0.65rem;
+            }
+
+            /* GPS Toggle Mobile */
+            .gps-toggle {
+                padding: 16px 20px;
+                gap: 12px;
+            }
+
+            .gps-toggle-btn {
+                width: 52px;
+                height: 52px;
+                font-size: 1.3rem;
+            }
+
+            .gps-status-label {
+                font-size: 1rem;
+            }
+
+            .gps-status-detail {
+                font-size: 0.8rem;
+            }
+
+            /* Content Cards Mobile */
+            .content-card {
+                margin-bottom: 15px;
+                border-radius: var(--radius);
+            }
+
+            .glass-card {
+                border-radius: var(--radius-lg);
+            }
+
+            /* Tables Mobile */
+            .table-responsive {
+                border-radius: var(--radius);
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .table thead th {
+                font-size: 0.7rem;
+                padding: 12px 10px;
+            }
+
+            .table tbody td {
+                padding: 12px 10px;
+            }
+
+            /* Badges Mobile */
+            .badge {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            /* Avatar Mobile */
+            .profile-avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .avatar-sm { width: 40px; height: 40px; font-size: 1rem; }
+            .avatar-md { width: 56px; height: 56px; font-size: 1.4rem; }
+            .avatar-lg { width: 100px; height: 100px; font-size: 2.5rem; }
+
+            /* Modal Mobile */
+            .modal-dialog {
+                max-width: 95%;
+                margin: 0.5rem auto;
+            }
+
+            .modal-header,
+            .modal-body,
+            .modal-footer {
+                padding: 16px;
+            }
+
+            /* WhatsApp Float Mobile */
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 56px;
+                height: 56px;
+                font-size: 1.6rem;
+            }
+
+            [dir="rtl"] .whatsapp-float {
+                right: auto;
+                left: 20px;
+            }
+
+            /* Form Controls Mobile */
+            .form-control,
+            .form-select {
+                padding: 12px 14px;
+                font-size: 0.95rem;
+            }
+
+            .form-label {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+            }
+
+            /* Auth Toggle Mobile */
+            .auth-toggle button {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+
+            /* PIN Box Mobile */
+            .pin-box {
+                font-size: 1.2rem;
+                letter-spacing: 6px;
+                padding: 12px 20px;
+            }
+        }
+
+        /* Extra Small Devices (phones portrait, less than 576px) */
+        @media (max-width: 575px) {
+            .container {
+                padding: 0 12px;
+            }
+
+            /* Navbar Extra Small */
+            .app-navbar {
+                padding: 8px 0;
+            }
+
+            .app-navbar .navbar-brand {
+                font-size: 1rem;
+            }
+
+            /* Login Card Extra Small */
+            .login-card {
+                margin: 10px;
+                padding: 18px;
+            }
+
+            /* Buttons Extra Small */
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+
+            .btn-lg {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            /* Stats Box Extra Small */
+            .stats-box {
+                padding: 16px;
+            }
+
+            .stats-box h3 {
+                font-size: 1.2rem;
+            }
+
+            .stats-box .icon-wrapper {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+
+            /* Mini Stats - Stack Vertically on Very Small Screens */
+            .mini-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .mini-stat {
+                padding: 10px;
+            }
+
+            .mini-stat-value {
+                font-size: 1.1rem;
+            }
+
+            /* GPS Toggle Extra Small */
+            .gps-toggle {
+                padding: 14px 16px;
+                gap: 10px;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .gps-toggle-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
+
+            .gps-status-label {
+                font-size: 0.95rem;
+            }
+
+            .gps-status-detail {
+                font-size: 0.75rem;
+            }
+
+            /* Tables Extra Small */
+            .table {
+                font-size: 0.8rem;
+            }
+
+            .table thead th {
+                font-size: 0.65rem;
+                padding: 10px 8px;
+            }
+
+            .table tbody td {
+                padding: 10px 8px;
+            }
+
+            /* Badges Extra Small */
+            .badge {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+            }
+
+            /* Modal Extra Small */
+            .modal-dialog {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .modal-content {
+                border-radius: var(--radius);
+            }
+
+            .modal-header,
+            .modal-body,
+            .modal-footer {
+                padding: 14px;
+            }
+
+            /* WhatsApp Float Extra Small */
+            .whatsapp-float {
+                bottom: 15px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.4rem;
+            }
+
+            [dir="rtl"] .whatsapp-float {
+                right: auto;
+                left: 15px;
+            }
+
+            /* Form Controls Extra Small */
+            .form-control,
+            .form-select {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            /* Auth Toggle Extra Small */
+            .auth-toggle {
+                padding: 4px;
+                margin-bottom: 20px;
+            }
+
+            .auth-toggle button {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+
+            /* PIN Box Extra Small */
+            .pin-box {
+                font-size: 1rem;
+                letter-spacing: 4px;
+                padding: 10px 16px;
+            }
+        }
+
+        /* Landscape Orientation Adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .login-card {
+                margin: 10px auto;
+                padding: 16px;
+            }
+
+            .modal-dialog {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .stats-box {
+                padding: 16px;
+            }
+
+            .app-navbar {
+                padding: 6px 0;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .app-navbar,
+            .whatsapp-float,
+            .btn,
+            .modal,
+            .gps-toggle-btn {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .content-card,
+            .glass-card,
+            .stats-box {
+                background: white;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+
+        /* High DPI / Retina Displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .app-navbar .navbar-brand img {
+                image-rendering: -webkit-optimize-contrast;
+            }
+        }
+
+        /* Reduce Motion for Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
@@ -3431,94 +3748,6 @@ function createNotificationSound() {
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <footer class="app-footer py-5 mt-5">
-        <div class="container footer-content">
-            <div class="row g-4">
-                <!-- Brand & Description -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="height: 36px; width: auto; filter: brightness(0) invert(1);" onerror="this.style.display='none'">
-                        <span class="footer-brand"><?php echo $t['app_name']; ?></span>
-                    </div>
-                    <p class="text-gray-400 mb-4" style="line-height: 1.7;">
-                        <?php echo $t['fast_delivery'] ?? 'Fast and reliable delivery service for all your needs.'; ?>
-                    </p>
-                    <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>"
-                       target="_blank"
-                       class="footer-whatsapp-cta">
-                        <i class="fab fa-whatsapp"></i>
-                        <?php echo $t['need_help'] ?? 'Need Help?'; ?>
-                    </a>
-                </div>
-
-                <!-- Contact Info -->
-                <div class="col-lg-4 col-md-6">
-                    <h6 class="footer-section-title">
-                        <i class="fas fa-headset"></i>
-                        <?php echo $t['contact_us'] ?? 'Contact Us'; ?>
-                    </h6>
-                    <div class="d-flex flex-column gap-2">
-                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="footer-link">
-                            <i class="fab fa-whatsapp text-success"></i>
-                            <span class="phone-display"><?php echo $help_phone; ?></span>
-                        </a>
-                        <a href="tel:+<?php echo $whatsapp_number; ?>" class="footer-link">
-                            <i class="fas fa-phone"></i>
-                            <span class="phone-display"><?php echo $help_phone; ?></span>
-                        </a>
-                        <a href="mailto:<?php echo $help_email; ?>" class="footer-link">
-                            <i class="fas fa-envelope"></i>
-                            <?php echo $help_email; ?>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Social & Quick Contact -->
-                <div class="col-lg-4 col-md-12">
-                    <h6 class="footer-section-title">
-                        <i class="fas fa-share-alt"></i>
-                        <?php echo $t['connect_with_us'] ?? 'Connect With Us'; ?>
-                    </h6>
-                    <div class="footer-social">
-                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="whatsapp-link" title="WhatsApp">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                        <a href="tel:+<?php echo $whatsapp_number; ?>" class="phone-link" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
-                            <i class="fas fa-phone"></i>
-                        </a>
-                        <a href="mailto:<?php echo $help_email; ?>" class="email-link" title="Email">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                    </div>
-                    <div class="mt-4 p-3 rounded-3" style="background: rgba(255,255,255,0.05);">
-                        <p class="mb-1 small text-gray-400">
-                            <i class="fas fa-clock me-2"></i>
-                            <?php echo $t['available_24_7'] ?? 'Available 24/7'; ?>
-                        </p>
-                        <p class="mb-0 small text-gray-400">
-                            <i class="fas fa-map-marker-alt me-2"></i>
-                            <?php echo $t['location_mauritania'] ?? 'Nouakchott, Mauritania'; ?>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-divider"></div>
-
-            <div class="footer-bottom">
-                <p class="footer-copyright mb-0">
-                    <i class="fas fa-bolt me-1"></i>
-                    &copy; <?php echo date('Y'); ?> <?php echo $t['app_name']; ?>. <?php echo $t['all_rights']; ?>.
-                </p>
-                <div class="d-flex align-items-center gap-3">
-                    <span class="badge bg-success bg-opacity-25 text-success-emphasis px-3 py-2 rounded-pill">
-                        <i class="fas fa-shield-alt me-1"></i>
-                        <?php echo $t['secure_service'] ?? 'Secure Service'; ?>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </footer>
 <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
