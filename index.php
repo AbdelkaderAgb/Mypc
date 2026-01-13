@@ -30,25 +30,28 @@ require_once 'actions.php';
 
     <style>
         :root {
-            /* New Vibrant Color Palette */
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #a5b4fc;
-            --primary-glow: rgba(99, 102, 241, 0.4);
+            /* Barq Ultra Premium Color Palette */
+            --primary: #584BF6;
+            --primary-dark: #4338ca;
+            --primary-light: #818cf8;
+            --primary-glow: rgba(88, 75, 246, 0.5);
             --secondary: #ec4899;
             --secondary-light: #f9a8d4;
             --accent: #06b6d4;
             --accent-light: #67e8f9;
 
-            --success: #22c55e;
+            --success: #00C851;
             --success-light: #86efac;
             --warning: #f59e0b;
             --warning-light: #fcd34d;
             --danger: #ef4444;
             --danger-light: #fca5a5;
 
-            --dark: #0f172a;
+            --dark: #0f121e;
             --dark-soft: #1e293b;
+            --text-main: #1A1D26;
+            --text-sub: #9499A8;
+            --bg-body: #F2F4F8;
             --gray-900: #111827;
             --gray-800: #1f2937;
             --gray-700: #374151;
@@ -62,8 +65,8 @@ require_once 'actions.php';
             --white: #ffffff;
 
             /* Glassmorphism */
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
             --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
             /* Shadows */
@@ -90,55 +93,26 @@ require_once 'actions.php';
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
-            color: var(--dark);
+            background-color: var(--bg-body);
+            color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            padding-bottom: 120px;
+            /* Subtle Mesh Gradient Background */
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(88, 75, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, rgba(0, 200, 81, 0.05) 0%, transparent 40%);
         }
 
-        /* Enhanced Background Pattern */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.1) 0%, transparent 30%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Animated Background Orbs */
-        body::after {
-            content: '';
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-            top: -250px;
-            right: -250px;
-            animation: floatOrb 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes floatOrb {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(-100px, 100px) scale(1.1); }
-            50% { transform: translate(-50px, 200px) scale(0.9); }
-            75% { transform: translate(50px, 100px) scale(1.05); }
+        /* Remove animated background for cleaner look */
+        body::before, body::after {
+            display: none;
         }
 
         /* ==========================================
@@ -1969,6 +1943,334 @@ require_once 'actions.php';
             right: auto;
             left: 30px;
         }
+
+        /* ==========================================
+           BARQ ULTRA PREMIUM - HEADER WIDGET
+           ========================================== */
+        .header-section {
+            padding: 20px 20px 0 20px;
+            margin-bottom: 10px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .avatar-circle {
+            width: 48px; height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #FF9966, #FF5E62);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 1.2rem;
+            box-shadow: 0 8px 16px rgba(255, 94, 98, 0.2);
+            overflow: hidden;
+        }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-circle.driver { background: linear-gradient(135deg, #10b981, #06b6d4); }
+        .avatar-circle.customer { background: linear-gradient(135deg, var(--primary), #8b5cf6); }
+        .avatar-circle.admin { background: linear-gradient(135deg, #f43f5e, #ec4899); }
+        .greeting h3 { font-size: 1.1rem; font-weight: 800; line-height: 1.1; color: var(--text-main); }
+        .greeting span { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; }
+
+        .notif-btn {
+            width: 44px; height: 44px;
+            background: white; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: var(--text-main);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            position: relative;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .notif-btn:hover { transform: scale(1.05); }
+        .notif-badge {
+            position: absolute; top: 10px; right: 12px;
+            width: 8px; height: 8px; background: #FF4444;
+            border-radius: 50%; border: 2px solid white;
+        }
+
+        /* ==========================================
+           DASHBOARD SUMMARY CARDS
+           ========================================== */
+        .stats-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 0 20px 20px 20px;
+            scrollbar-width: none;
+        }
+        .stats-scroll::-webkit-scrollbar { display: none; }
+
+        .stat-card-new {
+            min-width: 140px;
+            padding: 18px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 130px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .stat-card-new:active { transform: scale(0.95); }
+
+        /* Card Styles */
+        .card-purple {
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+            color: white;
+            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+        }
+        .card-new-white {
+            background: white;
+            color: var(--text-main);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .stat-icon-new { font-size: 1.4rem; opacity: 0.8; margin-bottom: 10px; }
+        .stat-num-new { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+        .stat-label-new { font-size: 0.75rem; font-weight: 600; opacity: 0.8; margin-top: 5px; }
+
+        /* ==========================================
+           FILTER TABS
+           ========================================== */
+        .tabs-wrapper {
+            padding: 0 20px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .tabs-wrapper::-webkit-scrollbar { display: none; }
+        .tab-new {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            background: white;
+            color: var(--text-sub);
+            border: 1px solid transparent;
+            transition: 0.3s;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .tab-new.active {
+            background: var(--text-main);
+            color: white;
+            box-shadow: 0 5px 15px rgba(26, 29, 38, 0.2);
+        }
+
+        /* ==========================================
+           ULTRA CARDS
+           ========================================== */
+        .orders-container { padding: 0 20px; }
+
+        .ultra-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 5px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+        .card-inner {
+            background: #FAFAFC;
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid #F0F0F5;
+        }
+
+        /* Header of Card */
+        .c-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #E0E0E0;
+        }
+
+        .price-tag {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--text-main);
+            display: flex; align-items: center; gap: 5px;
+        }
+        .price-tag i { color: #FFD700; font-size: 0.9rem; }
+        .price-tag .currency { font-size: 0.8rem; font-weight: 600; color: var(--text-sub); }
+
+        .time-tag {
+            background: #FFF0F0; color: #FF4444;
+            padding: 6px 12px; border-radius: 12px;
+            font-size: 0.75rem; font-weight: 700;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .time-tag.blue { background: #E3F2FD; color: #2196F3; }
+
+        /* Route Visual */
+        .route-row { display: flex; gap: 15px; margin-bottom: 25px; }
+
+        .visual-connector {
+            display: flex; flex-direction: column; align-items: center;
+            padding-top: 5px;
+        }
+        .dot-circle { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-p { background: var(--primary); box-shadow: 0 0 0 3px rgba(88, 75, 246, 0.15); }
+        .dot-d { background: var(--text-main); }
+        .line-dashed {
+            width: 2px; height: 40px;
+            background: repeating-linear-gradient(to bottom, #dcdde1 0, #dcdde1 4px, transparent 4px, transparent 8px);
+            margin: 4px 0;
+        }
+
+        .text-info-route { display: flex; flex-direction: column; justify-content: space-between; height: 75px; flex: 1; }
+        .loc-title { font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+        .loc-sub { font-size: 0.8rem; color: var(--text-sub); }
+
+        /* Meta Tags */
+        .meta-tags {
+            display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+        }
+        .tag-new {
+            font-size: 0.7rem; padding: 6px 10px; border-radius: 8px; font-weight: 700;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .tag-cash { background: #E8F5E9; color: #2E7D32; }
+        .tag-heavy { background: #FFF3E0; color: #EF6C00; }
+        .tag-bank { background: #F3E5F5; color: #9C27B0; }
+        .tag-pending { background: #FFF8E1; color: #F57F17; }
+        .tag-accepted { background: #E3F2FD; color: #1565C0; }
+        .tag-picked { background: #EDE7F6; color: #5E35B1; }
+        .tag-delivered { background: #E8F5E9; color: #2E7D32; }
+
+        /* Slider Button */
+        .slider-btn-container {
+            position: relative;
+            background: var(--text-main);
+            height: 56px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .slider-btn-container.success { background: var(--success); }
+        .slider-btn-container.info { background: #2196F3; }
+        .slider-btn-container.muted { background: var(--text-sub); }
+
+        .slider-text {
+            color: rgba(255,255,255,0.9);
+            font-weight: 700;
+            font-size: 0.95rem;
+            z-index: 1;
+        }
+
+        .slider-thumb {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            bottom: 4px;
+            width: 48px;
+            background: white;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        [dir="rtl"] .slider-thumb { right: auto; left: 4px; }
+        .slider-btn-container:active .slider-thumb {
+            transform: translateX(-10px);
+        }
+        [dir="rtl"] .slider-btn-container:active .slider-thumb {
+            transform: translateX(10px);
+        }
+
+        /* ==========================================
+           GLASS NAV
+           ========================================== */
+        .glass-nav {
+            position: fixed;
+            bottom: 25px;
+            left: 20px;
+            right: 20px;
+            height: 75px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+            color: #C2C6D1;
+            transition: 0.3s;
+            cursor: pointer;
+            padding: 10px;
+        }
+        .nav-icon.active { color: var(--text-main); }
+        .nav-icon:hover { color: var(--primary); }
+
+        /* Central Floating Button */
+        .nav-center-btn {
+            width: 65px; height: 65px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-top: -35px;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 10px 25px var(--primary-glow);
+            border: 4px solid var(--bg-body);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .nav-center-btn:hover {
+            transform: scale(1.1);
+            color: white;
+        }
+        .nav-center-btn.online { background: var(--success); box-shadow: 0 10px 25px rgba(0,200,81,0.5); }
+        .nav-center-btn.offline { background: var(--gray-400); }
+
+        /* Order actions in ultra card */
+        .order-actions-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .order-actions-row .btn { flex: 1; }
+
+        /* PIN input in card */
+        .pin-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .pin-input-row input {
+            flex: 1;
+            height: 48px;
+            border: 2px solid var(--success);
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
     </style>
 </head>
 <body>
@@ -2929,357 +3231,419 @@ function createNotificationSound() {
             </div>
 
         <?php else: ?>
-            <!-- ================= DRIVER/CUSTOMER DASHBOARD ================= -->
-            <div class="row g-4">
-                <!-- LEFT COLUMN -->
-                <div class="col-lg-4 order-lg-last">
-                    <?php if($role == 'driver'): ?>
-                    <!-- GPS Toggle Button -->
-                    <div class="gps-toggle" id="gpsToggle">
-                        <button type="button" class="gps-toggle-btn off" id="gpsToggleBtn" onclick="toggleDriverGPS()">
-                            <i class="fas fa-location-crosshairs"></i>
-                        </button>
-                        <div class="gps-status-info">
-                            <div class="gps-status-label off" id="gpsStatusLabel">
-                                <i class="fas fa-satellite-dish me-1"></i>
-                                <?php echo $t['gps_disabled'] ?? 'GPS Disabled'; ?>
-                            </div>
-                            <div class="gps-status-detail" id="gpsStatusDetail">
-                                <?php echo $t['gps_driver_note'] ?? 'Enable GPS to see nearby orders'; ?>
-                            </div>
+            <!-- ================= BARQ ULTRA PREMIUM DASHBOARD ================= -->
+            <?php
+            // Get driver stats for driver role
+            if($role == 'driver') {
+                $driverStats = getDriverStats($conn, $uid);
+            } elseif($role == 'customer') {
+                $clientStats = getClientStats($conn, $u['id'], $u['username']);
+            }
+            ?>
+
+            <!-- HEADER SECTION -->
+            <section class="header-section">
+                <div class="top-bar">
+                    <div class="user-info">
+                        <div class="avatar-circle <?php echo $role; ?>">
+                            <?php
+                            $headerAvatarUrl = getAvatarUrl($u);
+                            if ($headerAvatarUrl): ?>
+                                <img src="<?php echo e($headerAvatarUrl); ?>" alt="">
+                            <?php else:
+                                echo getUserInitials($u);
+                            endif; ?>
                         </div>
-                        <span class="gps-accuracy-badge" id="gpsAccuracyBadge" style="display: none;">
-                            <i class="fas fa-signal"></i>
-                            <span id="gpsAccuracyValue">--</span>m
-                        </span>
-                    </div>
-
-                    <!-- Online/Offline Toggle -->
-                    <div class="online-toggle mb-3">
-                        <form method="POST" id="onlineToggleForm" class="d-flex align-items-center gap-3 w-100">
-                            <div class="form-check form-switch mb-0">
-                                <input class="form-check-input" type="checkbox" id="onlineSwitch" name="is_online" value="1"
-                                    <?php echo $u['is_online'] ? 'checked' : ''; ?>
-                                    onchange="document.getElementById('onlineToggleForm').submit();"
-                                    <?php echo !isPhoneVerified($u) ? 'disabled' : ''; ?>>
-                            </div>
-                            <div class="flex-grow-1">
-                                <span class="online-status <?php echo $u['is_online'] ? 'online' : 'offline'; ?>">
-                                    <?php echo $u['is_online'] ? ($t['online'] ?? 'Online') : ($t['offline'] ?? 'Offline'); ?>
-                                </span>
-                                <?php if(!isPhoneVerified($u)): ?>
-                                    <div class="small text-warning"><i class="fas fa-exclamation-circle me-1"></i><?php echo $t['verify_phone_first'] ?? 'Add phone number to go online'; ?></div>
-                                <?php endif; ?>
-                            </div>
-                            <input type="hidden" name="toggle_online" value="1">
-                        </form>
-                    </div>
-
-                    <div class="card stat-card mb-3">
-                        <div class="card-body text-center p-4">
-                            <h6 class="opacity-75 mb-2"><?php echo $t['balance']; ?></h6>
-                            <h1 class="display-4 fw-bold mb-0" id="driverPoints"><?php echo $u['points']; ?></h1>
-                            <span class="opacity-75"><?php echo $t['points']; ?></span>
-
-                            <?php if(!empty($u['rating'])): ?>
-                            <div class="mt-2 opacity-75">
-                                <span class="rating-stars"><i class="fas fa-star"></i></span>
-                                <span class="rating-value"><?php echo number_format($u['rating'], 1); ?></span>
-                            </div>
-                            <?php endif; ?>
-
-                            <?php if($u['points'] < $points_cost_per_order): ?>
-                                <div class="mt-3 bg-white text-danger rounded p-2 small fw-bold" id="lowBalanceWarning">
-                                    <i class="fas fa-exclamation-triangle"></i> <?php echo $t['err_low_bal']; ?>
-                                </div>
-                            <?php endif; ?>
-                            <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=Recharge%20User:%20<?php echo $u['username']; ?>" target="_blank" class="btn btn-light text-success w-100 mt-3 fw-bold rounded-pill">
-                                <i class="fab fa-whatsapp"></i> <?php echo $t['recharge_wa']; ?>
-                            </a>
+                        <div class="greeting">
+                            <h3><?php echo $t['hello'] ?? 'مرحباً'; ?> <?php echo e($u['full_name'] ?: $u['username']); ?></h3>
+                            <span><?php echo $role == 'driver' ? ($t['start_your_day'] ?? 'ابدأ يومك بنشاط!') : ($t['what_need_today'] ?? 'ماذا تحتاج اليوم؟'); ?></span>
                         </div>
                     </div>
+                    <a href="?settings=1" class="notif-btn" title="<?php echo $t['settings']; ?>">
+                        <i class="fa-solid fa-gear"></i>
+                    </a>
+                </div>
+            </section>
 
-                    <!-- Driver Quick Stats -->
-                    <?php $driverStats = getDriverStats($conn, $uid); ?>
-                    <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <div class="stats-box text-center py-3">
-                                <h4 class="mb-0 text-primary"><?php echo $driverStats['active_orders']; ?></h4>
-                                <small class="text-muted"><?php echo $t['active_orders'] ?? 'Active'; ?></small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stats-box text-center py-3">
-                                <h4 class="mb-0 text-success"><?php echo $driverStats['total_delivered']; ?></h4>
-                                <small class="text-muted"><?php echo $t['completed_orders'] ?? 'Completed'; ?></small>
-                            </div>
-                        </div>
+            <?php if($role == 'driver'): ?>
+            <!-- DRIVER STATS SCROLL -->
+            <div class="stats-scroll">
+                <div class="stat-card-new card-purple">
+                    <i class="fa-solid fa-wallet stat-icon-new"></i>
+                    <div>
+                        <div class="stat-num-new" id="driverPoints"><?php echo number_format($u['points']); ?></div>
+                        <div class="stat-label-new"><?php echo $t['balance'] ?? 'الأرباح'; ?> (<?php echo $t['pts'] ?? 'نقطة'; ?>)</div>
                     </div>
-                    <?php endif; ?>
-
-                    <?php if($role == 'customer'): ?>
-                    <div class="card content-card">
-                        <div class="card-body p-4">
-                            <h5 class="fw-bold mb-4">
-                                <i class="fas fa-plus-circle text-primary me-2"></i><?php echo $t['new_order']; ?>
-                            </h5>
-                            <form method="POST" accept-charset="UTF-8" id="newOrderForm">
-                                <!-- Order Details -->
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted mb-1">
-                                        <i class="fas fa-box me-1"></i><?php echo $t['order_details']; ?>
-                                    </label>
-                                    <textarea name="details" class="form-control bg-light border-0 rounded-3" rows="3" placeholder="<?php echo $t['order_details_placeholder'] ?? 'Describe what you need delivered...'; ?>" required></textarea>
-                                </div>
-
-                                <!-- Phone Number -->
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted mb-1">
-                                        <i class="fas fa-phone me-1"></i><?php echo $t['phone_ph'] ?? 'Phone'; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light border-0 rounded-start-3">+222</span>
-                                        <input type="tel" name="client_phone" class="form-control bg-light border-0 rounded-end-3"
-                                               value="<?php echo e($u['phone'] ?? ''); ?>"
-                                               placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>"
-                                               pattern="[234][0-9]{7}" maxlength="8" inputmode="tel"
-                                               <?php echo !empty($u['phone']) ? '' : 'required'; ?>>
-                                    </div>
-                                </div>
-
-                                <!-- GPS Pickup Location -->
-                                <div class="mb-4">
-                                    <label class="form-label small text-muted mb-1">
-                                        <i class="fas fa-map-marker-alt me-1 text-danger"></i><?php echo $t['pickup_location'] ?? 'Pickup Location'; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="text" name="address" id="pickupAddress" class="form-control bg-light border-0"
-                                               placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" required readonly>
-                                        <button type="button" class="btn btn-success border-0 px-4" onclick="getPickupLocation()" id="gpsBtn" title="<?php echo $t['turn_on_gps'] ?? 'Turn on GPS'; ?>">
-                                            <i class="fas fa-location-crosshairs"></i>
-                                        </button>
-                                    </div>
-                                    <input type="hidden" name="pickup_lat" id="pickupLat" required>
-                                    <input type="hidden" name="pickup_lng" id="pickupLng" required>
-                                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i><?php echo $t['gps_required'] ?? 'GPS location is required for drivers to find you'; ?></small>
-                                </div>
-
-                                <button name="add_order" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-sm btn-lg">
-                                    <i class="fas fa-paper-plane me-2"></i><?php echo $t['btn_publish']; ?>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <?php endif; ?>
+                    <div style="position:absolute; top:-10px; left:-10px; width:60px; height:60px; background:rgba(255,255,255,0.1); border-radius:50%;"></div>
                 </div>
 
-                <!-- RIGHT COLUMN -->
-                <div class="col-lg-8">
-                    <div class="card content-card h-100">
-                        <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                            <h5 class="fw-bold mb-0 text-primary">
-                                <i class="fas fa-list-ul"></i> <?php echo $t['recent_orders']; ?>
-                                <?php if($role == 'driver'): ?>
-                                <span class="badge bg-warning text-dark ms-2 pulse-badge" id="pendingBadge" style="display:none;">0</span>
-                                <?php endif; ?>
-                            </h5>
-                            <?php if($role == 'customer'): ?>
-                                <span class="badge bg-light text-dark border"><?php echo $u['username']; ?></span>
-                            <?php endif; ?>
-                        </div>
+                <?php if(!empty($u['rating'])): ?>
+                <div class="stat-card-new card-new-white">
+                    <i class="fa-solid fa-star stat-icon-new" style="color:#FFD700"></i>
+                    <div>
+                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo number_format($u['rating'], 1); ?></div>
+                        <div class="stat-label-new"><?php echo $t['rating'] ?? 'التقييم'; ?></div>
+                    </div>
+                </div>
+                <?php endif; ?>
 
-                        <div class="table-responsive" id="ordersContainer">
-                            <table class="table align-middle mb-0 table-hover">
-                                <thead class="bg-light">
-                                    <tr class="text-secondary small text-uppercase">
-                                        <th class="ps-4" style="min-width:200px"><?php echo $t['order_details']; ?></th>
-                                        <th><?php echo $t['status']; ?></th>
-                                        <th class="text-end pe-4"><?php echo $t['action']; ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="border-top-0">
-                                    <?php
-                                    // Get driver's location for distance filtering
-                                    $driverLat = $u['last_lat'] ?? null;
-                                    $driverLng = $u['last_lng'] ?? null;
-                                    $maxDistance = 7; // 7km radius for drivers
+                <div class="stat-card-new card-new-white">
+                    <i class="fa-solid fa-route stat-icon-new" style="color:var(--success)"></i>
+                    <div>
+                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo $driverStats['total_delivered']; ?></div>
+                        <div class="stat-label-new"><?php echo $t['completed_orders'] ?? 'تم التوصيل'; ?></div>
+                    </div>
+                </div>
 
-                                    if($role == 'driver') {
-                                        // Driver sees: their accepted/picked_up orders OR pending orders within 7km
-                                        if ($driverLat && $driverLng) {
-                                            // Haversine formula in SQL for distance calculation
-                                            $sql = "SELECT *,
-                                                    (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) AS distance
-                                                    FROM orders1
-                                                    WHERE (driver_id = ? AND status IN ('accepted', 'picked_up'))
-                                                    OR (status = 'pending' AND pickup_lat IS NOT NULL
-                                                        AND (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) <= ?)
-                                                    ORDER BY CASE WHEN driver_id = ? THEN 0 ELSE 1 END, distance ASC, id DESC
-                                                    LIMIT 50";
-                                            $stmt = $conn->prepare($sql);
-                                            $stmt->execute([$driverLat, $driverLng, $driverLat, $uid, $driverLat, $driverLng, $driverLat, $maxDistance, $uid]);
-                                            $res = $stmt;
-                                        } else {
-                                            // No GPS - only show driver's own orders
-                                            $sql = "SELECT * FROM orders1 WHERE driver_id = ? AND status IN ('accepted', 'picked_up') ORDER BY id DESC LIMIT 50";
-                                            $stmt = $conn->prepare($sql);
-                                            $stmt->execute([$uid]);
-                                            $res = $stmt;
-                                        }
-                                    } elseif($role == 'customer') {
-                                        $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
-                                        $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
-                                        $res = $conn->query($sql);
-                                    } else {
-                                        $sql = "SELECT * FROM orders1 ORDER BY id DESC LIMIT 50";
-                                        $res = $conn->query($sql);
-                                    }
-
-                                    if($role == 'driver' && !$driverLat):
-                                    ?>
-                                    <tr>
-                                        <td colspan="3" class="p-4">
-                                            <div class="alert alert-warning mb-0 d-flex align-items-center gap-3">
-                                                <i class="fas fa-location-crosshairs fa-2x"></i>
-                                                <div>
-                                                    <strong><?php echo $t['enable_gps'] ?? 'Enable GPS to see nearby orders'; ?></strong>
-                                                    <p class="mb-0 small"><?php echo $t['gps_driver_note'] ?? 'Turn on your GPS to find orders within 7km of your location'; ?></p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endif;
-
-                                    if($res->rowCount() == 0): ?>
-                                    <tr>
-                                        <td colspan="3" class="empty-state">
-                                            <i class="fas fa-box-open"></i>
-                                            <h5><?php echo $t['no_orders']; ?></h5>
-                                            <p class="text-muted small mb-0">
-                                                <?php echo ($role == 'driver') ? ($driverLat ? $t['no_nearby_orders'] ?? 'No orders nearby (7km radius)' : $t['enable_gps_first'] ?? 'Enable GPS first') : $t['check_back_later']; ?>
-                                            </p>
-                                        </td>
-                                    </tr>
-                                    <?php else: while($row = $res->fetch()):
-                                        $st = $row['status'];
-                                        $badge = getStatusBadge($st);
-                                        $icon = getStatusIcon($st);
-                                        $orderDistance = isset($row['distance']) ? round($row['distance'], 1) : null;
-                                    ?>
-                                    <tr class="order-row">
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-start gap-2">
-                                                <div class="mt-1"><i class="fas fa-clock text-muted small"></i></div>
-                                                <div>
-                                                    <small class="text-muted"><?php echo fmtDate($row['created_at']); ?></small>
-                                                    <div class="fw-bold text-dark text-break"><?php echo e($row['details']); ?></div>
-                                                    <small class="text-secondary"><i class="fas fa-map-marker-alt text-danger me-1"></i> <?php echo e($row['address']); ?></small>
-
-                                                    <?php if($role == 'driver' && $st == 'pending' && $orderDistance !== null): ?>
-                                                        <div class="mt-1">
-                                                            <span class="badge bg-info text-white">
-                                                                <i class="fas fa-route me-1"></i><?php echo $orderDistance; ?> <?php echo $t['km'] ?? 'km'; ?>
-                                                            </span>
-                                                        </div>
-                                                    <?php endif; ?>
-
-                                                    <?php if($role == 'customer' && $st != 'delivered' && $st != 'cancelled'): ?>
-                                                        <div class="mt-2 bg-warning bg-opacity-10 p-2 rounded border border-warning border-opacity-25">
-                                                            <small class="d-block text-warning fw-bold mb-1"><?php echo $t['pin_label']; ?>:</small>
-                                                            <span class="pin-box text-dark"><?php echo $row['delivery_code']; ?></span>
-                                                            <div class="small text-muted mt-1" style="font-size:0.75rem"><?php echo $t['pin_note']; ?></div>
-                                                        </div>
-                                                    <?php endif; ?>
-
-                                                    <?php if($role == 'driver' && ($st == 'accepted' || $st == 'picked_up') && $row['driver_id'] == $uid): ?>
-                                                        <div class="mt-2 text-muted small">
-                                                            <i class="fas fa-user me-1"></i> <?php echo e($row['customer_name']); ?>
-                                                            <?php if($row['client_phone']): ?>
-                                                            - <a href="tel:+222<?php echo $row['client_phone']; ?>" class="text-primary"><i class="fas fa-phone"></i></a>
-                                                            <?php endif; ?>
-                                                        </div>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge <?php echo $badge; ?> rounded-pill px-3 py-2">
-                                                <i class="fas fa-<?php echo $icon; ?> me-1"></i>
-                                                <?php echo $t['st_'.$st] ?? ucfirst($st); ?>
-                                            </span>
-                                        </td>
-                                        <td class="text-end pe-4">
-                                            <?php if($role == 'driver'): ?>
-
-                                                <?php if($st == 'pending'): ?>
-                                                    <form method="POST" onsubmit="this.querySelector('button').classList.add('loading')">
-                                                        <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                                        <button name="accept_order" class="btn btn-sm btn-primary rounded-pill px-3" onclick="return confirm('<?php echo $t['confirm_accept']; ?>\n<?php echo $t['cost_per_order']; ?>: <?php echo $points_cost_per_order; ?> <?php echo $t['pts']; ?>')">
-                                                            <i class="fas fa-hand-pointer me-1"></i> <?php echo $t['driver_accept']; ?>
-                                                        </button>
-                                                    </form>
-
-                                                <?php elseif($st == 'accepted' && $row['driver_id'] == $uid): ?>
-                                                    <form method="POST" onsubmit="this.querySelector('button').classList.add('loading')">
-                                                        <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                                        <button type="submit" name="pickup_order" class="btn btn-sm btn-info text-white rounded-pill px-3">
-                                                            <i class="fas fa-box me-1"></i> <?php echo $t['driver_pickup'] ?? 'Picked Up'; ?>
-                                                        </button>
-                                                    </form>
-
-                                                <?php elseif($st == 'picked_up' && $row['driver_id'] == $uid): ?>
-                                                    <form method="POST" class="d-flex justify-content-end align-items-center gap-2" onsubmit="this.querySelector('button').classList.add('loading')">
-                                                        <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                                        <input type="text" name="pin" class="form-control form-control-sm text-center fw-bold" style="width:85px; border-color: var(--success-color);" placeholder="<?php echo $t['verify_ph']; ?>" required maxlength="4" pattern="[0-9]{4}" inputmode="numeric">
-                                                        <button type="submit" name="finish_job" class="btn btn-sm btn-success rounded-pill px-3" title="<?php echo $t['finish_delivery']; ?>">
-                                                            <i class="fas fa-check-double me-1"></i> <?php echo $t['verify_fin']; ?>
-                                                        </button>
-                                                    </form>
-                                                <?php endif; ?>
-
-                                            <?php elseif($role == 'customer'): ?>
-
-                                                <?php if($st == 'pending'): ?>
-                                                    <a href="?customer_cancel=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('<?php echo $t['confirm_cancel'] ?? 'Cancel this order?'; ?>');">
-                                                        <i class="fas fa-times me-1"></i> <?php echo $t['cancel'] ?? 'Cancel'; ?>
-                                                    </a>
-
-                                                <?php elseif($st == 'accepted' || $st == 'picked_up'): ?>
-                                                    <?php
-                                                    // Get driver info for this order
-                                                    $driverStmt = $conn->prepare("SELECT id, full_name, phone, avatar_url, rating, is_verified FROM users1 WHERE id = ?");
-                                                    $driverStmt->execute([$row['driver_id']]);
-                                                    $orderDriver = $driverStmt->fetch();
-                                                    $driverAvatarUrl = $orderDriver ? getAvatarUrl($orderDriver) : null;
-                                                    ?>
-                                                    <button type="button" class="btn btn-sm btn-info text-white rounded-pill px-3"
-                                                            onclick="showOrderTracking(<?php echo htmlspecialchars(json_encode([
-                                                                'id' => $row['id'],
-                                                                'status' => $st,
-                                                                'details' => $row['details'],
-                                                                'address' => $row['address'],
-                                                                'driver_name' => $orderDriver['full_name'] ?? 'Driver',
-                                                                'driver_phone' => $orderDriver['phone'] ?? '',
-                                                                'driver_rating' => $orderDriver['rating'] ?? 5,
-                                                                'driver_verified' => $orderDriver['is_verified'] ?? 0,
-                                                                'driver_avatar' => $driverAvatarUrl,
-                                                                'accepted_at' => $row['accepted_at'],
-                                                                'picked_at' => $row['picked_at']
-                                                            ])); ?>)">
-                                                        <i class="fas fa-map-marker-alt me-1"></i> <?php echo $t['track_order'] ?? 'Track'; ?>
-                                                    </button>
-                                                <?php endif; ?>
-
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="stat-card-new card-new-white">
+                    <i class="fa-solid fa-clock stat-icon-new" style="color:var(--primary)"></i>
+                    <div>
+                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo $driverStats['active_orders']; ?></div>
+                        <div class="stat-label-new"><?php echo $t['active_orders'] ?? 'طلبات نشطة'; ?></div>
                     </div>
                 </div>
             </div>
+
+            <!-- GPS Toggle (Hidden - controlled by nav button) -->
+            <div id="gpsToggle" style="display:none;">
+                <span class="gps-accuracy-badge" id="gpsAccuracyBadge" style="display: none;">
+                    <i class="fas fa-signal"></i>
+                    <span id="gpsAccuracyValue">--</span>m
+                </span>
+            </div>
+            <div id="gpsStatusLabel" style="display:none;"></div>
+            <div id="gpsStatusDetail" style="display:none;"></div>
+
+            <!-- Online Toggle Form (Hidden) -->
+            <form method="POST" id="onlineToggleForm" style="display:none;">
+                <input type="checkbox" id="onlineSwitch" name="is_online" value="1" <?php echo $u['is_online'] ? 'checked' : ''; ?>>
+                <input type="hidden" name="toggle_online" value="1">
+            </form>
+
+            <?php if($u['points'] < $points_cost_per_order): ?>
+            <div class="orders-container mb-3">
+                <div class="alert alert-danger d-flex align-items-center gap-2" id="lowBalanceWarning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><?php echo $t['err_low_bal']; ?></span>
+                    <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=Recharge%20User:%20<?php echo $u['username']; ?>" target="_blank" class="btn btn-sm btn-success ms-auto">
+                        <i class="fab fa-whatsapp me-1"></i><?php echo $t['recharge_wa']; ?>
+                    </a>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if($role == 'customer'): ?>
+            <!-- CUSTOMER STATS SCROLL -->
+            <div class="stats-scroll">
+                <div class="stat-card-new card-purple">
+                    <i class="fa-solid fa-box stat-icon-new"></i>
+                    <div>
+                        <div class="stat-num-new"><?php echo $clientStats['total_orders']; ?></div>
+                        <div class="stat-label-new"><?php echo $t['total_orders'] ?? 'إجمالي الطلبات'; ?></div>
+                    </div>
+                    <div style="position:absolute; top:-10px; left:-10px; width:60px; height:60px; background:rgba(255,255,255,0.1); border-radius:50%;"></div>
+                </div>
+
+                <div class="stat-card-new card-new-white">
+                    <i class="fa-solid fa-check-circle stat-icon-new" style="color:var(--success)"></i>
+                    <div>
+                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo $clientStats['delivered']; ?></div>
+                        <div class="stat-label-new"><?php echo $t['delivered'] ?? 'تم التوصيل'; ?></div>
+                    </div>
+                </div>
+
+                <div class="stat-card-new card-new-white">
+                    <i class="fa-solid fa-clock stat-icon-new" style="color:var(--primary)"></i>
+                    <div>
+                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo $clientStats['active']; ?></div>
+                        <div class="stat-label-new"><?php echo $t['active_orders'] ?? 'طلبات نشطة'; ?></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW ORDER CARD -->
+            <div class="orders-container mb-4">
+                <div class="ultra-card">
+                    <div class="card-inner">
+                        <h5 class="fw-bold mb-4">
+                            <i class="fas fa-plus-circle text-primary me-2"></i><?php echo $t['new_order']; ?>
+                        </h5>
+                        <form method="POST" accept-charset="UTF-8" id="newOrderForm">
+                            <div class="mb-3">
+                                <label class="form-label small text-muted mb-1">
+                                    <i class="fas fa-box me-1"></i><?php echo $t['order_details']; ?>
+                                </label>
+                                <textarea name="details" class="form-control" rows="3" placeholder="<?php echo $t['order_details_placeholder'] ?? 'Describe what you need delivered...'; ?>" required style="border-radius: var(--radius); border: 2px solid var(--gray-200);"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small text-muted mb-1">
+                                    <i class="fas fa-phone me-1"></i><?php echo $t['phone_ph'] ?? 'Phone'; ?>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+222</span>
+                                    <input type="tel" name="client_phone" class="form-control"
+                                           value="<?php echo e($u['phone'] ?? ''); ?>"
+                                           placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>"
+                                           pattern="[234][0-9]{7}" maxlength="8" inputmode="tel"
+                                           <?php echo !empty($u['phone']) ? '' : 'required'; ?>>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-1">
+                                    <i class="fas fa-map-marker-alt me-1 text-danger"></i><?php echo $t['pickup_location'] ?? 'Pickup Location'; ?>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" name="address" id="pickupAddress" class="form-control"
+                                           placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" required readonly>
+                                    <button type="button" class="btn btn-success px-4" onclick="getPickupLocation()" id="gpsBtn" title="<?php echo $t['turn_on_gps'] ?? 'Turn on GPS'; ?>">
+                                        <i class="fas fa-location-crosshairs"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="pickup_lat" id="pickupLat" required>
+                                <input type="hidden" name="pickup_lng" id="pickupLng" required>
+                                <small class="text-muted"><i class="fas fa-info-circle me-1"></i><?php echo $t['gps_required'] ?? 'GPS location is required for drivers to find you'; ?></small>
+                            </div>
+
+                            <div class="slider-btn-container" onclick="document.getElementById('newOrderForm').submit();">
+                                <div class="slider-thumb"><i class="fa-solid fa-paper-plane"></i></div>
+                                <div class="slider-text"><?php echo $t['btn_publish']; ?></div>
+                                <button name="add_order" style="display:none;"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- TABS FOR FILTERING -->
+            <div class="tabs-wrapper">
+                <div class="tab-new active"><?php echo $t['recent_orders'] ?? 'الطلبات'; ?></div>
+                <?php if($role == 'driver'): ?>
+                <span class="badge bg-warning text-dark pulse-badge" id="pendingBadge" style="display:none; margin: auto 0;">0</span>
+                <?php endif; ?>
+            </div>
+
+            <!-- ORDERS AS ULTRA CARDS -->
+            <div class="orders-container" id="ordersContainer">
+                <?php
+                // Get driver's location for distance filtering
+                $driverLat = $u['last_lat'] ?? null;
+                $driverLng = $u['last_lng'] ?? null;
+                $maxDistance = 7; // 7km radius for drivers
+
+                if($role == 'driver') {
+                    if ($driverLat && $driverLng) {
+                        $sql = "SELECT *,
+                                (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) AS distance
+                                FROM orders1
+                                WHERE (driver_id = ? AND status IN ('accepted', 'picked_up'))
+                                OR (status = 'pending' AND pickup_lat IS NOT NULL
+                                    AND (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) <= ?)
+                                ORDER BY CASE WHEN driver_id = ? THEN 0 ELSE 1 END, distance ASC, id DESC
+                                LIMIT 50";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute([$driverLat, $driverLng, $driverLat, $uid, $driverLat, $driverLng, $driverLat, $maxDistance, $uid]);
+                        $res = $stmt;
+                    } else {
+                        $sql = "SELECT * FROM orders1 WHERE driver_id = ? AND status IN ('accepted', 'picked_up') ORDER BY id DESC LIMIT 50";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute([$uid]);
+                        $res = $stmt;
+                    }
+                } elseif($role == 'customer') {
+                    $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
+                    $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
+                    $res = $conn->query($sql);
+                } else {
+                    $sql = "SELECT * FROM orders1 ORDER BY id DESC LIMIT 50";
+                    $res = $conn->query($sql);
+                }
+
+                if($role == 'driver' && !$driverLat):
+                ?>
+                <div class="ultra-card">
+                    <div class="card-inner">
+                        <div class="text-center py-4">
+                            <i class="fas fa-location-crosshairs fa-3x text-warning mb-3"></i>
+                            <h5 class="fw-bold"><?php echo $t['enable_gps'] ?? 'Enable GPS to see nearby orders'; ?></h5>
+                            <p class="text-muted small"><?php echo $t['gps_driver_note'] ?? 'Turn on your GPS to find orders within 7km of your location'; ?></p>
+                        </div>
+                    </div>
+                </div>
+                <?php endif;
+
+                if($res->rowCount() == 0): ?>
+                <div class="ultra-card">
+                    <div class="card-inner text-center py-5">
+                        <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted"><?php echo $t['no_orders']; ?></h5>
+                        <p class="text-muted small mb-0">
+                            <?php echo ($role == 'driver') ? ($driverLat ? $t['no_nearby_orders'] ?? 'No orders nearby (7km radius)' : $t['enable_gps_first'] ?? 'Enable GPS first') : $t['check_back_later']; ?>
+                        </p>
+                    </div>
+                </div>
+                <?php else: while($row = $res->fetch()):
+                    $st = $row['status'];
+                    $orderDistance = isset($row['distance']) ? round($row['distance'], 1) : null;
+                    $statusTagClass = ($st == 'pending') ? 'tag-pending' : (($st == 'accepted') ? 'tag-accepted' : (($st == 'picked_up') ? 'tag-picked' : 'tag-delivered'));
+                ?>
+                <div class="ultra-card">
+                    <div class="card-inner">
+                        <!-- Card Header -->
+                        <div class="c-header">
+                            <div class="price-tag">
+                                #<?php echo $row['id']; ?>
+                            </div>
+                            <div class="time-tag <?php echo ($orderDistance && $orderDistance < 3) ? '' : 'blue'; ?>">
+                                <i class="fa-regular fa-clock"></i>
+                                <?php echo fmtDate($row['created_at']); ?>
+                            </div>
+                        </div>
+
+                        <!-- Meta Tags -->
+                        <div class="meta-tags">
+                            <div class="tag-new <?php echo $statusTagClass; ?>">
+                                <i class="fas fa-<?php echo getStatusIcon($st); ?>"></i>
+                                <?php echo $t['st_'.$st] ?? ucfirst($st); ?>
+                            </div>
+                            <?php if($role == 'driver' && $st == 'pending' && $orderDistance !== null): ?>
+                            <div class="tag-new tag-accepted">
+                                <i class="fas fa-route"></i>
+                                <?php echo $orderDistance; ?> <?php echo $t['km'] ?? 'km'; ?>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Route Visual -->
+                        <div class="route-row">
+                            <div class="visual-connector">
+                                <div class="dot-circle dot-p"></div>
+                                <div class="line-dashed"></div>
+                                <div class="dot-circle dot-d"></div>
+                            </div>
+                            <div class="text-info-route">
+                                <div>
+                                    <div class="loc-title"><?php echo e($row['details']); ?></div>
+                                    <div class="loc-sub"><?php echo e($row['customer_name']); ?></div>
+                                </div>
+                                <div>
+                                    <div class="loc-title"><i class="fas fa-map-marker-alt text-danger me-1"></i><?php echo e($row['address']); ?></div>
+                                    <?php if($row['client_phone']): ?>
+                                    <div class="loc-sub">
+                                        <a href="tel:+222<?php echo $row['client_phone']; ?>" class="text-primary">
+                                            <i class="fas fa-phone me-1"></i>+222 <?php echo $row['client_phone']; ?>
+                                        </a>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php if($role == 'customer' && $st != 'delivered' && $st != 'cancelled'): ?>
+                        <!-- PIN Code for Customer -->
+                        <div class="alert alert-warning mb-3 py-2">
+                            <small class="d-block fw-bold mb-1"><?php echo $t['pin_label']; ?>:</small>
+                            <span class="pin-box text-dark fs-5"><?php echo $row['delivery_code']; ?></span>
+                            <div class="small text-muted mt-1"><?php echo $t['pin_note']; ?></div>
+                        </div>
+                        <?php endif; ?>
+
+                        <!-- Action Buttons -->
+                        <?php if($role == 'driver'): ?>
+
+                            <?php if($st == 'pending'): ?>
+                            <form method="POST" onsubmit="this.querySelector('.slider-btn-container').classList.add('loading')">
+                                <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
+                                <button type="submit" name="accept_order" class="slider-btn-container w-100" onclick="return confirm('<?php echo $t['confirm_accept']; ?>\n<?php echo $t['cost_per_order']; ?>: <?php echo $points_cost_per_order; ?> <?php echo $t['pts']; ?>')">
+                                    <div class="slider-thumb"><i class="fa-solid fa-check"></i></div>
+                                    <div class="slider-text"><?php echo $t['driver_accept']; ?></div>
+                                </button>
+                            </form>
+
+                            <?php elseif($st == 'accepted' && $row['driver_id'] == $uid): ?>
+                            <form method="POST">
+                                <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
+                                <button type="submit" name="pickup_order" class="slider-btn-container info w-100">
+                                    <div class="slider-thumb"><i class="fa-solid fa-box"></i></div>
+                                    <div class="slider-text"><?php echo $t['driver_pickup'] ?? 'Picked Up'; ?></div>
+                                </button>
+                            </form>
+
+                            <?php elseif($st == 'picked_up' && $row['driver_id'] == $uid): ?>
+                            <form method="POST" class="pin-input-row">
+                                <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
+                                <input type="text" name="entered_pin" placeholder="<?php echo $t['enter_pin'] ?? 'Enter PIN'; ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric">
+                                <button type="submit" name="finish_job" class="btn btn-success px-4 py-3 fw-bold" style="border-radius: 12px;">
+                                    <i class="fas fa-check-double me-1"></i><?php echo $t['driver_finish'] ?? 'Finish'; ?>
+                                </button>
+                            </form>
+                            <?php endif; ?>
+
+                        <?php elseif($role == 'customer'): ?>
+
+                            <?php if($st == 'pending'): ?>
+                            <a href="?customer_cancel=<?php echo $row['id']; ?>" class="slider-btn-container muted w-100" onclick="return confirm('<?php echo $t['confirm_cancel'] ?? 'Cancel this order?'; ?>')">
+                                <div class="slider-thumb"><i class="fa-solid fa-times"></i></div>
+                                <div class="slider-text"><?php echo $t['cancel_order'] ?? 'Cancel Order'; ?></div>
+                            </a>
+                            <?php elseif($st == 'accepted' || $st == 'picked_up'): ?>
+                            <div class="slider-btn-container info w-100" onclick="showOrderTracking(<?php echo htmlspecialchars(json_encode($row)); ?>)" style="cursor:pointer;">
+                                <div class="slider-thumb"><i class="fa-solid fa-location-dot"></i></div>
+                                <div class="slider-text"><?php echo $t['track_order'] ?? 'Track Order'; ?></div>
+                            </div>
+                            <?php elseif($st == 'delivered' && empty($row['rating'])): ?>
+                            <form method="POST" class="order-actions-row">
+                                <input type="hidden" name="order_id" value="<?php echo $row['id']; ?>">
+                                <select name="rating" class="form-select" required style="border-radius: 12px;">
+                                    <option value=""><?php echo $t['rate_driver'] ?? 'Rate Driver'; ?></option>
+                                    <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4)</option>
+                                    <option value="3">⭐⭐⭐ (3)</option>
+                                    <option value="2">⭐⭐ (2)</option>
+                                    <option value="1">⭐ (1)</option>
+                                </select>
+                                <button type="submit" name="submit_rating" class="btn btn-warning fw-bold" style="border-radius: 12px;">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </form>
+                            <?php endif; ?>
+
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endwhile; endif; ?>
+            </div>
+
+            <!-- GLASS NAVIGATION BAR -->
+            <?php if($role == 'driver'): ?>
+            <nav class="glass-nav">
+                <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-chart-simple"></i></a>
+
+                <div class="nav-center-btn <?php echo $u['is_online'] ? 'online' : 'offline'; ?>" onclick="document.getElementById('onlineSwitch').checked = !document.getElementById('onlineSwitch').checked; document.getElementById('onlineToggleForm').submit();" title="<?php echo $u['is_online'] ? ($t['go_offline'] ?? 'Go Offline') : ($t['go_online'] ?? 'Go Online'); ?>">
+                    <i class="fa-solid fa-power-off"></i>
+                </div>
+
+                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=Recharge%20User:%20<?php echo $u['username']; ?>" target="_blank" class="nav-icon"><i class="fa-solid fa-wallet"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
+            </nav>
+            <?php else: ?>
+            <nav class="glass-nav">
+                <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
+                <a href="#" class="nav-icon" onclick="document.getElementById('newOrderForm').scrollIntoView({behavior: 'smooth'})"><i class="fa-solid fa-plus"></i></a>
+
+                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>" target="_blank" class="nav-center-btn">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
+            </nav>
+            <?php endif; ?>
+
         <?php endif; ?>
 
         <?php if($role == 'customer'): ?>
