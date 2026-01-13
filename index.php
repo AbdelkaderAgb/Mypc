@@ -49,7 +49,7 @@ require_once 'actions.php';
 
             <!-- Logo Area -->
             <div class="login-logo-area">
-                <i class="fa-solid fa-bolt login-logo-icon"></i>
+                <img src="logo.png" alt="<?php echo $t['app_name']; ?>" class="login-logo-img" style="height: 80px; width: auto; margin-bottom: 15px;">
                 <h1 class="login-app-title"><?php echo $t['app_name']; ?></h1>
                 <p class="login-app-subtitle"><?php echo $t['app_desc']; ?></p>
             </div>
