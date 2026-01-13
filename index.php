@@ -351,18 +351,27 @@ require_once 'actions.php';
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        /* Login Card */
+        /* Login Card - Glass Design */
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            margin: 0 auto;
+        }
         .login-card {
-            max-width: 480px;
-            margin: 30px auto;
-            border-radius: var(--radius-xl);
-            border: none;
+            max-width: 420px;
+            margin: 0 auto;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(30px);
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.6) inset;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
             overflow: hidden;
             position: relative;
+            padding: 40px 30px;
+            text-align: center;
         }
         .login-card::before {
             content: '';
@@ -370,8 +379,195 @@ require_once 'actions.php';
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        /* Login Logo Area */
+        .login-logo-area {
+            margin-bottom: 30px;
+        }
+        .login-logo-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .login-app-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin: 0;
+            line-height: 1.2;
+        }
+        .login-app-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-top: 5px;
+        }
+
+        /* Login Input Groups */
+        .login-input-group {
+            margin-bottom: 20px;
+            position: relative;
+            text-align: right;
+        }
+        .login-input-icon {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+        [dir="ltr"] .login-input-icon {
+            right: auto;
+            left: 20px;
+        }
+        .login-form-control {
+            width: 100%;
+            padding: 16px 55px 16px 20px;
+            border-radius: 16px;
+            border: 2px solid #EBEBF0;
+            background: #F9FAFC;
+            font-size: 1rem;
+            font-family: inherit;
+            color: var(--gray-900);
+            outline: none;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+        [dir="ltr"] .login-form-control {
+            padding: 16px 20px 16px 55px;
+        }
+        .login-form-control:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Login Buttons */
+        .btn-login-main {
+            width: 100%;
+            padding: 18px;
+            border-radius: 18px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            transition: 0.3s;
+            margin-bottom: 15px;
+        }
+        .btn-login-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+            color: white;
+        }
+        .btn-login-main:active {
+            transform: scale(0.98);
+        }
+        .btn-register-main {
+            width: 100%;
+            padding: 18px;
+            border-radius: 18px;
+            border: none;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            transition: 0.3s;
+            margin-bottom: 15px;
+        }
+        .btn-register-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+            color: white;
+        }
+
+        /* Login Divider */
+        .login-divider {
+            position: relative;
+            margin: 25px 0;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+        .login-divider::before, .login-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #EBEBF0;
+        }
+        .login-divider::before { left: 0; }
+        .login-divider::after { right: 0; }
+
+        /* Login Contact Hub */
+        .login-contact-hub {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .login-social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            background: white;
+            color: var(--gray-500);
+            border: 1px solid #EBEBF0;
+            transition: 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .login-social-btn:hover {
+            transform: translateY(-5px);
+        }
+        .login-social-btn.whatsapp:hover {
+            background: #25D366;
+            color: white;
+            border-color: #25D366;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+        .login-social-btn.phone:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        .login-social-btn.email:hover {
+            background: #EA4335;
+            color: white;
+            border-color: #EA4335;
+            box-shadow: 0 8px 20px rgba(234, 67, 53, 0.3);
+        }
+
+        /* Login Footer Text */
+        .login-footer-text {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 10px;
+        }
+        .login-footer-text a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .login-footer-text a:hover {
+            text-decoration: underline;
         }
 
         /* App Navbar - Enhanced */
@@ -2120,101 +2316,104 @@ function createNotificationSound() {
 
 <?php if (!isset($_SESSION['user'])): ?>
     <!-- ================= LOGIN/REGISTER SCREEN ================= -->
-    <div class="container py-4">
-        <div class="card login-card content-card shadow-lg">
-            <div class="card-body p-4 p-md-5">
-                <div class="text-center mb-4">
-                    <div class="mb-3">
-                        <img src="logo.png" alt="<?php echo $t['app_name']; ?>" style="max-width: 100px; height: auto;" onerror="this.style.display='none'">
-                    </div>
-                    <h3 class="fw-bold mb-1" style="color: var(--primary-color);"><?php echo $t['app_name']; ?></h3>
-                    <p class="text-muted small mb-3"><?php echo $t['app_desc']; ?></p>
-                    <div class="btn-group btn-group-sm lang-switcher" role="group">
-                        <a href="?lang=ar" class="btn btn-outline-secondary <?php echo $lang=='ar'?'active':''; ?>">العربية</a>
-                        <a href="?lang=fr" class="btn btn-outline-secondary <?php echo $lang=='fr'?'active':''; ?>">Français</a>
-                    </div>
-                </div>
+    <div class="login-wrapper">
+        <div class="login-card">
 
-                <?php echo getFlash(); ?>
-
-                <!-- Auth Toggle -->
-                <div class="auth-toggle">
-                    <button type="button" id="loginToggle" class="active" onclick="showAuthForm('login')">
-                        <i class="fas fa-sign-in-alt me-2"></i><?php echo $t['login_title']; ?>
-                    </button>
-                    <button type="button" id="registerToggle" onclick="showAuthForm('register')">
-                        <i class="fas fa-user-plus me-2"></i><?php echo $t['register_title']; ?>
-                    </button>
-                </div>
-
-                <!-- Login Form (Phone + Password) -->
-                <form method="POST" id="loginForm" class="auth-form active" onsubmit="this.querySelector('button').classList.add('loading')">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
-                            <input type="tel" name="phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" pattern="[234][0-9]{7}">
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
-                            <input type="password" name="password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required autocomplete="current-password">
-                        </div>
-                    </div>
-                    <button name="do_login" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
-                        <?php echo $t['btn_login']; ?> <i class="fas fa-arrow-<?php echo ($lang=='ar')?'left':'right'; ?> ms-2"></i>
-                    </button>
-                </form>
-
-                <!-- Register Form (Phone + Password) -->
-                <form method="POST" id="registerForm" class="auth-form" onsubmit="this.querySelector('button').classList.add('loading')">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['full_name_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                            <input type="text" name="reg_full_name" class="form-control" placeholder="<?php echo $t['full_name_ph']; ?>" required minlength="2">
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['phone_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-phone text-muted"></i></span>
-                            <input type="tel" name="reg_phone" class="form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" minlength="8" pattern="[234][0-9]{7}">
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['pass_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
-                            <input type="password" name="reg_password" class="form-control" placeholder="<?php echo $t['pass_ph']; ?>" required minlength="4" autocomplete="new-password">
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold text-secondary"><?php echo $t['confirm_pass_ph']; ?> <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
-                            <input type="password" name="reg_confirm_password" class="form-control" placeholder="<?php echo $t['confirm_pass_ph']; ?>" required autocomplete="new-password">
-                        </div>
-                    </div>
-
-                    <button name="do_register" class="btn btn-success w-100 py-3 fw-bold rounded-pill">
-                        <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus ms-2"></i>
-                    </button>
-                </form>
-
-                <!-- Help Contact Info -->
-                <div class="mt-4 text-center p-3">
-                    <small class="text-muted">
-                        <?php echo $t['need_help'] ?? 'Need help?'; ?>
-                        <a href="mailto:<?php echo $help_email; ?>" class="text-primary"><?php echo $help_email; ?></a>
-                    </small>
-                </div>
+            <!-- Logo Area -->
+            <div class="login-logo-area">
+                <i class="fa-solid fa-bolt login-logo-icon"></i>
+                <h1 class="login-app-title"><?php echo $t['app_name']; ?></h1>
+                <p class="login-app-subtitle"><?php echo $t['app_desc']; ?></p>
             </div>
+
+            <!-- Language Switcher -->
+            <div class="btn-group btn-group-sm lang-switcher mb-4" role="group">
+                <a href="?lang=ar" class="btn btn-outline-secondary <?php echo $lang=='ar'?'active':''; ?>">العربية</a>
+                <a href="?lang=fr" class="btn btn-outline-secondary <?php echo $lang=='fr'?'active':''; ?>">Français</a>
+            </div>
+
+            <?php echo getFlash(); ?>
+
+            <!-- Auth Toggle -->
+            <div class="auth-toggle">
+                <button type="button" id="loginToggle" class="active" onclick="showAuthForm('login')">
+                    <i class="fas fa-sign-in-alt me-2"></i><?php echo $t['login_title']; ?>
+                </button>
+                <button type="button" id="registerToggle" onclick="showAuthForm('register')">
+                    <i class="fas fa-user-plus me-2"></i><?php echo $t['register_title']; ?>
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <form method="POST" id="loginForm" class="auth-form active" onsubmit="this.querySelector('button').classList.add('loading')">
+                <div class="login-input-group">
+                    <i class="fa-solid fa-mobile-screen login-input-icon"></i>
+                    <input type="tel" name="phone" class="login-form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" pattern="[234][0-9]{7}" style="direction: ltr; text-align: <?php echo ($lang=='ar')?'right':'left'; ?>;">
+                </div>
+
+                <div class="login-input-group">
+                    <i class="fa-solid fa-lock login-input-icon"></i>
+                    <input type="password" name="password" class="login-form-control" placeholder="<?php echo $t['pass_ph']; ?>" required autocomplete="current-password">
+                </div>
+
+                <button name="do_login" class="btn-login-main">
+                    <?php echo $t['btn_login']; ?> <i class="fas fa-arrow-<?php echo ($lang=='ar')?'left':'right'; ?>" style="margin-<?php echo ($lang=='ar')?'right':'left'; ?>: 8px;"></i>
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form method="POST" id="registerForm" class="auth-form" onsubmit="this.querySelector('button').classList.add('loading')">
+                <div class="login-input-group">
+                    <i class="fa-solid fa-user login-input-icon"></i>
+                    <input type="text" name="reg_full_name" class="login-form-control" placeholder="<?php echo $t['full_name_ph']; ?>" required minlength="2">
+                </div>
+
+                <div class="login-input-group">
+                    <i class="fa-solid fa-mobile-screen login-input-icon"></i>
+                    <input type="tel" name="reg_phone" class="login-form-control" placeholder="<?php echo $t['phone_example'] ?? '2XXXXXXX'; ?>" required inputmode="tel" maxlength="8" minlength="8" pattern="[234][0-9]{7}" style="direction: ltr; text-align: <?php echo ($lang=='ar')?'right':'left'; ?>;">
+                </div>
+
+                <div class="login-input-group">
+                    <i class="fa-solid fa-lock login-input-icon"></i>
+                    <input type="password" name="reg_password" class="login-form-control" placeholder="<?php echo $t['pass_ph']; ?>" required minlength="4" autocomplete="new-password">
+                </div>
+
+                <div class="login-input-group">
+                    <i class="fa-solid fa-lock login-input-icon"></i>
+                    <input type="password" name="reg_confirm_password" class="login-form-control" placeholder="<?php echo $t['confirm_pass_ph']; ?>" required autocomplete="new-password">
+                </div>
+
+                <button name="do_register" class="btn-register-main">
+                    <?php echo $t['btn_register']; ?> <i class="fas fa-user-plus" style="margin-<?php echo ($lang=='ar')?'right':'left'; ?>: 8px;"></i>
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="login-divider"><?php echo $t['need_help'] ?? 'Need help?'; ?></div>
+
+            <!-- Contact Hub -->
+            <div class="login-contact-hub">
+                <a href="https://wa.me/<?php echo $whatsapp_number; ?>" class="login-social-btn whatsapp" title="WhatsApp" target="_blank">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+
+                <a href="tel:+<?php echo $whatsapp_number; ?>" class="login-social-btn phone" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
+                    <i class="fa-solid fa-phone"></i>
+                </a>
+
+                <a href="mailto:<?php echo $help_email; ?>" class="login-social-btn email" title="<?php echo $help_email; ?>">
+                    <i class="fa-regular fa-envelope"></i>
+                </a>
+            </div>
+
+            <!-- Footer Text -->
+            <div class="login-footer-text" id="loginFooterText">
+                <?php echo $t['no_account'] ?? "Don't have an account?"; ?> <a href="#" onclick="showAuthForm('register'); return false;"><?php echo $t['register_title']; ?></a>
+            </div>
+            <div class="login-footer-text" id="registerFooterText" style="display: none;">
+                <?php echo $t['have_account'] ?? 'Already have an account?'; ?> <a href="#" onclick="showAuthForm('login'); return false;"><?php echo $t['login_title']; ?></a>
+            </div>
+
         </div>
     </div>
 
@@ -3610,6 +3809,8 @@ function showAuthForm(form) {
     const registerForm = document.getElementById('registerForm');
     const loginToggle = document.getElementById('loginToggle');
     const registerToggle = document.getElementById('registerToggle');
+    const loginFooterText = document.getElementById('loginFooterText');
+    const registerFooterText = document.getElementById('registerFooterText');
 
     if (!loginForm || !registerForm) return;
 
@@ -3620,6 +3821,17 @@ function showAuthForm(form) {
 
     document.getElementById(form + 'Form').classList.add('active');
     document.getElementById(form + 'Toggle').classList.add('active');
+
+    // Toggle footer text
+    if (loginFooterText && registerFooterText) {
+        if (form === 'login') {
+            loginFooterText.style.display = 'block';
+            registerFooterText.style.display = 'none';
+        } else {
+            loginFooterText.style.display = 'none';
+            registerFooterText.style.display = 'block';
+        }
+    }
 }
 
 // Form validation feedback
