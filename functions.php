@@ -653,7 +653,33 @@ $text = [
         'fast_delivery' => 'خدمة توصيل سريعة وموثوقة لجميع احتياجاتك.',
         'available_24_7' => 'متاح على مدار الساعة',
         'location_mauritania' => 'نواكشوط، موريتانيا',
-        'secure_service' => 'خدمة آمنة'
+        'secure_service' => 'خدمة آمنة',
+
+        // GPS & Location
+        'gps_status' => 'حالة GPS',
+        'gps_enabled' => 'GPS مفعّل',
+        'gps_disabled' => 'GPS معطّل',
+        'enable_gps' => 'تفعيل GPS',
+        'disable_gps' => 'إيقاف GPS',
+        'turn_on_gps' => 'تشغيل GPS',
+        'gps_required' => 'موقع GPS مطلوب ليجدك السائقون',
+        'gps_driver_note' => 'فعّل GPS لرؤية الطلبات القريبة منك (7 كم)',
+        'enable_gps_first' => 'فعّل GPS أولاً',
+        'no_nearby_orders' => 'لا توجد طلبات قريبة (7 كم)',
+        'geolocation_not_supported' => 'متصفحك لا يدعم تحديد الموقع',
+        'location_error' => 'خطأ في تحديد الموقع',
+        'location_denied' => 'تم رفض الوصول للموقع. يرجى تفعيل GPS.',
+        'click_gps' => 'انقر على GPS لتحديد موقعك',
+        'pickup_location' => 'موقع الاستلام',
+        'updating_location' => 'جاري تحديث الموقع...',
+        'location_updated' => 'تم تحديث الموقع',
+        'gps_accuracy' => 'دقة الموقع',
+        'last_update' => 'آخر تحديث',
+        'new_order_nearby' => 'طلب جديد قريب!',
+        'accept' => 'قبول',
+        'decline' => 'رفض',
+        'no_phone' => 'لا يوجد هاتف',
+        'update_order' => 'تحديث الطلب'
     ],
 
     'fr' => [
@@ -981,7 +1007,33 @@ $text = [
         'fast_delivery' => 'Service de livraison rapide et fiable pour tous vos besoins.',
         'available_24_7' => 'Disponible 24h/24',
         'location_mauritania' => 'Nouakchott, Mauritanie',
-        'secure_service' => 'Service sécurisé'
+        'secure_service' => 'Service sécurisé',
+
+        // GPS & Location
+        'gps_status' => 'Statut GPS',
+        'gps_enabled' => 'GPS activé',
+        'gps_disabled' => 'GPS désactivé',
+        'enable_gps' => 'Activer GPS',
+        'disable_gps' => 'Désactiver GPS',
+        'turn_on_gps' => 'Allumer GPS',
+        'gps_required' => 'La localisation GPS est requise pour que les livreurs vous trouvent',
+        'gps_driver_note' => 'Activez le GPS pour voir les commandes à proximité (7 km)',
+        'enable_gps_first' => 'Activez le GPS d\'abord',
+        'no_nearby_orders' => 'Pas de commandes à proximité (7 km)',
+        'geolocation_not_supported' => 'La géolocalisation n\'est pas supportée par votre navigateur',
+        'location_error' => 'Erreur de localisation',
+        'location_denied' => 'Accès à la localisation refusé. Veuillez activer le GPS.',
+        'click_gps' => 'Cliquez sur GPS pour définir votre position',
+        'pickup_location' => 'Lieu de ramassage',
+        'updating_location' => 'Mise à jour de la position...',
+        'location_updated' => 'Position mise à jour',
+        'gps_accuracy' => 'Précision GPS',
+        'last_update' => 'Dernière mise à jour',
+        'new_order_nearby' => 'Nouvelle commande à proximité!',
+        'accept' => 'Accepter',
+        'decline' => 'Refuser',
+        'no_phone' => 'Pas de téléphone',
+        'update_order' => 'Mettre à jour'
     ]
 ];
 $t = $text[$lang];

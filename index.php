@@ -239,6 +239,14 @@ require_once 'actions.php';
             direction: ltr;
             unicode-bidi: embed;
             display: inline-block;
+            text-align: left;
+        }
+
+        /* Force phone inputs to always be LTR aligned */
+        input[type="tel"],
+        input[name*="phone"] {
+            direction: ltr !important;
+            text-align: left !important;
         }
 
         /* RTL: Ensure numbers in badges and stats display correctly */
@@ -1112,6 +1120,85 @@ require_once 'actions.php';
         .online-status { font-weight: 700; }
         .online-status.online { color: var(--success); }
         .online-status.offline { color: var(--gray-400); }
+
+        /* GPS Toggle & Status */
+        .gps-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            border: 1px solid var(--gray-100);
+            transition: var(--transition);
+        }
+        .gps-toggle:hover {
+            box-shadow: var(--shadow-sm);
+        }
+        .gps-toggle.active {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border-color: var(--success);
+        }
+        .gps-toggle-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        .gps-toggle-btn.off {
+            background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+            color: var(--gray-600);
+        }
+        .gps-toggle-btn.on {
+            background: linear-gradient(135deg, var(--success), #16a34a);
+            color: white;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+            animation: gpsPulse 2s infinite;
+        }
+        .gps-toggle-btn.loading {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        .gps-toggle-btn.loading i {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes gpsPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(34, 197, 94, 0.6), 0 0 0 8px rgba(34, 197, 94, 0.1); }
+        }
+        .gps-status-info {
+            flex-grow: 1;
+        }
+        .gps-status-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .gps-status-label.on { color: var(--success); }
+        .gps-status-label.off { color: var(--gray-500); }
+        .gps-status-detail {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+        .gps-accuracy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
+            color: #1e40af;
+        }
 
         /* ==========================================
            MISC COMPONENTS
@@ -2573,7 +2660,7 @@ function createNotificationSound() {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
                                 <button type="submit" name="admin_add_user" class="btn btn-primary">Add User</button>
                             </div>
                         </form>
@@ -2614,8 +2701,8 @@ function createNotificationSound() {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" name="admin_edit_user" class="btn btn-primary">Update</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
+                                <button type="submit" name="admin_edit_user" class="btn btn-primary"><i class="fas fa-save me-1"></i><?php echo $t['save']; ?></button>
                             </div>
                         </form>
                     </div>
@@ -2667,7 +2754,7 @@ function createNotificationSound() {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
                                 <button type="submit" name="admin_add_order" class="btn btn-success">Add Order</button>
                             </div>
                         </form>
@@ -2721,8 +2808,8 @@ function createNotificationSound() {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" name="admin_edit_order" class="btn btn-primary">Update Order</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
+                                <button type="submit" name="admin_edit_order" class="btn btn-primary"><i class="fas fa-save me-1"></i><?php echo $t['update_order'] ?? $t['save']; ?></button>
                             </div>
                         </form>
                     </div>
@@ -2735,6 +2822,26 @@ function createNotificationSound() {
                 <!-- LEFT COLUMN -->
                 <div class="col-lg-4 order-lg-last">
                     <?php if($role == 'driver'): ?>
+                    <!-- GPS Toggle Button -->
+                    <div class="gps-toggle" id="gpsToggle">
+                        <button type="button" class="gps-toggle-btn off" id="gpsToggleBtn" onclick="toggleDriverGPS()">
+                            <i class="fas fa-location-crosshairs"></i>
+                        </button>
+                        <div class="gps-status-info">
+                            <div class="gps-status-label off" id="gpsStatusLabel">
+                                <i class="fas fa-satellite-dish me-1"></i>
+                                <?php echo $t['gps_disabled'] ?? 'GPS Disabled'; ?>
+                            </div>
+                            <div class="gps-status-detail" id="gpsStatusDetail">
+                                <?php echo $t['gps_driver_note'] ?? 'Enable GPS to see nearby orders'; ?>
+                            </div>
+                        </div>
+                        <span class="gps-accuracy-badge" id="gpsAccuracyBadge" style="display: none;">
+                            <i class="fas fa-signal"></i>
+                            <span id="gpsAccuracyValue">--</span>m
+                        </span>
+                    </div>
+
                     <!-- Online/Offline Toggle -->
                     <div class="online-toggle mb-3">
                         <form method="POST" id="onlineToggleForm" class="d-flex align-items-center gap-3 w-100">
@@ -2749,7 +2856,7 @@ function createNotificationSound() {
                                     <?php echo $u['is_online'] ? ($t['online'] ?? 'Online') : ($t['offline'] ?? 'Offline'); ?>
                                 </span>
                                 <?php if(!isPhoneVerified($u)): ?>
-                                    <div class="small text-warning"><i class="fas fa-exclamation-circle"></i> <?php echo $t['verify_phone_first'] ?? 'Add phone number to go online'; ?></div>
+                                    <div class="small text-warning"><i class="fas fa-exclamation-circle me-1"></i><?php echo $t['verify_phone_first'] ?? 'Add phone number to go online'; ?></div>
                                 <?php endif; ?>
                             </div>
                             <input type="hidden" name="toggle_online" value="1">
@@ -2836,8 +2943,8 @@ function createNotificationSound() {
                                     <div class="input-group">
                                         <input type="text" name="address" id="pickupAddress" class="form-control bg-light border-0"
                                                placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" required readonly>
-                                        <button type="button" class="btn btn-success border-0 px-4" onclick="getPickupLocation()" id="gpsBtn">
-                                            <i class="fas fa-crosshairs"></i>
+                                        <button type="button" class="btn btn-success border-0 px-4" onclick="getPickupLocation()" id="gpsBtn" title="<?php echo $t['turn_on_gps'] ?? 'Turn on GPS'; ?>">
+                                            <i class="fas fa-location-crosshairs"></i>
                                         </button>
                                     </div>
                                     <input type="hidden" name="pickup_lat" id="pickupLat" required>
@@ -3241,11 +3348,11 @@ function createNotificationSound() {
                     <div class="d-flex flex-column gap-2">
                         <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="footer-link">
                             <i class="fab fa-whatsapp text-success"></i>
-                            <span class="phone-display">+222 41 31 29 31</span>
+                            <span class="phone-display"><?php echo $help_phone; ?></span>
                         </a>
-                        <a href="tel:+22241312931" class="footer-link">
+                        <a href="tel:+<?php echo $whatsapp_number; ?>" class="footer-link">
                             <i class="fas fa-phone"></i>
-                            <span class="phone-display">+222 41 31 29 31</span>
+                            <span class="phone-display"><?php echo $help_phone; ?></span>
                         </a>
                         <a href="mailto:<?php echo $help_email; ?>" class="footer-link">
                             <i class="fas fa-envelope"></i>
@@ -3264,7 +3371,7 @@ function createNotificationSound() {
                         <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="whatsapp-link" title="WhatsApp">
                             <i class="fab fa-whatsapp"></i>
                         </a>
-                        <a href="tel:+22241312931" class="phone-link" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
+                        <a href="tel:+<?php echo $whatsapp_number; ?>" class="phone-link" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
                             <i class="fas fa-phone"></i>
                         </a>
                         <a href="mailto:<?php echo $help_email; ?>" class="email-link" title="Email">
@@ -3311,16 +3418,16 @@ const isRTL = document.documentElement.dir === 'rtl';
 
 // Keep phone and number inputs LTR for correct display
 document.addEventListener('DOMContentLoaded', function() {
-    // Make phone inputs LTR for proper number display
+    // Make phone inputs LTR for proper number display (always left-aligned)
     document.querySelectorAll('input[type="tel"], input[name*="phone"]').forEach(input => {
         input.style.direction = 'ltr';
-        input.style.textAlign = isRTL ? 'right' : 'left';
+        input.style.textAlign = 'left';
     });
 
-    // Make number inputs LTR
+    // Make number inputs LTR (always left-aligned for proper number entry)
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.style.direction = 'ltr';
-        input.style.textAlign = isRTL ? 'right' : 'left';
+        input.style.textAlign = 'left';
     });
 
     // Ensure phone number displays stay LTR
@@ -3328,6 +3435,7 @@ document.addEventListener('DOMContentLoaded', function() {
         el.style.direction = 'ltr';
         el.style.unicodeBidi = 'embed';
         el.style.display = 'inline-block';
+        el.style.textAlign = 'left';
     });
 });
 
@@ -3635,10 +3743,120 @@ function updateMyLocation() {
     }
 }
 
+// ==========================================
+// DRIVER GPS TOGGLE FUNCTIONALITY
+// ==========================================
+let gpsEnabled = false;
+let gpsWatchId = null;
+
+function toggleDriverGPS() {
+    const btn = document.getElementById('gpsToggleBtn');
+    const toggle = document.getElementById('gpsToggle');
+    const label = document.getElementById('gpsStatusLabel');
+    const detail = document.getElementById('gpsStatusDetail');
+    const accuracyBadge = document.getElementById('gpsAccuracyBadge');
+
+    if (!navigator.geolocation) {
+        alert('<?php echo $t['geolocation_not_supported'] ?? 'Geolocation is not supported by your browser'; ?>');
+        return;
+    }
+
+    if (gpsEnabled) {
+        // Disable GPS
+        if (gpsWatchId !== null) {
+            navigator.geolocation.clearWatch(gpsWatchId);
+            gpsWatchId = null;
+        }
+        gpsEnabled = false;
+
+        btn.classList.remove('on', 'loading');
+        btn.classList.add('off');
+        toggle.classList.remove('active');
+        label.classList.remove('on');
+        label.classList.add('off');
+        label.innerHTML = '<i class="fas fa-satellite-dish me-1"></i><?php echo $t['gps_disabled'] ?? 'GPS Disabled'; ?>';
+        detail.textContent = '<?php echo $t['gps_driver_note'] ?? 'Enable GPS to see nearby orders'; ?>';
+        accuracyBadge.style.display = 'none';
+
+        // Reset driver location variables
+        driverLat = null;
+        driverLng = null;
+    } else {
+        // Enable GPS
+        btn.classList.remove('off', 'on');
+        btn.classList.add('loading');
+        btn.innerHTML = '<i class="fas fa-spinner"></i>';
+        label.innerHTML = '<i class="fas fa-satellite-dish me-1"></i><?php echo $t['updating_location'] ?? 'Updating location...'; ?>';
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                gpsEnabled = true;
+                driverLat = position.coords.latitude;
+                driverLng = position.coords.longitude;
+                const accuracy = Math.round(position.coords.accuracy);
+
+                btn.classList.remove('loading');
+                btn.classList.add('on');
+                btn.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                toggle.classList.add('active');
+                label.classList.remove('off');
+                label.classList.add('on');
+                label.innerHTML = '<i class="fas fa-check-circle me-1"></i><?php echo $t['gps_enabled'] ?? 'GPS Enabled'; ?>';
+                detail.textContent = '<?php echo $t['location_updated'] ?? 'Location updated'; ?>';
+                accuracyBadge.style.display = 'inline-flex';
+                document.getElementById('gpsAccuracyValue').textContent = accuracy;
+
+                // Update location on server
+                updateMyLocation();
+
+                // Start watching position
+                gpsWatchId = navigator.geolocation.watchPosition(
+                    (pos) => {
+                        driverLat = pos.coords.latitude;
+                        driverLng = pos.coords.longitude;
+                        const acc = Math.round(pos.coords.accuracy);
+                        document.getElementById('gpsAccuracyValue').textContent = acc;
+                        updateMyLocation();
+                    },
+                    () => {},
+                    { enableHighAccuracy: true, timeout: 30000, maximumAge: 5000 }
+                );
+
+                // Start fetching nearby orders
+                fetchNearbyOrders();
+            },
+            (error) => {
+                btn.classList.remove('loading');
+                btn.classList.add('off');
+                btn.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                label.innerHTML = '<i class="fas fa-exclamation-triangle me-1 text-warning"></i><?php echo $t['location_error'] ?? 'Location error'; ?>';
+
+                let msg = '<?php echo $t['location_error'] ?? 'Error getting location'; ?>';
+                if (error.code === error.PERMISSION_DENIED) {
+                    msg = '<?php echo $t['location_denied'] ?? 'Location access denied. Please enable GPS.'; ?>';
+                    detail.textContent = msg;
+                }
+                alert(msg);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+    }
+}
+
 // Start location updates for drivers
 <?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
 setInterval(updateMyLocation, 60000); // Update every minute
 updateMyLocation(); // Initial update
+
+// Auto-enable GPS if driver has existing location
+<?php if(!empty($u['last_lat']) && !empty($u['last_lng'])): ?>
+// Driver has previous location, auto-enable GPS
+setTimeout(() => {
+    if (!gpsEnabled) {
+        toggleDriverGPS();
+    }
+}, 1000);
+<?php endif; ?>
 
 // ==========================================
 // DRIVER ORDER NOTIFICATION BUBBLES
