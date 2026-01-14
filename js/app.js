@@ -296,52 +296,6 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
-// Live tracking for driver location (called periodically)
-let trackingInterval = null;
-
-function startLiveTracking(orderId, driverId, translations) {
-    if (trackingInterval) clearInterval(trackingInterval);
-
-    trackingInterval = setInterval(() => {
-        fetch(`api.php?action=get_driver_location&driver_id=${driverId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.lat && data.lng) {
-                    updateDriverDistance(data.lat, data.lng, translations);
-                }
-            })
-            .catch(() => {});
-    }, 30000); // Update every 30 seconds
-}
-
-function stopLiveTracking() {
-    if (trackingInterval) {
-        clearInterval(trackingInterval);
-        trackingInterval = null;
-    }
-}
-
-function updateDriverDistance(driverLat, driverLng, translations) {
-    // Get client's current position for distance calculation
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const clientLat = position.coords.latitude;
-                const clientLng = position.coords.longitude;
-                const distance = haversineDistance(clientLat, clientLng, driverLat, driverLng);
-                const time = Math.ceil(distance / 25 * 60); // 25 km/h in city
-
-                const distanceEl = document.getElementById('live-distance');
-                const timeEl = document.getElementById('live-eta');
-
-                if (distanceEl) distanceEl.textContent = distance.toFixed(1) + ' ' + (translations.km || 'km');
-                if (timeEl) timeEl.textContent = time + ' ' + (translations.min || 'min');
-            },
-            () => {}
-        );
-    }
-}
-
 // Update driver location (for drivers)
 function updateMyLocation() {
     if (navigator.geolocation) {
@@ -359,59 +313,6 @@ function updateMyLocation() {
             () => {}
         );
     }
-}
-
-// ==========================================
-// ANIMATED ORDER STATUS POPUP
-// ==========================================
-
-function showOrderStatusPopup(order, translations) {
-    // Remove existing popup
-    const existingPopup = document.getElementById('orderStatusPopup');
-    if (existingPopup) existingPopup.remove();
-
-    const statusConfig = {
-        'pending': { icon: 'clock', color: '#f59e0b', text: translations.st_pending || 'Pending', animation: 'pulse' },
-        'accepted': { icon: 'truck', color: '#3b82f6', text: translations.st_accepted || 'Accepted', animation: 'bounce' },
-        'picked_up': { icon: 'box', color: '#8b5cf6', text: translations.st_picked_up || 'Picked Up', animation: 'bounce' },
-        'delivered': { icon: 'check-double', color: '#10b981', text: translations.st_delivered || 'Delivered', animation: 'celebrate' },
-        'cancelled': { icon: 'times-circle', color: '#ef4444', text: translations.st_cancelled || 'Cancelled', animation: 'shake' }
-    };
-
-    const config = statusConfig[order.status] || statusConfig['pending'];
-
-    const popup = document.createElement('div');
-    popup.id = 'orderStatusPopup';
-    popup.className = 'order-status-popup';
-    popup.innerHTML = `
-        <div class="status-popup-content">
-            <div class="status-icon-wrapper ${config.animation}">
-                <i class="fas fa-${config.icon}" style="color: ${config.color}"></i>
-            </div>
-            <h4 class="status-title">${config.text}</h4>
-            <p class="status-order-id">${translations.order_number || 'Order'} #${order.id}</p>
-            ${order.driver_name ? `<p class="status-driver"><i class="fas fa-user"></i> ${order.driver_name}</p>` : ''}
-            <div class="status-progress">
-                <div class="progress-bar-animated" style="width: ${getProgressPercent(order.status)}%; background: ${config.color}"></div>
-            </div>
-            <button class="btn btn-light btn-sm mt-3" onclick="this.closest('.order-status-popup').remove()">
-                <i class="fas fa-times"></i> ${translations.close || 'Close'}
-            </button>
-        </div>
-    `;
-
-    document.body.appendChild(popup);
-
-    // Auto-close after 5 seconds
-    setTimeout(() => {
-        popup.classList.add('fade-out');
-        setTimeout(() => popup.remove(), 500);
-    }, 5000);
-}
-
-function getProgressPercent(status) {
-    const progress = { 'pending': 25, 'accepted': 50, 'picked_up': 75, 'delivered': 100, 'cancelled': 0 };
-    return progress[status] || 0;
 }
 
 // ==========================================
@@ -657,6 +558,14 @@ function _toggleDriverGPS(translations) {
     const detail = document.getElementById('gpsStatusDetail');
     const accuracyBadge = document.getElementById('gpsAccuracyBadge');
 
+    // New dashboard control panel elements
+    const controlBtn = document.getElementById('gpsControlBtn');
+    const controlIcon = document.getElementById('gpsControlIcon');
+    const controlLabel = document.getElementById('gpsControlLabel');
+    const controlHint = document.getElementById('gpsControlHint');
+    const statusBar = document.getElementById('gpsStatusBar');
+    const statusText = document.getElementById('gpsStatusText');
+
     if (!navigator.geolocation) {
         alert(translations.geolocation_not_supported || 'Geolocation is not supported by your browser');
         return;
@@ -683,17 +592,36 @@ function _toggleDriverGPS(translations) {
         if (detail) detail.textContent = translations.gps_driver_note || 'Enable GPS to see nearby orders';
         if (accuracyBadge) accuracyBadge.style.display = 'none';
 
+        // Update dashboard control panel
+        if (controlIcon) {
+            controlIcon.classList.remove('gps-on', 'gps-loading');
+            controlIcon.classList.add('gps-off');
+        }
+        if (controlLabel) controlLabel.textContent = translations.gps_disabled || 'GPS Off';
+        if (controlHint) controlHint.textContent = translations.tap_to_enable_gps || 'Tap to enable GPS';
+        if (statusBar) statusBar.style.display = 'none';
+        if (controlBtn) controlBtn.classList.remove('active');
+
         // Reset driver location variables
         driverLat = null;
         driverLng = null;
     } else {
-        // Enable GPS
+        // Enable GPS - show loading state
         if (btn) {
             btn.classList.remove('off', 'on');
             btn.classList.add('loading');
             btn.innerHTML = '<i class="fas fa-spinner"></i>';
         }
         if (label) label.innerHTML = '<i class="fas fa-satellite-dish me-1"></i>' + (translations.updating_location || 'Updating location...');
+
+        // Update dashboard control panel - loading state
+        if (controlIcon) {
+            controlIcon.classList.remove('gps-off', 'gps-on');
+            controlIcon.classList.add('gps-loading');
+            controlIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        }
+        if (controlLabel) controlLabel.textContent = translations.updating_location || 'Locating...';
+        if (controlHint) controlHint.textContent = translations.please_wait || 'Please wait...';
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -718,6 +646,18 @@ function _toggleDriverGPS(translations) {
                 const accuracyValue = document.getElementById('gpsAccuracyValue');
                 if (accuracyValue) accuracyValue.textContent = accuracy;
 
+                // Update dashboard control panel - enabled state
+                if (controlIcon) {
+                    controlIcon.classList.remove('gps-off', 'gps-loading');
+                    controlIcon.classList.add('gps-on');
+                    controlIcon.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                }
+                if (controlLabel) controlLabel.textContent = translations.gps_enabled || 'GPS On';
+                if (controlHint) controlHint.textContent = translations.location_active || 'Location active';
+                if (statusBar) statusBar.style.display = 'block';
+                if (statusText) statusText.textContent = (translations.accuracy || 'Accuracy') + ': ' + accuracy + 'm';
+                if (controlBtn) controlBtn.classList.add('active');
+
                 // Update location on server
                 updateMyLocation();
 
@@ -729,6 +669,8 @@ function _toggleDriverGPS(translations) {
                         const acc = Math.round(pos.coords.accuracy);
                         const accEl = document.getElementById('gpsAccuracyValue');
                         if (accEl) accEl.textContent = acc;
+                        const statusTextEl = document.getElementById('gpsStatusText');
+                        if (statusTextEl) statusTextEl.textContent = (translations.accuracy || 'Accuracy') + ': ' + acc + 'm';
                         updateMyLocation();
                     },
                     () => {},
@@ -746,10 +688,20 @@ function _toggleDriverGPS(translations) {
                 }
                 if (label) label.innerHTML = '<i class="fas fa-exclamation-triangle me-1 text-warning"></i>' + (translations.location_error || 'Location error');
 
+                // Update dashboard control panel - error state
+                if (controlIcon) {
+                    controlIcon.classList.remove('gps-on', 'gps-loading');
+                    controlIcon.classList.add('gps-off');
+                    controlIcon.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                }
+                if (controlLabel) controlLabel.textContent = translations.location_error || 'GPS Error';
+                if (controlHint) controlHint.textContent = translations.tap_to_retry || 'Tap to retry';
+
                 let msg = translations.location_error || 'Error getting location';
                 if (error.code === error.PERMISSION_DENIED) {
                     msg = translations.location_denied || 'Location access denied. Please enable GPS.';
                     if (detail) detail.textContent = msg;
+                    if (controlHint) controlHint.textContent = translations.enable_in_settings || 'Enable in settings';
                 }
                 alert(msg);
             },

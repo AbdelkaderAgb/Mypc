@@ -2297,3 +2297,180 @@
     overflow: hidden;
 }
 .driver-avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ==========================================
+   DRIVER CONTROL PANEL
+   ========================================== */
+.driver-control-btn {
+    background: var(--white);
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.driver-control-btn:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+.driver-control-btn.active {
+    border-color: var(--success);
+    background: rgba(0, 200, 81, 0.05);
+}
+.control-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: var(--transition);
+}
+.control-icon.online {
+    background: linear-gradient(135deg, var(--success), #16a34a);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 200, 81, 0.4);
+}
+.control-icon.offline {
+    background: var(--gray-200);
+    color: var(--gray-500);
+}
+.control-icon.gps-off {
+    background: var(--gray-200);
+    color: var(--gray-500);
+}
+.control-icon.gps-on {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 4px 15px rgba(88, 75, 246, 0.4);
+}
+.control-icon.gps-loading {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    color: white;
+    animation: pulse 1s infinite;
+}
+.control-info {
+    flex: 1;
+    min-width: 0;
+}
+.control-label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+.control-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-sub);
+    margin-top: 2px;
+}
+.gps-status-bar {
+    background: rgba(0, 200, 81, 0.1);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    border: 1px solid rgba(0, 200, 81, 0.2);
+}
+
+/* ==========================================
+   DRIVER RECHARGE CARD
+   ========================================== */
+.recharge-card {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+}
+.recharge-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+}
+.recharge-balance {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
+.recharge-label {
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+.recharge-btn {
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px 24px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+    text-decoration: none;
+}
+.recharge-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    color: var(--primary);
+}
+.recharge-btn.whatsapp {
+    background: #25D366;
+    color: white;
+}
+.recharge-btn.whatsapp:hover {
+    background: #128C7E;
+    color: white;
+}
+
+/* ==========================================
+   ORDER DISTANCE/TIME INFO
+   ========================================== */
+.order-distance-info {
+    background: linear-gradient(135deg, rgba(88, 75, 246, 0.1), rgba(6, 182, 212, 0.1));
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(88, 75, 246, 0.2);
+}
+.distance-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.distance-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+.distance-icon.route {
+    background: var(--primary);
+    color: white;
+}
+.distance-icon.time {
+    background: var(--accent);
+    color: white;
+}
+.distance-value {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+.distance-label {
+    font-size: 0.75rem;
+    color: var(--text-sub);
+}
