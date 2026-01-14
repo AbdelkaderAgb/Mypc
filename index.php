@@ -1039,13 +1039,51 @@ require_once 'actions.php';
                 </div>
             </div>
 
-            <!-- GPS Toggle (Hidden - controlled by nav button) -->
-            <div id="gpsToggle" style="display:none;">
-                <span class="gps-accuracy-badge" id="gpsAccuracyBadge" style="display: none;">
-                    <i class="fas fa-signal"></i>
-                    <span id="gpsAccuracyValue">--</span>m
-                </span>
+            <!-- DRIVER CONTROL PANEL -->
+            <div class="orders-container mb-3">
+                <div class="ultra-card">
+                    <div class="card-inner">
+                        <div class="row g-3">
+                            <!-- Online/Offline Toggle -->
+                            <div class="col-6">
+                                <div class="driver-control-btn <?php echo ($u['is_online'] ?? 0) ? 'active' : ''; ?>" onclick="document.getElementById('onlineSwitch').checked = !document.getElementById('onlineSwitch').checked; document.getElementById('onlineToggleForm').submit();">
+                                    <div class="control-icon <?php echo ($u['is_online'] ?? 0) ? 'online' : 'offline'; ?>">
+                                        <i class="fas fa-power-off"></i>
+                                    </div>
+                                    <div class="control-info">
+                                        <span class="control-label"><?php echo ($u['is_online'] ?? 0) ? ($t['online'] ?? 'Online') : ($t['offline'] ?? 'Offline'); ?></span>
+                                        <small class="control-hint"><?php echo ($u['is_online'] ?? 0) ? ($t['receiving_orders'] ?? 'Receiving orders') : ($t['tap_to_go_online'] ?? 'Tap to go online'); ?></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- GPS Toggle -->
+                            <div class="col-6">
+                                <div class="driver-control-btn" id="gpsControlBtn" onclick="toggleDriverGPS()">
+                                    <div class="control-icon gps-off" id="gpsControlIcon">
+                                        <i class="fas fa-location-crosshairs"></i>
+                                    </div>
+                                    <div class="control-info">
+                                        <span class="control-label" id="gpsControlLabel"><?php echo $t['gps_disabled'] ?? 'GPS Off'; ?></span>
+                                        <small class="control-hint" id="gpsControlHint"><?php echo $t['tap_to_enable_gps'] ?? 'Tap to enable GPS'; ?></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- GPS Accuracy Badge -->
+                        <div class="gps-status-bar mt-3" id="gpsStatusBar" style="display: none;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="text-success small"><i class="fas fa-satellite-dish me-1"></i><span id="gpsStatusText"><?php echo $t['location_active'] ?? 'Location active'; ?></span></span>
+                                <span class="badge bg-light text-dark" id="gpsAccuracyBadge" style="display: none;">
+                                    <i class="fas fa-signal me-1"></i><span id="gpsAccuracyValue">--</span>m
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Hidden elements for GPS toggle -->
+            <div id="gpsToggle" style="display:none;"></div>
             <div id="gpsStatusLabel" style="display:none;"></div>
             <div id="gpsStatusDetail" style="display:none;"></div>
 
@@ -1055,17 +1093,38 @@ require_once 'actions.php';
                 <input type="hidden" name="toggle_online" value="1">
             </form>
 
-            <?php if(($u['points'] ?? 0) < $points_cost_per_order): ?>
+            <!-- DRIVER RECHARGE DASHBOARD -->
             <div class="orders-container mb-3">
-                <div class="alert alert-danger d-flex align-items-center gap-2" id="lowBalanceWarning">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span><?php echo $t['err_low_bal']; ?></span>
-                    <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=Recharge%20User:%20<?php echo $u['username']; ?>" target="_blank" class="btn btn-sm btn-success ms-auto">
-                        <i class="fab fa-whatsapp me-1"></i><?php echo $t['recharge_wa']; ?>
-                    </a>
+                <div class="recharge-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <div class="recharge-label"><?php echo $t['your_balance'] ?? 'Your Balance'; ?></div>
+                            <div class="recharge-balance"><?php echo number_format($u['points'] ?? 0); ?> <small style="font-size: 0.5em;"><?php echo $t['pts'] ?? 'pts'; ?></small></div>
+                        </div>
+                        <div class="text-end">
+                            <small class="d-block opacity-75"><?php echo $t['cost_per_order'] ?? 'Cost per order'; ?></small>
+                            <span class="fw-bold"><?php echo $points_cost_per_order; ?> <?php echo $t['pts'] ?? 'pts'; ?></span>
+                        </div>
+                    </div>
+                    <?php if(($u['points'] ?? 0) < $points_cost_per_order): ?>
+                    <div class="alert alert-light mb-3 py-2 px-3" style="background: rgba(255,255,255,0.9); border-radius: 10px;">
+                        <small class="text-danger fw-bold"><i class="fas fa-exclamation-triangle me-1"></i><?php echo $t['err_low_bal'] ?? 'Low balance! Recharge to accept orders.'; ?></small>
+                    </div>
+                    <?php endif; ?>
+                    <div class="d-flex gap-2">
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode('طلب شحن رصيد' . "\n" . 'المستخدم: ' . ($u['serial_no'] ?? $u['username']) . "\n" . 'الرقم: ' . ($u['phone'] ?? '')); ?>" target="_blank" class="recharge-btn whatsapp flex-grow-1 justify-content-center">
+                            <i class="fab fa-whatsapp"></i>
+                            <?php echo $t['recharge_whatsapp'] ?? 'Recharge via WhatsApp'; ?>
+                        </a>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <small class="opacity-75">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <?php echo $t['recharge_note'] ?? 'Contact support to add credits to your account'; ?>
+                        </small>
+                    </div>
                 </div>
             </div>
-            <?php endif; ?>
             <?php endif; ?>
 
             <?php if($role == 'customer'): ?>
@@ -1250,7 +1309,47 @@ require_once 'actions.php';
                                 <?php echo $orderDistance; ?> <?php echo $t['km'] ?? 'km'; ?>
                             </div>
                             <?php endif; ?>
+                            <?php if($st != 'pending' && $st != 'cancelled' && !empty($row['distance_km'])): ?>
+                            <div class="tag-new tag-accepted">
+                                <i class="fas fa-route"></i>
+                                <?php echo number_format($row['distance_km'], 1); ?> <?php echo $t['km'] ?? 'km'; ?>
+                            </div>
+                            <div class="tag-new tag-pending">
+                                <i class="fas fa-clock"></i>
+                                ~<?php echo ceil($row['distance_km'] / 25 * 60); ?> <?php echo $t['min'] ?? 'min'; ?>
+                            </div>
+                            <?php endif; ?>
                         </div>
+
+                        <?php if($st != 'pending' && $st != 'cancelled' && $st != 'delivered' && !empty($row['distance_km'])): ?>
+                        <!-- Distance/Time Info -->
+                        <div class="order-distance-info">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="distance-item">
+                                        <div class="distance-icon route">
+                                            <i class="fas fa-route"></i>
+                                        </div>
+                                        <div>
+                                            <div class="distance-value"><?php echo number_format($row['distance_km'], 1); ?> km</div>
+                                            <div class="distance-label"><?php echo $t['distance'] ?? 'Distance'; ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="distance-item">
+                                        <div class="distance-icon time">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div>
+                                            <div class="distance-value">~<?php echo ceil($row['distance_km'] / 25 * 60); ?> min</div>
+                                            <div class="distance-label"><?php echo $t['estimated_time'] ?? 'Est. Time'; ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
 
                         <!-- Route Visual -->
                         <div class="route-row">

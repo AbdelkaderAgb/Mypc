@@ -377,9 +377,33 @@ if (isset($_SESSION['user'])) {
                 $order = $chk->fetch();
 
                 if ($order) {
-                    // Update order
-                    $upd = $conn->prepare("UPDATE orders1 SET status='accepted', driver_id=?, accepted_at=NOW(), points_cost=? WHERE id=?");
-                    $upd->execute([$uid, $points_cost_per_order, $oid]);
+                    // Get order pickup location and driver location to calculate distance
+                    $orderInfo = $conn->prepare("SELECT pickup_lat, pickup_lng FROM orders1 WHERE id=?");
+                    $orderInfo->execute([$oid]);
+                    $orderLoc = $orderInfo->fetch();
+
+                    $driverInfo = $conn->prepare("SELECT last_lat, last_lng FROM users1 WHERE id=?");
+                    $driverInfo->execute([$uid]);
+                    $driverLoc = $driverInfo->fetch();
+
+                    // Calculate distance if both locations are available
+                    $distance_km = null;
+                    if ($orderLoc && $driverLoc && !empty($orderLoc['pickup_lat']) && !empty($driverLoc['last_lat'])) {
+                        $lat1 = deg2rad($driverLoc['last_lat']);
+                        $lon1 = deg2rad($driverLoc['last_lng']);
+                        $lat2 = deg2rad($orderLoc['pickup_lat']);
+                        $lon2 = deg2rad($orderLoc['pickup_lng']);
+
+                        $dlat = $lat2 - $lat1;
+                        $dlon = $lon2 - $lon1;
+                        $a = sin($dlat/2) * sin($dlat/2) + cos($lat1) * cos($lat2) * sin($dlon/2) * sin($dlon/2);
+                        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+                        $distance_km = round(6371 * $c, 2); // Earth radius in km
+                    }
+
+                    // Update order with distance
+                    $upd = $conn->prepare("UPDATE orders1 SET status='accepted', driver_id=?, accepted_at=NOW(), points_cost=?, distance_km=? WHERE id=?");
+                    $upd->execute([$uid, $points_cost_per_order, $distance_km, $oid]);
 
                     // Deduct points from driver
                     $deduct = $conn->prepare("UPDATE users1 SET points = points - ?, total_orders = total_orders + 1 WHERE id=?");

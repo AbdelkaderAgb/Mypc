@@ -657,6 +657,14 @@ function _toggleDriverGPS(translations) {
     const detail = document.getElementById('gpsStatusDetail');
     const accuracyBadge = document.getElementById('gpsAccuracyBadge');
 
+    // New dashboard control panel elements
+    const controlBtn = document.getElementById('gpsControlBtn');
+    const controlIcon = document.getElementById('gpsControlIcon');
+    const controlLabel = document.getElementById('gpsControlLabel');
+    const controlHint = document.getElementById('gpsControlHint');
+    const statusBar = document.getElementById('gpsStatusBar');
+    const statusText = document.getElementById('gpsStatusText');
+
     if (!navigator.geolocation) {
         alert(translations.geolocation_not_supported || 'Geolocation is not supported by your browser');
         return;
@@ -683,17 +691,36 @@ function _toggleDriverGPS(translations) {
         if (detail) detail.textContent = translations.gps_driver_note || 'Enable GPS to see nearby orders';
         if (accuracyBadge) accuracyBadge.style.display = 'none';
 
+        // Update dashboard control panel
+        if (controlIcon) {
+            controlIcon.classList.remove('gps-on', 'gps-loading');
+            controlIcon.classList.add('gps-off');
+        }
+        if (controlLabel) controlLabel.textContent = translations.gps_disabled || 'GPS Off';
+        if (controlHint) controlHint.textContent = translations.tap_to_enable_gps || 'Tap to enable GPS';
+        if (statusBar) statusBar.style.display = 'none';
+        if (controlBtn) controlBtn.classList.remove('active');
+
         // Reset driver location variables
         driverLat = null;
         driverLng = null;
     } else {
-        // Enable GPS
+        // Enable GPS - show loading state
         if (btn) {
             btn.classList.remove('off', 'on');
             btn.classList.add('loading');
             btn.innerHTML = '<i class="fas fa-spinner"></i>';
         }
         if (label) label.innerHTML = '<i class="fas fa-satellite-dish me-1"></i>' + (translations.updating_location || 'Updating location...');
+
+        // Update dashboard control panel - loading state
+        if (controlIcon) {
+            controlIcon.classList.remove('gps-off', 'gps-on');
+            controlIcon.classList.add('gps-loading');
+            controlIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        }
+        if (controlLabel) controlLabel.textContent = translations.updating_location || 'Locating...';
+        if (controlHint) controlHint.textContent = translations.please_wait || 'Please wait...';
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -718,6 +745,18 @@ function _toggleDriverGPS(translations) {
                 const accuracyValue = document.getElementById('gpsAccuracyValue');
                 if (accuracyValue) accuracyValue.textContent = accuracy;
 
+                // Update dashboard control panel - enabled state
+                if (controlIcon) {
+                    controlIcon.classList.remove('gps-off', 'gps-loading');
+                    controlIcon.classList.add('gps-on');
+                    controlIcon.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                }
+                if (controlLabel) controlLabel.textContent = translations.gps_enabled || 'GPS On';
+                if (controlHint) controlHint.textContent = translations.location_active || 'Location active';
+                if (statusBar) statusBar.style.display = 'block';
+                if (statusText) statusText.textContent = (translations.accuracy || 'Accuracy') + ': ' + accuracy + 'm';
+                if (controlBtn) controlBtn.classList.add('active');
+
                 // Update location on server
                 updateMyLocation();
 
@@ -729,6 +768,8 @@ function _toggleDriverGPS(translations) {
                         const acc = Math.round(pos.coords.accuracy);
                         const accEl = document.getElementById('gpsAccuracyValue');
                         if (accEl) accEl.textContent = acc;
+                        const statusTextEl = document.getElementById('gpsStatusText');
+                        if (statusTextEl) statusTextEl.textContent = (translations.accuracy || 'Accuracy') + ': ' + acc + 'm';
                         updateMyLocation();
                     },
                     () => {},
@@ -746,10 +787,20 @@ function _toggleDriverGPS(translations) {
                 }
                 if (label) label.innerHTML = '<i class="fas fa-exclamation-triangle me-1 text-warning"></i>' + (translations.location_error || 'Location error');
 
+                // Update dashboard control panel - error state
+                if (controlIcon) {
+                    controlIcon.classList.remove('gps-on', 'gps-loading');
+                    controlIcon.classList.add('gps-off');
+                    controlIcon.innerHTML = '<i class="fas fa-location-crosshairs"></i>';
+                }
+                if (controlLabel) controlLabel.textContent = translations.location_error || 'GPS Error';
+                if (controlHint) controlHint.textContent = translations.tap_to_retry || 'Tap to retry';
+
                 let msg = translations.location_error || 'Error getting location';
                 if (error.code === error.PERMISSION_DENIED) {
                     msg = translations.location_denied || 'Location access denied. Please enable GPS.';
                     if (detail) detail.textContent = msg;
+                    if (controlHint) controlHint.textContent = translations.enable_in_settings || 'Enable in settings';
                 }
                 alert(msg);
             },
