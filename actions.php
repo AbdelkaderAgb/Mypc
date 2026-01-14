@@ -318,20 +318,52 @@ if (isset($_SESSION['user'])) {
         }
     }
 
-    // Customer Cancel Order
+    // Customer Cancel Order (pending or accepted - before pickup)
     if (isset($_GET['customer_cancel']) && $u['role'] == 'customer') {
         $order_id = (int)$_GET['customer_cancel'];
 
-        // Only allow cancellation of pending orders by the owner
-        $stmt = $conn->prepare("SELECT id FROM orders1 WHERE id=? AND (client_id=? OR customer_name=?) AND status='pending'");
+        // Allow cancellation of pending or accepted orders (before pickup)
+        $stmt = $conn->prepare("SELECT id, status, driver_id, points_cost FROM orders1 WHERE id=? AND (client_id=? OR customer_name=?) AND status IN ('pending', 'accepted')");
         $stmt->execute([$order_id, $uid, $u['username']]);
+        $order = $stmt->fetch();
 
-        if ($stmt->rowCount() > 0) {
+        if ($order) {
+            // If order was accepted, refund points to driver
+            if ($order['status'] == 'accepted' && $order['driver_id'] && $order['points_cost']) {
+                $conn->prepare("UPDATE users1 SET points = points + ? WHERE id=?")
+                     ->execute([$order['points_cost'], $order['driver_id']]);
+            }
             $conn->prepare("UPDATE orders1 SET status='cancelled', cancelled_at=NOW(), cancel_reason='Cancelled by customer' WHERE id=?")
                  ->execute([$order_id]);
             setFlash('success', $t['success_order_cancelled'] ?? 'Order cancelled');
         } else {
-            setFlash('error', $t['err_general'] ?? 'Cannot cancel this order');
+            setFlash('error', $t['err_cannot_cancel'] ?? 'Cannot cancel this order (already picked up)');
+        }
+        header("Location: index.php");
+        exit();
+    }
+
+    // Driver Cancel Order (accepted orders only - refund points)
+    if (isset($_GET['driver_cancel']) && $u['role'] == 'driver') {
+        $order_id = (int)$_GET['driver_cancel'];
+
+        $stmt = $conn->prepare("SELECT id, points_cost FROM orders1 WHERE id=? AND driver_id=? AND status='accepted'");
+        $stmt->execute([$order_id, $uid]);
+        $order = $stmt->fetch();
+
+        if ($order) {
+            // Refund points to driver
+            if ($order['points_cost']) {
+                $conn->prepare("UPDATE users1 SET points = points + ? WHERE id=?")
+                     ->execute([$order['points_cost'], $uid]);
+                $_SESSION['user']['points'] += $order['points_cost'];
+            }
+            // Reset order to pending
+            $conn->prepare("UPDATE orders1 SET status='pending', driver_id=NULL, accepted_at=NULL, points_cost=0, cancel_reason='Driver cancelled' WHERE id=?")
+                 ->execute([$order_id]);
+            setFlash('success', $t['order_released'] ?? 'Order released. Points refunded.');
+        } else {
+            setFlash('error', $t['err_cannot_cancel'] ?? 'Cannot cancel this order');
         }
         header("Location: index.php");
         exit();

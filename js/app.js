@@ -296,52 +296,6 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
-// Live tracking for driver location (called periodically)
-let trackingInterval = null;
-
-function startLiveTracking(orderId, driverId, translations) {
-    if (trackingInterval) clearInterval(trackingInterval);
-
-    trackingInterval = setInterval(() => {
-        fetch(`api.php?action=get_driver_location&driver_id=${driverId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.lat && data.lng) {
-                    updateDriverDistance(data.lat, data.lng, translations);
-                }
-            })
-            .catch(() => {});
-    }, 30000); // Update every 30 seconds
-}
-
-function stopLiveTracking() {
-    if (trackingInterval) {
-        clearInterval(trackingInterval);
-        trackingInterval = null;
-    }
-}
-
-function updateDriverDistance(driverLat, driverLng, translations) {
-    // Get client's current position for distance calculation
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const clientLat = position.coords.latitude;
-                const clientLng = position.coords.longitude;
-                const distance = haversineDistance(clientLat, clientLng, driverLat, driverLng);
-                const time = Math.ceil(distance / 25 * 60); // 25 km/h in city
-
-                const distanceEl = document.getElementById('live-distance');
-                const timeEl = document.getElementById('live-eta');
-
-                if (distanceEl) distanceEl.textContent = distance.toFixed(1) + ' ' + (translations.km || 'km');
-                if (timeEl) timeEl.textContent = time + ' ' + (translations.min || 'min');
-            },
-            () => {}
-        );
-    }
-}
-
 // Update driver location (for drivers)
 function updateMyLocation() {
     if (navigator.geolocation) {
@@ -359,59 +313,6 @@ function updateMyLocation() {
             () => {}
         );
     }
-}
-
-// ==========================================
-// ANIMATED ORDER STATUS POPUP
-// ==========================================
-
-function showOrderStatusPopup(order, translations) {
-    // Remove existing popup
-    const existingPopup = document.getElementById('orderStatusPopup');
-    if (existingPopup) existingPopup.remove();
-
-    const statusConfig = {
-        'pending': { icon: 'clock', color: '#f59e0b', text: translations.st_pending || 'Pending', animation: 'pulse' },
-        'accepted': { icon: 'truck', color: '#3b82f6', text: translations.st_accepted || 'Accepted', animation: 'bounce' },
-        'picked_up': { icon: 'box', color: '#8b5cf6', text: translations.st_picked_up || 'Picked Up', animation: 'bounce' },
-        'delivered': { icon: 'check-double', color: '#10b981', text: translations.st_delivered || 'Delivered', animation: 'celebrate' },
-        'cancelled': { icon: 'times-circle', color: '#ef4444', text: translations.st_cancelled || 'Cancelled', animation: 'shake' }
-    };
-
-    const config = statusConfig[order.status] || statusConfig['pending'];
-
-    const popup = document.createElement('div');
-    popup.id = 'orderStatusPopup';
-    popup.className = 'order-status-popup';
-    popup.innerHTML = `
-        <div class="status-popup-content">
-            <div class="status-icon-wrapper ${config.animation}">
-                <i class="fas fa-${config.icon}" style="color: ${config.color}"></i>
-            </div>
-            <h4 class="status-title">${config.text}</h4>
-            <p class="status-order-id">${translations.order_number || 'Order'} #${order.id}</p>
-            ${order.driver_name ? `<p class="status-driver"><i class="fas fa-user"></i> ${order.driver_name}</p>` : ''}
-            <div class="status-progress">
-                <div class="progress-bar-animated" style="width: ${getProgressPercent(order.status)}%; background: ${config.color}"></div>
-            </div>
-            <button class="btn btn-light btn-sm mt-3" onclick="this.closest('.order-status-popup').remove()">
-                <i class="fas fa-times"></i> ${translations.close || 'Close'}
-            </button>
-        </div>
-    `;
-
-    document.body.appendChild(popup);
-
-    // Auto-close after 5 seconds
-    setTimeout(() => {
-        popup.classList.add('fade-out');
-        setTimeout(() => popup.remove(), 500);
-    }, 5000);
-}
-
-function getProgressPercent(status) {
-    const progress = { 'pending': 25, 'accepted': 50, 'picked_up': 75, 'delivered': 100, 'cancelled': 0 };
-    return progress[status] || 0;
 }
 
 // ==========================================

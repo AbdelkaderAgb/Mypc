@@ -1398,13 +1398,18 @@ require_once 'actions.php';
                             </form>
 
                             <?php elseif($st == 'accepted' && $row['driver_id'] == $uid): ?>
-                            <form method="POST">
-                                <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                <button type="submit" name="pickup_order" class="slider-btn-container info w-100">
-                                    <div class="slider-thumb"><i class="fa-solid fa-box"></i></div>
-                                    <div class="slider-text"><?php echo $t['driver_pickup'] ?? 'Picked Up'; ?></div>
-                                </button>
-                            </form>
+                            <div class="d-flex gap-2 w-100">
+                                <form method="POST" class="flex-grow-1">
+                                    <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" name="pickup_order" class="slider-btn-container info w-100">
+                                        <div class="slider-thumb"><i class="fa-solid fa-box"></i></div>
+                                        <div class="slider-text"><?php echo $t['driver_pickup'] ?? 'Picked Up'; ?></div>
+                                    </button>
+                                </form>
+                                <a href="?driver_cancel=<?php echo $row['id']; ?>" class="btn btn-outline-warning" onclick="return confirm('<?php echo $t['confirm_release'] ?? 'Release this order? Points will be refunded.'; ?>')" style="border-radius: 12px; padding: 12px 16px;">
+                                    <i class="fas fa-undo"></i>
+                                </a>
+                            </div>
 
                             <?php elseif($st == 'picked_up' && $row['driver_id'] == $uid): ?>
                             <form method="POST" class="pin-input-row">
@@ -1423,15 +1428,25 @@ require_once 'actions.php';
                                 <div class="slider-thumb"><i class="fa-solid fa-times"></i></div>
                                 <div class="slider-text"><?php echo $t['cancel_order'] ?? 'Cancel Order'; ?></div>
                             </a>
-                            <?php elseif($st == 'accepted' || $st == 'picked_up'): ?>
+                            <?php elseif($st == 'accepted'): ?>
+                            <div class="d-flex gap-2 w-100">
+                                <div class="slider-btn-container info flex-grow-1" onclick="showOrderTracking(<?php echo htmlspecialchars(json_encode($row)); ?>)" style="cursor:pointer;">
+                                    <div class="slider-thumb"><i class="fa-solid fa-location-dot"></i></div>
+                                    <div class="slider-text"><?php echo $t['track_order'] ?? 'Track'; ?></div>
+                                </div>
+                                <a href="?customer_cancel=<?php echo $row['id']; ?>" class="btn btn-outline-danger" onclick="return confirm('<?php echo $t['confirm_cancel'] ?? 'Cancel this order?'; ?>')" style="border-radius: 12px; padding: 12px 16px;">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                            <?php elseif($st == 'picked_up'): ?>
                             <div class="slider-btn-container info w-100" onclick="showOrderTracking(<?php echo htmlspecialchars(json_encode($row)); ?>)" style="cursor:pointer;">
                                 <div class="slider-thumb"><i class="fa-solid fa-location-dot"></i></div>
                                 <div class="slider-text"><?php echo $t['track_order'] ?? 'Track Order'; ?></div>
                             </div>
-                            <?php elseif($st == 'delivered' && empty($row['rating'])): ?>
+                            <?php elseif($st == 'delivered' && empty($row['rated_by_customer'])): ?>
                             <form method="POST" class="order-actions-row">
                                 <input type="hidden" name="order_id" value="<?php echo $row['id']; ?>">
-                                <select name="rating" class="form-select" required style="border-radius: 12px;">
+                                <select name="score" class="form-select" required style="border-radius: 12px;">
                                     <option value=""><?php echo $t['rate_driver'] ?? 'Rate Driver'; ?></option>
                                     <option value="5">⭐⭐⭐⭐⭐ (5)</option>
                                     <option value="4">⭐⭐⭐⭐ (4)</option>
