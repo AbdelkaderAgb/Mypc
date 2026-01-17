@@ -294,6 +294,13 @@ if (isset($_SESSION['user'])) {
         $address = mb_convert_encoding(trim($_POST['address'] ?? $u['address'] ?? ''), 'UTF-8', 'UTF-8');
         $client_phone = preg_replace('/[^0-9]/', '', $_POST['client_phone'] ?? '');
 
+        // Validate order details
+        if (empty($details) || strlen($details) < 3) {
+            setFlash('error', $t['details_required'] ?? 'Please provide order details (minimum 3 characters)');
+            header("Location: index.php");
+            exit();
+        }
+
         // GPS pickup coordinates
         $pickup_lat = !empty($_POST['pickup_lat']) ? floatval($_POST['pickup_lat']) : null;
         $pickup_lng = !empty($_POST['pickup_lng']) ? floatval($_POST['pickup_lng']) : null;
@@ -301,6 +308,20 @@ if (isset($_SESSION['user'])) {
         // Validate GPS location is provided
         if (!$pickup_lat || !$pickup_lng) {
             setFlash('error', $t['gps_required'] ?? 'Please set your GPS location for pickup');
+            header("Location: index.php");
+            exit();
+        }
+
+        // Validate GPS coordinates are within valid ranges
+        if ($pickup_lat < -90 || $pickup_lat > 90 || $pickup_lng < -180 || $pickup_lng > 180) {
+            setFlash('error', $t['invalid_gps'] ?? 'Invalid GPS coordinates. Please try again.');
+            header("Location: index.php");
+            exit();
+        }
+
+        // Validate phone number (Mauritanian format: 8 digits)
+        if (!empty($client_phone) && strlen($client_phone) != 8) {
+            setFlash('error', $t['invalid_phone'] ?? 'Phone number must be exactly 8 digits');
             header("Location: index.php");
             exit();
         }
@@ -382,8 +403,8 @@ if (isset($_SESSION['user'])) {
                      ->execute([$order['points_cost'], $uid]);
                 $_SESSION['user']['points'] += $order['points_cost'];
             }
-            // Reset order to pending
-            $conn->prepare("UPDATE orders1 SET status='pending', driver_id=NULL, accepted_at=NULL, points_cost=0, cancel_reason='Driver cancelled' WHERE id=?")
+            // Reset order to pending (keep original points_cost for audit trail)
+            $conn->prepare("UPDATE orders1 SET status='pending', driver_id=NULL, accepted_at=NULL, cancel_reason='Driver cancelled' WHERE id=?")
                  ->execute([$order_id]);
             setFlash('success', $t['order_released'] ?? 'Order released. Points refunded.');
         } else {

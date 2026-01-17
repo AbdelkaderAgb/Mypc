@@ -924,3 +924,86 @@ function initDriverFeatures(translations, hasExistingLocation) {
         { enableHighAccuracy: true }
     );
 }
+
+// ==========================================
+// FORM LOADING STATES
+// ==========================================
+
+// Add loading state to all forms on submit
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('form');
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            // Don't add loading state to forms that shouldn't have it
+            if (form.classList.contains('no-loading')) {
+                return;
+            }
+
+            // Add loading class to form
+            form.classList.add('submitting');
+
+            // Find submit button and add loading state
+            const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+            if (submitBtn) {
+                submitBtn.classList.add('btn-loading');
+                submitBtn.disabled = true;
+
+                // Store original text
+                if (!submitBtn.dataset.originalText) {
+                    submitBtn.dataset.originalText = submitBtn.innerHTML;
+                }
+            }
+
+            // Show loading overlay for important forms
+            if (form.id === 'newOrderForm' || form.classList.contains('show-overlay')) {
+                showLoadingOverlay();
+            }
+        });
+    });
+
+    // Modal forms
+    const modalForms = document.querySelectorAll('.modal form');
+    modalForms.forEach(form => {
+        form.addEventListener('submit', function() {
+            showLoadingOverlay();
+        });
+    });
+});
+
+// Loading overlay functions
+function showLoadingOverlay() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+        overlay.classList.add('active');
+    }
+}
+
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+}
+
+// Hide loading overlay on page load (in case of redirect back)
+window.addEventListener('load', function() {
+    hideLoadingOverlay();
+});
+
+// ==========================================
+// ENHANCED ERROR HANDLING
+// ==========================================
+
+// Auto-hide flash messages after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-20px)';
+            setTimeout(() => alert.remove(), 500);
+        }, 5000);
+    });
+});

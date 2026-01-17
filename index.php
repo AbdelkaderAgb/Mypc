@@ -37,6 +37,11 @@ require_once 'actions.php';
 <!-- Notification Toast Container -->
 <div id="notificationContainer" class="notification-toast <?php echo $dir == 'rtl' ? 'rtl' : ''; ?>"></div>
 
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
 <!-- Order Notification Bubbles Container (for drivers) -->
 <?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
 <div id="orderBubbleContainer" class="order-notification-container"></div>
@@ -1443,9 +1448,10 @@ require_once 'actions.php';
                         $res = $stmt;
                     }
                 } elseif($role == 'customer') {
-                    $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
-                    $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
-                    $res = $conn->query($sql);
+                    $sql = "SELECT * FROM orders1 WHERE customer_name = ? OR client_id = ? ORDER BY id DESC LIMIT 50";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute([$u['username'], $uid]);
+                    $res = $stmt;
                 } else {
                     $sql = "SELECT * FROM orders1 ORDER BY id DESC LIMIT 50";
                     $res = $conn->query($sql);

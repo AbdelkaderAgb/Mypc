@@ -127,7 +127,7 @@ switch ($action) {
                 FROM orders1
                 WHERE driver_id = ?
             ");
-            $driverStats->execute([$userId, $userId]);
+            $driverStats->execute([$user['id'], $user['id']]);
             $stats = $driverStats->fetch(PDO::FETCH_ASSOC);
 
             $completedOrders = $stats['completed_orders'] ?? 0;

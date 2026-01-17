@@ -2957,3 +2957,349 @@
     font-size: 0.75rem;
     color: var(--text-sub);
 }
+
+/* ==========================================
+   LOADING STATES AND BUTTON IMPROVEMENTS
+   ========================================== */
+
+/* Button Loading State */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: button-spin 0.6s linear infinite;
+}
+
+@keyframes button-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Form Submit Loading */
+form.submitting button[type="submit"] {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+form.submitting button[type="submit"]::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: button-spin 0.6s linear infinite;
+}
+
+/* ==========================================
+   CONSISTENT FORM STYLING
+   ========================================== */
+
+/* Standard Form Control Styling */
+.form-control,
+.form-select {
+    border-radius: var(--radius);
+    border: 2px solid var(--gray-200);
+    padding: 12px 16px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(88, 75, 246, 0.1);
+    outline: none;
+}
+
+.form-control:disabled,
+.form-select:disabled {
+    background-color: var(--gray-100);
+    cursor: not-allowed;
+}
+
+/* Form Labels */
+.form-label {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-label.required::after {
+    content: ' *';
+    color: var(--danger);
+}
+
+/* Input Groups */
+.input-group-text {
+    background: var(--gray-100);
+    border: 2px solid var(--gray-200);
+    border-right: none;
+    color: var(--text-sub);
+    font-weight: 600;
+}
+
+[dir="rtl"] .input-group-text {
+    border-right: 2px solid var(--gray-200);
+    border-left: none;
+}
+
+.input-group .form-control {
+    border-left: none;
+}
+
+[dir="rtl"] .input-group .form-control {
+    border-left: 2px solid var(--gray-200);
+    border-right: none;
+}
+
+/* ==========================================
+   FLASH MESSAGES / ALERTS POSITIONING
+   ========================================== */
+
+.alert {
+    border-radius: var(--radius-lg);
+    border: none;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #00C851 0%, #00a844 100%);
+    color: white;
+}
+
+.alert-error,
+.alert-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    color: white;
+}
+
+/* ==========================================
+   CONSISTENT BUTTON SIZING
+   ========================================== */
+
+.btn {
+    border-radius: var(--radius);
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+}
+
+.btn-lg {
+    padding: 16px 32px;
+    font-size: 1.125rem;
+}
+
+/* Button Variants */
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(88, 75, 246, 0.3);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #00a844;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 200, 81, 0.3);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Outline Button Variants */
+.btn-outline-primary {
+    background: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-outline-success {
+    background: transparent;
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.btn-outline-success:hover {
+    background: var(--success);
+    color: white;
+}
+
+.btn-outline-danger {
+    background: transparent;
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.btn-outline-danger:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* ==========================================
+   MODAL RESPONSIVENESS
+   ========================================== */
+
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .modal-content {
+        border-radius: var(--radius-lg);
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 16px;
+    }
+
+    .modal-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* ==========================================
+   CARD SPACING CONSISTENCY
+   ========================================== */
+
+.ultra-card {
+    margin-bottom: 20px;
+}
+
+.card-inner {
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .ultra-card {
+        margin-bottom: 16px;
+    }
+
+    .card-inner {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ultra-card {
+        margin-bottom: 12px;
+    }
+
+    .card-inner {
+        padding: 14px;
+    }
+}
+
+/* ==========================================
+   LOADING OVERLAY
+   ========================================== */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: button-spin 0.8s linear infinite;
+}
