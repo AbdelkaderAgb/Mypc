@@ -65,6 +65,8 @@ CREATE TABLE IF NOT EXISTS orders1 (
     delivered_at TIMESTAMP NULL,
     cancelled_at TIMESTAMP NULL,
     cancel_reason TEXT DEFAULT NULL,
+    promo_code VARCHAR(50) DEFAULT NULL COMMENT 'Applied promo code',
+    discount_amount DECIMAL(10,2) DEFAULT 0 COMMENT 'Discount amount applied',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -118,6 +120,45 @@ CREATE TABLE IF NOT EXISTS order_tracking (
 
     INDEX idx_order_time (order_id, recorded_at DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================
+-- 6. PROMO CODES TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS promo_codes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE COMMENT 'Promo code (e.g., SUMMER2026)',
+    discount_type ENUM('percentage', 'fixed') NOT NULL COMMENT 'Percentage or fixed amount',
+    discount_value DECIMAL(10,2) NOT NULL COMMENT 'Value (e.g., 20 for 20% or 50 for 50 MRU)',
+    max_uses INT DEFAULT NULL COMMENT 'Maximum uses (NULL = unlimited)',
+    used_count INT DEFAULT 0 COMMENT 'Number of times used',
+    valid_from TIMESTAMP NULL COMMENT 'Start date',
+    valid_until TIMESTAMP NULL COMMENT 'End date',
+    is_active TINYINT(1) DEFAULT 1 COMMENT 'Active status',
+    created_by INT DEFAULT NULL COMMENT 'Admin who created it',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    INDEX idx_code (code),
+    INDEX idx_active (is_active),
+    INDEX idx_valid (valid_from, valid_until)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- 7. PROMO CODE USAGE TRACKING
+-- ============================================
+CREATE TABLE IF NOT EXISTS promo_code_uses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    promo_code_id INT NOT NULL COMMENT 'Link to promo_codes.id',
+    user_id INT NOT NULL COMMENT 'Customer who used the code',
+    order_id INT NOT NULL COMMENT 'Order where code was used',
+    discount_amount DECIMAL(10,2) NOT NULL COMMENT 'Actual discount applied',
+    used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    INDEX idx_promo_code (promo_code_id),
+    INDEX idx_user (user_id),
+    INDEX idx_order (order_id),
+    UNIQUE KEY unique_user_promo (user_id, promo_code_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
 -- DEFAULT USERS
