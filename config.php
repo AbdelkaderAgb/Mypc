@@ -112,6 +112,8 @@ try {
         delivered_at TIMESTAMP NULL,
         cancelled_at TIMESTAMP NULL,
         cancel_reason TEXT DEFAULT NULL,
+        promo_code VARCHAR(50) DEFAULT NULL,
+        discount_amount DECIMAL(10,2) DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         INDEX idx_status (status),

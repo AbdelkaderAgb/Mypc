@@ -929,13 +929,19 @@
         }
         .input-group-text {
             border: 2px solid var(--gray-200);
-            border-right: none;
             background: var(--gray-50);
             color: var(--gray-600);
             font-weight: 600;
+            border-radius: var(--radius) 0 0 var(--radius);
         }
         .input-group .form-control {
-            border-left: none;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+        .input-group .form-control:first-child {
+            border-radius: var(--radius) 0 0 var(--radius);
+        }
+        .input-group .btn {
+            border-radius: 0 var(--radius) var(--radius) 0;
         }
         .input-group:focus-within .input-group-text {
             border-color: var(--primary);
