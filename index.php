@@ -1552,13 +1552,13 @@ require_once 'actions.php';
                                 </label>
                                 <div class="input-group">
                                     <input type="text" name="address" id="pickupAddress" class="form-control"
-                                           placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" required readonly>
+                                           placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" readonly>
                                     <button type="button" class="btn btn-success px-4" onclick="getPickupLocation()" id="gpsBtn" title="<?php echo $t['turn_on_gps'] ?? 'Turn on GPS'; ?>">
                                         <i class="fas fa-location-crosshairs"></i>
                                     </button>
                                 </div>
-                                <input type="hidden" name="pickup_lat" id="pickupLat" required>
-                                <input type="hidden" name="pickup_lng" id="pickupLng" required>
+                                <input type="hidden" name="pickup_lat" id="pickupLat">
+                                <input type="hidden" name="pickup_lng" id="pickupLng">
                                 <small class="text-muted"><i class="fas fa-info-circle me-1"></i><?php echo $t['gps_required'] ?? 'GPS location is required for drivers to find you'; ?></small>
                             </div>
 
@@ -1576,7 +1576,7 @@ require_once 'actions.php';
                                 <small id="promoFeedback" class="text-muted"></small>
                             </div>
 
-                            <button type="submit" name="add_order" class="slider-btn-container w-100" style="border: none; background: none; padding: 0; cursor: pointer;">
+                            <button type="submit" name="add_order" class="slider-btn-container w-100">
                                 <div class="slider-thumb"><i class="fa-solid fa-paper-plane"></i></div>
                                 <div class="slider-text"><?php echo $t['btn_publish']; ?></div>
                             </button>
