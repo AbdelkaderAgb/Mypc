@@ -253,7 +253,6 @@ function _showOrderTracking(order, translations) {
     // Set contact buttons
     if (order.driver_phone) {
         document.getElementById('tracking-call-btn').href = 'tel:+222' + order.driver_phone;
-        document.getElementById('tracking-whatsapp-btn').href = 'https://wa.me/222' + order.driver_phone;
     }
 
     // Set order details

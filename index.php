@@ -121,10 +121,6 @@ require_once 'actions.php';
 
             <!-- Contact Hub -->
             <div class="login-contact-hub">
-                <a href="https://wa.me/<?php echo $whatsapp_number; ?>" class="login-social-btn whatsapp" title="WhatsApp" target="_blank">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </a>
-
                 <a href="tel:+<?php echo $whatsapp_number; ?>" class="login-social-btn phone" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
                     <i class="fa-solid fa-phone"></i>
                 </a>
@@ -1112,9 +1108,9 @@ require_once 'actions.php';
                     </div>
                     <?php endif; ?>
                     <div class="d-flex gap-2">
-                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode('طلب شحن رصيد' . "\n" . 'المستخدم: ' . ($u['serial_no'] ?? $u['username']) . "\n" . 'الرقم: ' . ($u['phone'] ?? '')); ?>" target="_blank" class="recharge-btn whatsapp flex-grow-1 justify-content-center">
-                            <i class="fab fa-whatsapp"></i>
-                            <?php echo $t['recharge_whatsapp'] ?? 'Recharge via WhatsApp'; ?>
+                        <a href="tel:+<?php echo $whatsapp_number; ?>" class="recharge-btn phone flex-grow-1 justify-content-center">
+                            <i class="fas fa-phone"></i>
+                            <?php echo $t['call_to_recharge'] ?? 'Call to Recharge'; ?>
                         </a>
                     </div>
                     <div class="mt-3 text-center">
@@ -1476,7 +1472,6 @@ require_once 'actions.php';
                     <i class="fa-solid fa-power-off"></i>
                 </div>
 
-                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=Recharge%20User:%20<?php echo $u['username']; ?>" target="_blank" class="nav-icon"><i class="fa-solid fa-wallet"></i></a>
                 <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
             </nav>
             <?php else: ?>
@@ -1484,8 +1479,8 @@ require_once 'actions.php';
                 <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
                 <a href="#" class="nav-icon" onclick="document.getElementById('newOrderForm').scrollIntoView({behavior: 'smooth'})"><i class="fa-solid fa-plus"></i></a>
 
-                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>" target="_blank" class="nav-center-btn">
-                    <i class="fab fa-whatsapp"></i>
+                <a href="tel:+<?php echo $whatsapp_number; ?>" class="nav-center-btn">
+                    <i class="fas fa-phone"></i>
                 </a>
 
                 <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
@@ -1545,12 +1540,9 @@ require_once 'actions.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-3 d-flex gap-2">
-                                <a href="#" id="tracking-call-btn" class="btn btn-success btn-sm flex-grow-1 rounded-pill">
+                            <div class="mt-3">
+                                <a href="#" id="tracking-call-btn" class="btn btn-success btn-sm w-100 rounded-pill">
                                     <i class="fas fa-phone me-1"></i> <?php echo $t['call_driver'] ?? 'Call'; ?>
-                                </a>
-                                <a href="#" id="tracking-whatsapp-btn" class="btn btn-outline-success btn-sm flex-grow-1 rounded-pill">
-                                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
                                 </a>
                             </div>
                         </div>
