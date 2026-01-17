@@ -3,13 +3,24 @@
  * Action Handlers
  * Enhanced Delivery Pro System v2.0
  * This file contains all business logic for admin, driver, and customer actions
+ * 
+ * FIXES APPLIED:
+ * 1. Fixed sprintf() formatting for flash messages
+ * 2. Fixed SQL injection vulnerability in auto-expire query
+ * 3. Added input sanitization
+ * 4. Fixed session refresh consistency
+ * 5. Added missing variable checks
+ * 6. Fixed promo code discount message formatting
  */
 
 // ==========================================
 // AUTO-EXPIRE OLD PENDING ORDERS (3 hours)
 // ==========================================
 try {
-    $conn->exec("UPDATE orders1 SET status='cancelled', cancelled_at=NOW(), cancel_reason='Auto-expired: No driver accepted within 3 hours' WHERE status='pending' AND created_at < DATE_SUB(NOW(), INTERVAL {$order_expiry_hours} HOUR)");
+    // FIX: Use prepared statement instead of direct variable interpolation to prevent SQL injection
+    $expiry_hours = isset($order_expiry_hours) ? (int)$order_expiry_hours : 3;
+    $stmt = $conn->prepare("UPDATE orders1 SET status='cancelled', cancelled_at=NOW(), cancel_reason='Auto-expired: No driver accepted within time limit' WHERE status='pending' AND created_at < DATE_SUB(NOW(), INTERVAL ? HOUR)");
+    $stmt->execute([$expiry_hours]);
 } catch (Exception $e) {
     // Silently fail - table might not exist yet
 }
@@ -21,10 +32,10 @@ if (isset($_SESSION['user'])) {
     // PROFILE UPDATE (All Users)
     // ==========================================
     if (isset($_POST['update_profile'])) {
-        $full_name = trim($_POST['full_name']);
-        $phone = trim($_POST['phone']);
-        $email = trim($_POST['email']);
-        $address = trim($_POST['profile_address']);
+        $full_name = htmlspecialchars(trim($_POST['full_name'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $phone = preg_replace('/[^0-9]/', '', trim($_POST['phone'] ?? ''));
+        $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+        $address = htmlspecialchars(trim($_POST['profile_address'] ?? ''), ENT_QUOTES, 'UTF-8');
         $new_password = trim($_POST['new_password'] ?? '');
         $confirm_new_password = trim($_POST['confirm_new_password'] ?? '');
 
@@ -71,7 +82,7 @@ if (isset($_SESSION['user'])) {
         // Refresh session with updated user data
         $stmt = $conn->prepare("SELECT * FROM users1 WHERE id=?");
         $stmt->execute([$uid]);
-        $_SESSION['user'] = $stmt->fetch();
+        $_SESSION['user'] = $stmt->fetch(PDO::FETCH_ASSOC);
 
         setFlash('success', $t['success_profile'] ?? 'Profile updated successfully');
         header("Location: index.php?settings=1");
@@ -108,10 +119,17 @@ if (isset($_SESSION['user'])) {
 
         // Add User (with hashed password and serial number)
         if (isset($_POST['admin_add_user'])) {
-            $username = trim($_POST['username']);
-            $password = trim($_POST['password']);
-            $role = $_POST['role'];
-            $points = (int)$_POST['points'];
+            $username = htmlspecialchars(trim($_POST['username'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $password = trim($_POST['password'] ?? '');
+            $role = in_array($_POST['role'] ?? '', ['admin', 'driver', 'customer']) ? $_POST['role'] : 'customer';
+            $points = max(0, (int)($_POST['points'] ?? 0));
+
+            // FIX: Validate required fields
+            if (empty($username) || empty($password)) {
+                setFlash('error', $t['err_required_fields'] ?? 'Username and password are required');
+                header("Location: index.php");
+                exit();
+            }
 
             try {
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -129,10 +147,17 @@ if (isset($_SESSION['user'])) {
 
         // Edit User
         if (isset($_POST['admin_edit_user'])) {
-            $user_id = (int)$_POST['user_id'];
-            $password = trim($_POST['password']);
-            $role = $_POST['role'];
-            $points = (int)$_POST['points'];
+            $user_id = (int)($_POST['user_id'] ?? 0);
+            $password = trim($_POST['password'] ?? '');
+            $role = in_array($_POST['role'] ?? '', ['admin', 'driver', 'customer']) ? $_POST['role'] : 'customer';
+            $points = max(0, (int)($_POST['points'] ?? 0));
+
+            // FIX: Validate user_id
+            if ($user_id <= 0) {
+                setFlash('error', $t['err_invalid_user'] ?? 'Invalid user');
+                header("Location: index.php");
+                exit();
+            }
 
             if (!empty($password)) {
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -150,13 +175,23 @@ if (isset($_SESSION['user'])) {
         // Ban/Unban User
         if (isset($_GET['toggle_ban'])) {
             $user_id = (int)$_GET['toggle_ban'];
+            
+            // FIX: Validate user_id and prevent self-ban
+            if ($user_id <= 0 || $user_id == $uid) {
+                setFlash('error', $t['err_invalid_action'] ?? 'Invalid action');
+                header("Location: index.php");
+                exit();
+            }
+            
             $stmt = $conn->prepare("SELECT status FROM users1 WHERE id=?");
             $stmt->execute([$user_id]);
             $user = $stmt->fetch();
 
-            $new_status = ($user['status'] == 'active') ? 'banned' : 'active';
-            $conn->prepare("UPDATE users1 SET status=? WHERE id=?")->execute([$new_status, $user_id]);
-            setFlash('success', 'User status updated');
+            if ($user) {
+                $new_status = ($user['status'] == 'active') ? 'banned' : 'active';
+                $conn->prepare("UPDATE users1 SET status=? WHERE id=?")->execute([$new_status, $user_id]);
+                setFlash('success', 'User status updated');
+            }
             header("Location: index.php");
             exit();
         }
@@ -164,6 +199,14 @@ if (isset($_SESSION['user'])) {
         // Toggle Driver Verification
         if (isset($_GET['toggle_verify'])) {
             $driver_id = (int)$_GET['toggle_verify'];
+            
+            // FIX: Validate driver_id
+            if ($driver_id <= 0) {
+                setFlash('error', $t['err_invalid_driver'] ?? 'Invalid driver');
+                header("Location: index.php#drivers");
+                exit();
+            }
+            
             $stmt = $conn->prepare("SELECT is_verified, role FROM users1 WHERE id=?");
             $stmt->execute([$driver_id]);
             $driver = $stmt->fetch();
@@ -185,6 +228,14 @@ if (isset($_SESSION['user'])) {
         // Delete User
         if (isset($_GET['delete_user'])) {
             $user_id = (int)$_GET['delete_user'];
+            
+            // FIX: Validate and prevent self-deletion
+            if ($user_id <= 0 || $user_id == $uid) {
+                setFlash('error', $t['err_invalid_action'] ?? 'Invalid action');
+                header("Location: index.php");
+                exit();
+            }
+            
             $conn->prepare("DELETE FROM users1 WHERE id=? AND id!=?")->execute([$user_id, $uid]);
             setFlash('success', $t['success_user_deleted'] ?? 'User deleted');
             header("Location: index.php");
@@ -194,10 +245,10 @@ if (isset($_SESSION['user'])) {
         // Save Promo Code (Create/Update)
         if (isset($_POST['save_promo_code'])) {
             $promo_id = !empty($_POST['promo_id']) ? (int)$_POST['promo_id'] : null;
-            $code = strtoupper(trim($_POST['promo_code']));
-            $discount_type = $_POST['discount_type'];
-            $discount_value = floatval($_POST['discount_value']);
-            $max_uses = !empty($_POST['max_uses']) ? (int)$_POST['max_uses'] : null;
+            $code = strtoupper(preg_replace('/[^A-Z0-9]/', '', trim($_POST['promo_code'] ?? '')));
+            $discount_type = in_array($_POST['discount_type'] ?? '', ['fixed', 'percentage']) ? $_POST['discount_type'] : 'fixed';
+            $discount_value = max(0, floatval($_POST['discount_value'] ?? 0));
+            $max_uses = !empty($_POST['max_uses']) ? max(0, (int)$_POST['max_uses']) : null;
             $valid_from = !empty($_POST['valid_from']) ? $_POST['valid_from'] : null;
             $valid_until = !empty($_POST['valid_until']) ? $_POST['valid_until'] : null;
             $is_active = isset($_POST['is_active']) ? 1 : 0;
@@ -249,6 +300,14 @@ if (isset($_SESSION['user'])) {
         // Toggle Promo Code Active Status
         if (isset($_GET['toggle_promo'])) {
             $promo_id = (int)$_GET['toggle_promo'];
+            
+            // FIX: Validate promo_id
+            if ($promo_id <= 0) {
+                setFlash('error', $t['err_invalid_promo'] ?? 'Invalid promo code');
+                header("Location: index.php#promo-codes");
+                exit();
+            }
+            
             $stmt = $conn->prepare("SELECT is_active FROM promo_codes WHERE id=?");
             $stmt->execute([$promo_id]);
             $promo = $stmt->fetch();
@@ -265,6 +324,14 @@ if (isset($_SESSION['user'])) {
         // Delete Promo Code
         if (isset($_GET['delete_promo'])) {
             $promo_id = (int)$_GET['delete_promo'];
+            
+            // FIX: Validate promo_id
+            if ($promo_id <= 0) {
+                setFlash('error', $t['err_invalid_promo'] ?? 'Invalid promo code');
+                header("Location: index.php#promo-codes");
+                exit();
+            }
+            
             $conn->prepare("DELETE FROM promo_codes WHERE id=?")->execute([$promo_id]);
             setFlash('success', $t['promo_deleted'] ?? 'Promo code deleted successfully!');
             header("Location: index.php#promo-codes");
@@ -273,11 +340,15 @@ if (isset($_SESSION['user'])) {
 
         // Recharge Points
         if (isset($_POST['recharge'])) {
-            $amt = (int)$_POST['amount'];
-            $did = (int)$_POST['driver_id'];
+            $amt = max(0, (int)($_POST['amount'] ?? 0));
+            $did = (int)($_POST['driver_id'] ?? 0);
             if ($amt > 0 && $did > 0) {
                 $conn->prepare("UPDATE users1 SET points = points + ? WHERE id=?")->execute([$amt, $did]);
                 setFlash('success', $t['success_points_added'] ?? "Points added successfully.");
+                header("Location: index.php");
+                exit();
+            } else {
+                setFlash('error', $t['err_invalid_recharge'] ?? 'Invalid recharge amount or driver');
                 header("Location: index.php");
                 exit();
             }
@@ -285,8 +356,8 @@ if (isset($_SESSION['user'])) {
 
         // Bulk Recharge Drivers
         if (isset($_POST['bulk_recharge_drivers'])) {
-            $amt = (int)$_POST['bulk_amount'];
-            $driver_ids = $_POST['driver_ids'];
+            $amt = max(0, (int)($_POST['bulk_amount'] ?? 0));
+            $driver_ids = $_POST['driver_ids'] ?? '';
 
             if ($amt > 0 && !empty($driver_ids)) {
                 $ids = explode(',', $driver_ids);
@@ -300,24 +371,39 @@ if (isset($_SESSION['user'])) {
                     $stmt->execute($params);
 
                     $count = $stmt->rowCount();
-                    setFlash('success', ($t['bulk_recharge_success'] ?? "Successfully recharged %d drivers with %d points.") . " " . sprintf("%d drivers recharged with %d points each.", $count, $amt));
+                    // FIX: Properly format the success message using sprintf
+                    $message = $t['bulk_recharge_success'] ?? "Successfully recharged %d drivers with %d points each.";
+                    setFlash('success', sprintf($message, $count, $amt));
                     header("Location: index.php");
                     exit();
                 }
             }
+            setFlash('error', $t['err_bulk_recharge'] ?? 'Invalid bulk recharge data');
+            header("Location: index.php");
+            exit();
         }
 
         // Add Order (Admin)
         if (isset($_POST['admin_add_order'])) {
-            $customer_name = trim($_POST['customer_name']);
-            $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
-            $address = mb_convert_encoding(trim($_POST['address']), 'UTF-8', 'UTF-8');
-            $status = $_POST['status'];
+            $customer_name = htmlspecialchars(trim($_POST['customer_name'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $details = mb_convert_encoding(trim($_POST['details'] ?? ''), 'UTF-8', 'UTF-8');
+            $address = mb_convert_encoding(trim($_POST['address'] ?? ''), 'UTF-8', 'UTF-8');
+            $status = in_array($_POST['status'] ?? '', ['pending', 'accepted', 'picked_up', 'delivered', 'cancelled']) ? $_POST['status'] : 'pending';
             $driver_id = !empty($_POST['driver_id']) ? (int)$_POST['driver_id'] : NULL;
             $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
+            // FIX: Validate required fields
+            if (empty($customer_name) || empty($details)) {
+                setFlash('error', $t['err_required_fields'] ?? 'Customer name and details are required');
+                header("Location: index.php");
+                exit();
+            }
+
+            // FIX: Ensure points_cost_per_order is defined
+            $points_cost = isset($points_cost_per_order) ? (int)$points_cost_per_order : 0;
+
             $stmt = $conn->prepare("INSERT INTO orders1 (customer_name, details, address, status, driver_id, delivery_code, points_cost) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$customer_name, $details, $address, $status, $driver_id, $otp, $points_cost_per_order]);
+            $stmt->execute([$customer_name, $details, $address, $status, $driver_id, $otp, $points_cost]);
             setFlash('success', 'Order added successfully');
             header("Location: index.php");
             exit();
@@ -325,12 +411,19 @@ if (isset($_SESSION['user'])) {
 
         // Edit Order (Admin)
         if (isset($_POST['admin_edit_order'])) {
-            $order_id = (int)$_POST['order_id'];
-            $customer_name = trim($_POST['customer_name']);
-            $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
-            $address = mb_convert_encoding(trim($_POST['address']), 'UTF-8', 'UTF-8');
-            $status = $_POST['status'];
+            $order_id = (int)($_POST['order_id'] ?? 0);
+            $customer_name = htmlspecialchars(trim($_POST['customer_name'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $details = mb_convert_encoding(trim($_POST['details'] ?? ''), 'UTF-8', 'UTF-8');
+            $address = mb_convert_encoding(trim($_POST['address'] ?? ''), 'UTF-8', 'UTF-8');
+            $status = in_array($_POST['status'] ?? '', ['pending', 'accepted', 'picked_up', 'delivered', 'cancelled']) ? $_POST['status'] : 'pending';
             $driver_id = !empty($_POST['driver_id']) ? (int)$_POST['driver_id'] : NULL;
+
+            // FIX: Validate order_id
+            if ($order_id <= 0) {
+                setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+                header("Location: index.php");
+                exit();
+            }
 
             // Update timestamps based on status
             $timestamp_sql = '';
@@ -349,6 +442,14 @@ if (isset($_SESSION['user'])) {
         // Cancel Order
         if (isset($_GET['cancel_order'])) {
             $order_id = (int)$_GET['cancel_order'];
+            
+            // FIX: Validate order_id
+            if ($order_id <= 0) {
+                setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+                header("Location: index.php");
+                exit();
+            }
+            
             $conn->prepare("UPDATE orders1 SET status='cancelled', cancelled_at=NOW() WHERE id=?")->execute([$order_id]);
             setFlash('success', $t['success_order_cancelled'] ?? 'Order cancelled');
             header("Location: index.php");
@@ -358,6 +459,14 @@ if (isset($_SESSION['user'])) {
         // Delete Order
         if (isset($_GET['delete_order'])) {
             $order_id = (int)$_GET['delete_order'];
+            
+            // FIX: Validate order_id
+            if ($order_id <= 0) {
+                setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+                header("Location: index.php");
+                exit();
+            }
+            
             $conn->prepare("DELETE FROM orders1 WHERE id=?")->execute([$order_id]);
             setFlash('success', 'Order deleted');
             header("Location: index.php");
@@ -370,7 +479,7 @@ if (isset($_SESSION['user'])) {
     // ==========================================
     if (isset($_POST['add_order']) && $u['role'] == 'customer') {
         // Get form data
-        $details = mb_convert_encoding(trim($_POST['details']), 'UTF-8', 'UTF-8');
+        $details = mb_convert_encoding(trim($_POST['details'] ?? ''), 'UTF-8', 'UTF-8');
         $address = mb_convert_encoding(trim($_POST['address'] ?? $u['address'] ?? ''), 'UTF-8', 'UTF-8');
         $client_phone = preg_replace('/[^0-9]/', '', $_POST['client_phone'] ?? '');
 
@@ -427,6 +536,9 @@ if (isset($_SESSION['user'])) {
         $discount_amount = 0;
         $promo_id = null;
 
+        // FIX: Ensure points_cost_per_order is defined
+        $points_cost = isset($points_cost_per_order) ? (int)$points_cost_per_order : 0;
+
         if ($promo_code) {
             $stmt = $conn->prepare("SELECT * FROM promo_codes WHERE code = ? AND is_active = 1");
             $stmt->execute([$promo_code]);
@@ -457,14 +569,12 @@ if (isset($_SESSION['user'])) {
                 }
 
                 if ($is_valid) {
-                    // Calculate discount (we'll assume base order cost for percentage calculation)
-                    // For fixed, just use the value
+                    // Calculate discount
                     if ($promo['discount_type'] == 'fixed') {
                         $discount_amount = $promo['discount_value'];
                     } else {
-                        // For percentage, calculate based on points_cost_per_order or fixed base price
-                        // Assuming 1 point = 1 MRU for simplicity
-                        $base_price = $points_cost_per_order; // or use a fixed value
+                        // For percentage, calculate based on points_cost or fixed base price
+                        $base_price = $points_cost;
                         $discount_amount = ($base_price * $promo['discount_value']) / 100;
                     }
 
@@ -486,7 +596,7 @@ if (isset($_SESSION['user'])) {
                 $pickup_lat,
                 $pickup_lng,
                 $otp,
-                $points_cost_per_order,
+                $points_cost,
                 $promo_code,
                 $discount_amount
             ]);
@@ -503,9 +613,11 @@ if (isset($_SESSION['user'])) {
                 $conn->prepare("INSERT INTO promo_code_uses (promo_code_id, user_id, order_id, discount_amount) VALUES (?, ?, ?, ?)")
                     ->execute([$promo_id, $uid, $order_id, $discount_amount]);
 
-                setFlash('success', ($t['success_add_with_promo'] ?? 'Order created! Discount applied: %s MRU') . ' ' . number_format($discount_amount, 2) . ' MRU');
+                // FIX: Properly format the promo success message using sprintf
+                $message = $t['success_add_with_promo'] ?? 'Order created! Discount applied: %s MRU';
+                setFlash('success', sprintf($message, number_format($discount_amount, 2)));
             } else {
-                setFlash('success', $t['success_add']);
+                setFlash('success', $t['success_add'] ?? 'Order created successfully');
             }
 
             header("Location: index.php");
@@ -516,6 +628,13 @@ if (isset($_SESSION['user'])) {
     // Customer Cancel Order (pending or accepted - before pickup)
     if (isset($_GET['customer_cancel']) && $u['role'] == 'customer') {
         $order_id = (int)$_GET['customer_cancel'];
+
+        // FIX: Validate order_id
+        if ($order_id <= 0) {
+            setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+            header("Location: index.php");
+            exit();
+        }
 
         // Allow cancellation of pending or accepted orders (before pickup)
         $stmt = $conn->prepare("SELECT id, status, driver_id, points_cost FROM orders1 WHERE id=? AND (client_id=? OR customer_name=?) AND status IN ('pending', 'accepted')");
@@ -541,6 +660,13 @@ if (isset($_SESSION['user'])) {
     // Driver Cancel Order (accepted orders only - refund points)
     if (isset($_GET['driver_cancel']) && $u['role'] == 'driver') {
         $order_id = (int)$_GET['driver_cancel'];
+
+        // FIX: Validate order_id
+        if ($order_id <= 0) {
+            setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+            header("Location: index.php");
+            exit();
+        }
 
         $stmt = $conn->prepare("SELECT id, points_cost FROM orders1 WHERE id=? AND driver_id=? AND status='accepted'");
         $stmt->execute([$order_id, $uid]);
@@ -568,7 +694,14 @@ if (isset($_SESSION['user'])) {
     // DRIVER ACTIONS
     // ==========================================
     if (isset($_POST['accept_order']) && $u['role'] == 'driver') {
-        $oid = (int)$_POST['oid'];
+        $oid = (int)($_POST['oid'] ?? 0);
+
+        // FIX: Validate order id
+        if ($oid <= 0) {
+            setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+            header("Location: index.php");
+            exit();
+        }
 
         // Check driver verification by admin
         if (empty($u['is_verified'])) {
@@ -586,14 +719,18 @@ if (isset($_SESSION['user'])) {
 
         // Check if driver has too many active orders
         $activeOrders = countActiveOrders($conn, $uid);
-        if ($activeOrders >= $driver_max_active_orders) {
+        $max_orders = isset($driver_max_active_orders) ? (int)$driver_max_active_orders : 5;
+        if ($activeOrders >= $max_orders) {
             setFlash('error', $t['max_orders_reached'] ?? 'You have reached the maximum number of active orders');
             header("Location: index.php");
             exit();
         }
 
-        if ($u['points'] < $points_cost_per_order) {
-            setFlash('error', $t['err_low_bal']);
+        // FIX: Ensure points_cost_per_order is defined
+        $points_cost = isset($points_cost_per_order) ? (int)$points_cost_per_order : 0;
+
+        if ($u['points'] < $points_cost) {
+            setFlash('error', $t['err_low_bal'] ?? 'Insufficient points balance');
         } else {
             try {
                 $conn->beginTransaction();
@@ -630,17 +767,17 @@ if (isset($_SESSION['user'])) {
 
                     // Update order with distance
                     $upd = $conn->prepare("UPDATE orders1 SET status='accepted', driver_id=?, accepted_at=NOW(), points_cost=?, distance_km=? WHERE id=?");
-                    $upd->execute([$uid, $points_cost_per_order, $distance_km, $oid]);
+                    $upd->execute([$uid, $points_cost, $distance_km, $oid]);
 
                     // Deduct points from driver
                     $deduct = $conn->prepare("UPDATE users1 SET points = points - ?, total_orders = total_orders + 1 WHERE id=?");
-                    $deduct->execute([$points_cost_per_order, $uid]);
+                    $deduct->execute([$points_cost, $uid]);
 
                     // Update session points
-                    $_SESSION['user']['points'] -= $points_cost_per_order;
+                    $_SESSION['user']['points'] -= $points_cost;
 
                     $conn->commit();
-                    setFlash('success', $t['success_acc']);
+                    setFlash('success', $t['success_acc'] ?? 'Order accepted successfully');
                 } else {
                     $conn->rollBack();
                     setFlash('error', $t['err_order_taken'] ?? "Order already taken by another driver");
@@ -656,13 +793,22 @@ if (isset($_SESSION['user'])) {
 
     // Driver marks package as picked up
     if (isset($_POST['pickup_order']) && $u['role'] == 'driver') {
-        $oid = (int)$_POST['oid'];
+        $oid = (int)($_POST['oid'] ?? 0);
+
+        // FIX: Validate order id
+        if ($oid <= 0) {
+            setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+            header("Location: index.php");
+            exit();
+        }
 
         $stmt = $conn->prepare("UPDATE orders1 SET status='picked_up', picked_at=NOW() WHERE id=? AND driver_id=? AND status='accepted'");
         $stmt->execute([$oid, $uid]);
 
         if ($stmt->rowCount() > 0) {
             setFlash('success', $t['package_picked'] ?? 'Package picked up');
+        } else {
+            setFlash('error', $t['err_pickup_failed'] ?? 'Could not mark order as picked up');
         }
         header("Location: index.php");
         exit();
@@ -670,8 +816,15 @@ if (isset($_SESSION['user'])) {
 
     // Driver finishes delivery
     if (isset($_POST['finish_job']) && $u['role'] == 'driver') {
-        $oid = (int)$_POST['oid'];
-        $pin = str_pad(trim($_POST['pin']), 4, '0', STR_PAD_LEFT);
+        $oid = (int)($_POST['oid'] ?? 0);
+        $pin = str_pad(trim($_POST['pin'] ?? ''), 4, '0', STR_PAD_LEFT);
+
+        // FIX: Validate order id
+        if ($oid <= 0) {
+            setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+            header("Location: index.php");
+            exit();
+        }
 
         $chk = $conn->prepare("SELECT delivery_code, points_cost FROM orders1 WHERE id=? AND driver_id=? AND status IN ('accepted', 'picked_up')");
         $chk->execute([$oid, $uid]);
@@ -684,9 +837,9 @@ if (isset($_SESSION['user'])) {
             $conn->prepare("UPDATE users1 SET total_earnings = total_earnings + ? WHERE id=?")
                  ->execute([$order['points_cost'], $uid]);
 
-            setFlash('success', $t['success_fin']);
+            setFlash('success', $t['success_fin'] ?? 'Delivery completed successfully');
         } else {
-            setFlash('error', $t['err_pin']);
+            setFlash('error', $t['err_pin'] ?? 'Invalid PIN code');
         }
         header("Location: index.php");
         exit();
@@ -696,9 +849,16 @@ if (isset($_SESSION['user'])) {
     // RATING SYSTEM
     // ==========================================
     if (isset($_POST['submit_rating'])) {
-        $order_id = (int)$_POST['order_id'];
-        $score = min(5, max(1, (int)$_POST['score']));
-        $comment = trim($_POST['comment'] ?? '');
+        $order_id = (int)($_POST['order_id'] ?? 0);
+        $score = min(5, max(1, (int)($_POST['score'] ?? 5)));
+        $comment = htmlspecialchars(trim($_POST['comment'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+        // FIX: Validate order_id
+        if ($order_id <= 0) {
+            setFlash('error', $t['err_invalid_order'] ?? 'Invalid order');
+            header("Location: index.php");
+            exit();
+        }
 
         // Get order to find who to rate
         $stmt = $conn->prepare("SELECT driver_id, client_id, customer_name FROM orders1 WHERE id=? AND status='delivered'");
@@ -730,8 +890,12 @@ if (isset($_SESSION['user'])) {
                     $conn->prepare("UPDATE users1 SET rating=? WHERE id=?")->execute([$newRating, $ratee_id]);
 
                     setFlash('success', $t['thanks_for_rating'] ?? 'Thank you for your rating!');
+                } else {
+                    setFlash('warning', $t['already_rated'] ?? 'You have already rated this order');
                 }
             }
+        } else {
+            setFlash('error', $t['err_order_not_found'] ?? 'Order not found or not delivered yet');
         }
         header("Location: index.php");
         exit();
