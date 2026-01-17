@@ -397,33 +397,142 @@ require_once 'actions.php';
             <!-- ================= ADMIN DASHBOARD ================= -->
 
             <!-- Statistics -->
+            <?php
+            // Enhanced Statistics Queries
+            $totalCustomers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='customer'")->fetchColumn();
+            $totalDrivers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver'")->fetchColumn();
+            $activeDrivers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver' AND status='active'")->fetchColumn();
+            $verifiedDrivers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver' AND is_verified=1")->fetchColumn();
+
+            $totalOrders = $conn->query("SELECT COUNT(*) FROM orders1")->fetchColumn();
+            $pendingOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status='pending'")->fetchColumn();
+            $activeOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status IN ('accepted', 'picked_up')")->fetchColumn();
+            $deliveredOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status='delivered'")->fetchColumn();
+            $cancelledOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status='cancelled'")->fetchColumn();
+
+            $todayOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE DATE(created_at) = CURDATE()")->fetchColumn();
+            $todayDelivered = $conn->query("SELECT COUNT(*) FROM orders1 WHERE DATE(delivered_at) = CURDATE() AND status='delivered'")->fetchColumn();
+
+            $totalRevenue = $conn->query("SELECT COALESCE(SUM(points_cost), 0) FROM orders1 WHERE status='delivered'")->fetchColumn();
+            $todayRevenue = $conn->query("SELECT COALESCE(SUM(points_cost), 0) FROM orders1 WHERE DATE(delivered_at) = CURDATE() AND status='delivered'")->fetchColumn();
+            ?>
+
+            <!-- Enhanced Statistics Grid -->
             <div class="row g-3 mb-4">
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-users fa-2x text-primary mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='customer'")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['customer']; ?>s</small>
+                <!-- User Statistics -->
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-primary-soft mb-2">
+                                <i class="fas fa-users text-primary"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($totalCustomers); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['customers'] ?? 'Customers'; ?></small>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-motorcycle fa-2x text-info mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver'")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['driver']; ?>s</small>
+
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-info-soft mb-2">
+                                <i class="fas fa-motorcycle text-info"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($totalDrivers); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['drivers'] ?? 'Drivers'; ?></small>
+                            <div class="mt-2">
+                                <span class="badge bg-success"><?php echo $activeDrivers; ?> <?php echo $t['active'] ?? 'Active'; ?></span>
+                                <span class="badge bg-primary"><?php echo $verifiedDrivers; ?> <?php echo $t['verified'] ?? 'Verified'; ?></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-box fa-2x text-success mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM orders1")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['total_orders']; ?></small>
+
+                <!-- Order Statistics -->
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-success-soft mb-2">
+                                <i class="fas fa-box text-success"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($totalOrders); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['total_orders'] ?? 'Total Orders'; ?></small>
+                            <div class="mt-2">
+                                <span class="badge bg-warning text-dark"><?php echo $pendingOrders; ?> <?php echo $t['pending'] ?? 'Pending'; ?></span>
+                                <span class="badge bg-success"><?php echo $deliveredOrders; ?> <?php echo $t['delivered'] ?? 'Delivered'; ?></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-check-circle fa-2x text-warning mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver' AND status='active'")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['active_drivers']; ?></small>
+
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-warning-soft mb-2">
+                                <i class="fas fa-chart-line text-warning"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($todayOrders); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['today_orders'] ?? 'Today\'s Orders'; ?></small>
+                            <div class="mt-2">
+                                <span class="badge bg-success"><?php echo $todayDelivered; ?> <?php echo $t['delivered'] ?? 'Delivered'; ?></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue and Performance Row -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="ultra-card">
+                        <div class="card-inner">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted d-block mb-1"><?php echo $t['total_revenue'] ?? 'Total Revenue'; ?></small>
+                                    <h4 class="mb-0 text-success"><?php echo number_format($totalRevenue); ?> <small class="text-muted">pts</small></h4>
+                                </div>
+                                <div class="stat-icon-circle bg-success-soft">
+                                    <i class="fas fa-coins text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="ultra-card">
+                        <div class="card-inner">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted d-block mb-1"><?php echo $t['today_revenue'] ?? 'Today\'s Revenue'; ?></small>
+                                    <h4 class="mb-0 text-primary"><?php echo number_format($todayRevenue); ?> <small class="text-muted">pts</small></h4>
+                                </div>
+                                <div class="stat-icon-circle bg-primary-soft">
+                                    <i class="fas fa-calendar-day text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="ultra-card">
+                        <div class="card-inner">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted d-block mb-1"><?php echo $t['success_rate'] ?? 'Success Rate'; ?></small>
+                                    <h4 class="mb-0 text-info">
+                                        <?php
+                                        $successRate = $totalOrders > 0 ? round(($deliveredOrders / $totalOrders) * 100, 1) : 0;
+                                        echo $successRate;
+                                        ?>%
+                                    </h4>
+                                </div>
+                                <div class="stat-icon-circle bg-info-soft">
+                                    <i class="fas fa-percentage text-info"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -520,10 +629,23 @@ require_once 'actions.php';
                 <div class="tab-pane fade" id="drivers">
                     <div class="card content-card">
                         <div class="card-header bg-white py-3 d-flex justify-content-between flex-wrap gap-2">
-                            <h5 class="mb-0"><i class="fas fa-motorcycle text-info"></i> <?php echo $t['manage_drivers']; ?></h5>
-                            <button class="btn btn-sm btn-info text-white" onclick="showAddUserModal('driver')">
-                                <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
-                            </button>
+                            <div class="d-flex align-items-center gap-3">
+                                <h5 class="mb-0"><i class="fas fa-motorcycle text-info"></i> <?php echo $t['manage_drivers']; ?></h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="selectAllDrivers" onclick="toggleAllDrivers(this)">
+                                    <label class="form-check-label small" for="selectAllDrivers">
+                                        <?php echo $t['select_all'] ?? 'Select All'; ?>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-success" onclick="showBulkRechargeModal()" id="bulkRechargeBtn" style="display:none;">
+                                    <i class="fas fa-coins"></i> <?php echo $t['bulk_recharge'] ?? 'Bulk Recharge'; ?>
+                                </button>
+                                <button class="btn btn-sm btn-info text-white" onclick="showAddUserModal('driver')">
+                                    <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body p-3">
                             <div class="admin-cards-grid">
@@ -541,6 +663,9 @@ require_once 'actions.php';
                                 <div class="ultra-card admin-card">
                                     <div class="card-inner">
                                         <div class="d-flex align-items-start gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input driver-checkbox" type="checkbox" value="<?php echo $driver['id']; ?>" id="driver<?php echo $driver['id']; ?>" onchange="updateBulkRechargeButton()">
+                                            </div>
                                             <div class="avatar-with-badge">
                                                 <div class="profile-avatar avatar-sm avatar-driver">
                                                     <?php if($driverAvatarUrl): ?>
@@ -854,6 +979,40 @@ require_once 'actions.php';
                 </div>
             </div>
 
+            <!-- Bulk Recharge Modal -->
+            <div class="modal fade" id="bulkRechargeModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fas fa-coins text-success"></i> <?php echo $t['bulk_recharge'] ?? 'Bulk Recharge Drivers'; ?></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form method="POST">
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <span id="selectedDriverCount">0</span> <?php echo $t['drivers_selected'] ?? 'drivers selected'; ?>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><?php echo $t['amount_to_add'] ?? 'Amount to Add'; ?></label>
+                                    <div class="input-group">
+                                        <input type="number" name="bulk_amount" id="bulkAmount" class="form-control form-control-lg" min="1" required placeholder="<?php echo $t['enter_amount'] ?? 'Enter amount'; ?>">
+                                        <span class="input-group-text"><?php echo $t['pts'] ?? 'pts'; ?></span>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="driver_ids" id="selectedDriverIds">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
+                                <button type="submit" name="bulk_recharge_drivers" class="btn btn-success">
+                                    <i class="fas fa-check-circle me-1"></i><?php echo $t['confirm_recharge'] ?? 'Confirm Recharge'; ?>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <!-- Add Order Modal -->
             <div class="modal fade" id="addOrderModal" tabindex="-1">
                 <div class="modal-dialog">
@@ -967,6 +1126,32 @@ require_once 'actions.php';
             // Get driver stats for driver role
             if($role == 'driver') {
                 $driverStats = getDriverStats($conn, $uid);
+
+                // Calculate driver priority tier
+                $completedOrders = (int)$driverStats['total_orders'];
+                $avgRating = (float)($u['rating'] ?? 0);
+
+                $priorityTier = 4; // Default: New driver
+                $priorityBadge = $t['new_driver'] ?? 'New Driver';
+                $priorityColor = 'secondary';
+                $priorityIcon = 'fa-user';
+
+                if ($completedOrders >= 50 && $avgRating >= 4) {
+                    $priorityTier = 1;
+                    $priorityBadge = $t['vip_driver'] ?? 'VIP Driver';
+                    $priorityColor = 'warning';
+                    $priorityIcon = 'fa-crown';
+                } elseif ($completedOrders >= 20 && $avgRating >= 3) {
+                    $priorityTier = 2;
+                    $priorityBadge = $t['pro_driver'] ?? 'Pro Driver';
+                    $priorityColor = 'primary';
+                    $priorityIcon = 'fa-medal';
+                } elseif ($completedOrders >= 5) {
+                    $priorityTier = 3;
+                    $priorityBadge = $t['regular_driver'] ?? 'Regular Driver';
+                    $priorityColor = 'info';
+                    $priorityIcon = 'fa-shield';
+                }
             } elseif($role == 'customer') {
                 $clientStats = getClientStats($conn, $u['id'], $u['username']);
             }
@@ -1006,6 +1191,20 @@ require_once 'actions.php';
                         <div class="stat-label-new"><?php echo $t['balance'] ?? 'الأرباح'; ?> (<?php echo $t['pts'] ?? 'نقطة'; ?>)</div>
                     </div>
                     <div style="position:absolute; top:-10px; left:-10px; width:60px; height:60px; background:rgba(255,255,255,0.1); border-radius:50%;"></div>
+                </div>
+
+                <!-- Priority Badge Card -->
+                <div class="stat-card-new card-new-white priority-badge-card">
+                    <i class="fa-solid <?php echo $priorityIcon; ?> stat-icon-new" style="color:var(--<?php echo $priorityColor; ?>)"></i>
+                    <div>
+                        <div class="stat-label-new text-uppercase" style="margin-bottom: 8px;"><?php echo $t['your_tier'] ?? 'Your Tier'; ?></div>
+                        <div class="priority-badge-text" style="font-size: 0.85rem; font-weight: 700; color: var(--<?php echo $priorityColor; ?>);">
+                            <?php echo $priorityBadge; ?>
+                        </div>
+                    </div>
+                    <?php if($priorityTier == 1): ?>
+                        <div class="sparkle-effect"></div>
+                    <?php endif; ?>
                 </div>
 
                 <?php if(!empty($u['rating'])): ?>
@@ -1108,9 +1307,9 @@ require_once 'actions.php';
                     </div>
                     <?php endif; ?>
                     <div class="d-flex gap-2">
-                        <a href="tel:+<?php echo $whatsapp_number; ?>" class="recharge-btn phone flex-grow-1 justify-content-center">
-                            <i class="fas fa-phone"></i>
-                            <?php echo $t['call_to_recharge'] ?? 'Call to Recharge'; ?>
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode('مرحبا، أرغب في شحن رصيد' . "\n" . 'المستخدم: ' . ($u['serial_no'] ?? $u['username']) . "\n" . 'الرقم: ' . ($u['phone'] ?? '')); ?>" target="_blank" class="recharge-btn whatsapp flex-grow-1 justify-content-center">
+                            <i class="fab fa-whatsapp"></i>
+                            <?php echo $t['whatsapp_recharge'] ?? 'WhatsApp to Recharge'; ?>
                         </a>
                     </div>
                     <div class="mt-3 text-center">
@@ -1410,7 +1609,7 @@ require_once 'actions.php';
                             <?php elseif($st == 'picked_up' && $row['driver_id'] == $uid): ?>
                             <form method="POST" class="pin-input-row">
                                 <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                <input type="text" name="entered_pin" placeholder="<?php echo $t['enter_pin'] ?? 'Enter PIN'; ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric">
+                                <input type="text" name="pin" placeholder="<?php echo $t['enter_pin'] ?? 'Enter PIN'; ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric">
                                 <button type="submit" name="finish_job" class="btn btn-success px-4 py-3 fw-bold" style="border-radius: 12px;">
                                     <i class="fas fa-check-double me-1"></i><?php echo $t['driver_finish'] ?? 'Finish'; ?>
                                 </button>
@@ -1479,8 +1678,8 @@ require_once 'actions.php';
                 <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
                 <a href="#" class="nav-icon" onclick="document.getElementById('newOrderForm').scrollIntoView({behavior: 'smooth'})"><i class="fa-solid fa-plus"></i></a>
 
-                <a href="tel:+<?php echo $whatsapp_number; ?>" class="nav-center-btn">
-                    <i class="fas fa-phone"></i>
+                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'مرحبا، أحتاج مساعدة'); ?>" target="_blank" class="nav-center-btn">
+                    <i class="fab fa-whatsapp"></i>
                 </a>
 
                 <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>

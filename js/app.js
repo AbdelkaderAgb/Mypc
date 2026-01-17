@@ -198,6 +198,44 @@ function editUser(user) {
     modal.show();
 }
 
+// Bulk Recharge Functions
+function toggleAllDrivers(checkbox) {
+    const driverCheckboxes = document.querySelectorAll('.driver-checkbox');
+    driverCheckboxes.forEach(cb => {
+        cb.checked = checkbox.checked;
+    });
+    updateBulkRechargeButton();
+}
+
+function updateBulkRechargeButton() {
+    const checkedBoxes = document.querySelectorAll('.driver-checkbox:checked');
+    const bulkBtn = document.getElementById('bulkRechargeBtn');
+    const selectAll = document.getElementById('selectAllDrivers');
+
+    if (checkedBoxes.length > 0) {
+        bulkBtn.style.display = 'inline-block';
+        bulkBtn.innerHTML = '<i class="fas fa-coins"></i> ' + (translations['bulk_recharge'] || 'Bulk Recharge') + ' (' + checkedBoxes.length + ')';
+    } else {
+        bulkBtn.style.display = 'none';
+    }
+
+    // Update select all checkbox state
+    const allDriverCheckboxes = document.querySelectorAll('.driver-checkbox');
+    selectAll.checked = allDriverCheckboxes.length > 0 && checkedBoxes.length === allDriverCheckboxes.length;
+}
+
+function showBulkRechargeModal() {
+    const checkedBoxes = document.querySelectorAll('.driver-checkbox:checked');
+    const driverIds = Array.from(checkedBoxes).map(cb => cb.value).join(',');
+
+    document.getElementById('selectedDriverIds').value = driverIds;
+    document.getElementById('selectedDriverCount').textContent = checkedBoxes.length;
+    document.getElementById('bulkAmount').value = '';
+
+    var modal = new bootstrap.Modal(document.getElementById('bulkRechargeModal'));
+    modal.show();
+}
+
 function editOrder(order) {
     document.getElementById('edit_order_id').value = order.id;
     document.getElementById('edit_order_customer').value = order.customer_name;

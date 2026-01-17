@@ -203,6 +203,30 @@ if (isset($_SESSION['user'])) {
             }
         }
 
+        // Bulk Recharge Drivers
+        if (isset($_POST['bulk_recharge_drivers'])) {
+            $amt = (int)$_POST['bulk_amount'];
+            $driver_ids = $_POST['driver_ids'];
+
+            if ($amt > 0 && !empty($driver_ids)) {
+                $ids = explode(',', $driver_ids);
+                $ids = array_map('intval', $ids);
+                $ids = array_filter($ids, function($id) { return $id > 0; });
+
+                if (count($ids) > 0) {
+                    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+                    $stmt = $conn->prepare("UPDATE users1 SET points = points + ? WHERE id IN ($placeholders) AND role='driver'");
+                    $params = array_merge([$amt], $ids);
+                    $stmt->execute($params);
+
+                    $count = $stmt->rowCount();
+                    setFlash('success', ($t['bulk_recharge_success'] ?? "Successfully recharged %d drivers with %d points.") . " " . sprintf("%d drivers recharged with %d points each.", $count, $amt));
+                    header("Location: index.php");
+                    exit();
+                }
+            }
+        }
+
         // Add Order (Admin)
         if (isset($_POST['admin_add_order'])) {
             $customer_name = trim($_POST['customer_name']);

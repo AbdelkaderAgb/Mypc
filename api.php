@@ -119,19 +119,73 @@ switch ($action) {
         }
 
         try {
-            // Get pending orders within the specified radius using Haversine formula
-            $sql = "SELECT id, details, address, client_phone, pickup_lat, pickup_lng,
-                    (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) AS distance
+            // Calculate driver's priority score based on completed orders and rating
+            $driverStats = $conn->prepare("
+                SELECT
+                    COUNT(CASE WHEN status = 'delivered' THEN 1 END) as completed_orders,
+                    COALESCE((SELECT AVG(score) FROM ratings WHERE ratee_id = ?), 0) as avg_rating
+                FROM orders1
+                WHERE driver_id = ?
+            ");
+            $driverStats->execute([$userId, $userId]);
+            $stats = $driverStats->fetch(PDO::FETCH_ASSOC);
+
+            $completedOrders = $stats['completed_orders'] ?? 0;
+            $avgRating = $stats['avg_rating'] ?? 0;
+
+            // Calculate priority tier (higher = better priority)
+            // Tier 1 (VIP): 50+ orders and 4+ rating
+            // Tier 2 (Pro): 20+ orders and 3+ rating
+            // Tier 3 (Regular): 5+ orders
+            // Tier 4 (New): < 5 orders
+            $priorityTier = 4; // Default: New driver
+            if ($completedOrders >= 50 && $avgRating >= 4) {
+                $priorityTier = 1; // VIP
+            } elseif ($completedOrders >= 20 && $avgRating >= 3) {
+                $priorityTier = 2; // Pro
+            } elseif ($completedOrders >= 5) {
+                $priorityTier = 3; // Regular
+            }
+
+            // Adjust max distance based on priority tier
+            // Higher tier drivers see orders from farther away
+            $tierDistance = $maxDistance + ($priorityTier <= 2 ? 3 : 0); // VIP/Pro get +3km range
+
+            // Get pending orders within radius using Haversine formula
+            // Orders are shown based on driver priority
+            $sql = "SELECT id, details, address, client_phone, pickup_lat, pickup_lng, created_at,
+                    (6371 * acos(cos(radians(?)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(?)) + sin(radians(?)) * sin(radians(pickup_lat)))) AS distance,
+                    TIMESTAMPDIFF(MINUTE, created_at, NOW()) as age_minutes
                     FROM orders1
                     WHERE status = 'pending' AND pickup_lat IS NOT NULL
                     HAVING distance <= ?
-                    ORDER BY distance ASC
-                    LIMIT 5";
+                    ORDER BY
+                        CASE
+                            WHEN ? <= 2 THEN distance * 0.7
+                            ELSE distance
+                        END ASC,
+                        age_minutes DESC
+                    LIMIT ?";
+
+            $limit = $priorityTier <= 2 ? 10 : 5; // VIP/Pro drivers see more orders
             $stmt = $conn->prepare($sql);
-            $stmt->execute([$lat, $lng, $lat, $maxDistance]);
+            $stmt->execute([$lat, $lng, $lat, $tierDistance, $priorityTier, $limit]);
             $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            echo json_encode(['success' => true, 'orders' => $orders]);
+            // Add priority badge info to response
+            $priorityBadge = ['New Driver', 'VIP Driver', 'Pro Driver', 'Regular Driver'][$priorityTier - 1];
+
+            echo json_encode([
+                'success' => true,
+                'orders' => $orders,
+                'driver_priority' => [
+                    'tier' => $priorityTier,
+                    'badge' => $priorityBadge,
+                    'completed_orders' => $completedOrders,
+                    'rating' => round($avgRating, 1),
+                    'max_distance' => $tierDistance
+                ]
+            ]);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
         }
