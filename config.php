@@ -97,6 +97,7 @@ try {
         customer_name VARCHAR(50) NOT NULL,
         details TEXT NOT NULL,
         address VARCHAR(255) NOT NULL,
+        client_phone VARCHAR(20) DEFAULT NULL,
         pickup_lat DECIMAL(10,8) DEFAULT NULL,
         pickup_lng DECIMAL(11,8) DEFAULT NULL,
         dropoff_lat DECIMAL(10,8) DEFAULT NULL,
@@ -155,6 +156,39 @@ try {
         INDEX idx_order_time (order_id, recorded_at DESC)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+    // 6. Create Promo Codes Table
+    $conn->exec("CREATE TABLE IF NOT EXISTS promo_codes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        code VARCHAR(50) NOT NULL UNIQUE,
+        discount_type ENUM('percentage', 'fixed') NOT NULL,
+        discount_value DECIMAL(10,2) NOT NULL,
+        max_uses INT DEFAULT NULL COMMENT 'NULL = unlimited',
+        used_count INT DEFAULT 0,
+        valid_from TIMESTAMP NULL,
+        valid_until TIMESTAMP NULL,
+        is_active TINYINT(1) DEFAULT 1,
+        created_by INT DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_code (code),
+        INDEX idx_active (is_active),
+        INDEX idx_valid (valid_from, valid_until)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    // 7. Create Promo Code Usage Tracking Table
+    $conn->exec("CREATE TABLE IF NOT EXISTS promo_code_uses (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        promo_code_id INT NOT NULL,
+        user_id INT NOT NULL,
+        order_id INT NOT NULL,
+        discount_amount DECIMAL(10,2) NOT NULL,
+        used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_promo_code (promo_code_id),
+        INDEX idx_user (user_id),
+        INDEX idx_order (order_id),
+        UNIQUE KEY unique_user_promo (user_id, promo_code_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
     // ==========================================
     // SCHEMA MIGRATIONS (Add missing columns)
     // ==========================================
@@ -181,7 +215,7 @@ try {
         'orders1' => [
             'client_id' => "ALTER TABLE orders1 ADD COLUMN client_id INT DEFAULT NULL AFTER id",
             'pickup_address' => "ALTER TABLE orders1 ADD COLUMN pickup_address VARCHAR(500) DEFAULT NULL AFTER address",
-            'client_phone' => "ALTER TABLE orders1 ADD COLUMN client_phone VARCHAR(20) DEFAULT NULL AFTER pickup_address",
+            'client_phone' => "ALTER TABLE orders1 ADD COLUMN client_phone VARCHAR(20) DEFAULT NULL AFTER address",
             'pickup_lat' => "ALTER TABLE orders1 ADD COLUMN pickup_lat DECIMAL(10,8) DEFAULT NULL AFTER client_phone",
             'pickup_lng' => "ALTER TABLE orders1 ADD COLUMN pickup_lng DECIMAL(11,8) DEFAULT NULL AFTER pickup_lat",
             'delivery_lat' => "ALTER TABLE orders1 ADD COLUMN delivery_lat DECIMAL(10,8) DEFAULT NULL AFTER pickup_lng",
@@ -193,7 +227,9 @@ try {
             'delivered_at' => "ALTER TABLE orders1 ADD COLUMN delivered_at TIMESTAMP NULL AFTER picked_at",
             'cancelled_at' => "ALTER TABLE orders1 ADD COLUMN cancelled_at TIMESTAMP NULL AFTER delivered_at",
             'cancel_reason' => "ALTER TABLE orders1 ADD COLUMN cancel_reason TEXT DEFAULT NULL AFTER cancelled_at",
-            'updated_at' => "ALTER TABLE orders1 ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at"
+            'updated_at' => "ALTER TABLE orders1 ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at",
+            'promo_code' => "ALTER TABLE orders1 ADD COLUMN promo_code VARCHAR(50) DEFAULT NULL AFTER cancel_reason",
+            'discount_amount' => "ALTER TABLE orders1 ADD COLUMN discount_amount DECIMAL(10,2) DEFAULT 0 AFTER promo_code"
         ]
     ];
 

@@ -37,6 +37,11 @@ require_once 'actions.php';
 <!-- Notification Toast Container -->
 <div id="notificationContainer" class="notification-toast <?php echo $dir == 'rtl' ? 'rtl' : ''; ?>"></div>
 
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
 <!-- Order Notification Bubbles Container (for drivers) -->
 <?php if(isset($_SESSION['user']) && $role === 'driver'): ?>
 <div id="orderBubbleContainer" class="order-notification-container"></div>
@@ -121,10 +126,6 @@ require_once 'actions.php';
 
             <!-- Contact Hub -->
             <div class="login-contact-hub">
-                <a href="https://wa.me/<?php echo $whatsapp_number; ?>" class="login-social-btn whatsapp" title="WhatsApp" target="_blank">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </a>
-
                 <a href="tel:+<?php echo $whatsapp_number; ?>" class="login-social-btn phone" title="<?php echo $t['call_us'] ?? 'Call Us'; ?>">
                     <i class="fa-solid fa-phone"></i>
                 </a>
@@ -401,33 +402,142 @@ require_once 'actions.php';
             <!-- ================= ADMIN DASHBOARD ================= -->
 
             <!-- Statistics -->
+            <?php
+            // Enhanced Statistics Queries
+            $totalCustomers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='customer'")->fetchColumn();
+            $totalDrivers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver'")->fetchColumn();
+            $activeDrivers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver' AND status='active'")->fetchColumn();
+            $verifiedDrivers = $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver' AND is_verified=1")->fetchColumn();
+
+            $totalOrders = $conn->query("SELECT COUNT(*) FROM orders1")->fetchColumn();
+            $pendingOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status='pending'")->fetchColumn();
+            $activeOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status IN ('accepted', 'picked_up')")->fetchColumn();
+            $deliveredOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status='delivered'")->fetchColumn();
+            $cancelledOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE status='cancelled'")->fetchColumn();
+
+            $todayOrders = $conn->query("SELECT COUNT(*) FROM orders1 WHERE DATE(created_at) = CURDATE()")->fetchColumn();
+            $todayDelivered = $conn->query("SELECT COUNT(*) FROM orders1 WHERE DATE(delivered_at) = CURDATE() AND status='delivered'")->fetchColumn();
+
+            $totalRevenue = $conn->query("SELECT COALESCE(SUM(points_cost), 0) FROM orders1 WHERE status='delivered'")->fetchColumn();
+            $todayRevenue = $conn->query("SELECT COALESCE(SUM(points_cost), 0) FROM orders1 WHERE DATE(delivered_at) = CURDATE() AND status='delivered'")->fetchColumn();
+            ?>
+
+            <!-- Enhanced Statistics Grid -->
             <div class="row g-3 mb-4">
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-users fa-2x text-primary mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='customer'")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['customer']; ?>s</small>
+                <!-- User Statistics -->
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-primary-soft mb-2">
+                                <i class="fas fa-users text-primary"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($totalCustomers); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['customers'] ?? 'Customers'; ?></small>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-motorcycle fa-2x text-info mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver'")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['driver']; ?>s</small>
+
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-info-soft mb-2">
+                                <i class="fas fa-motorcycle text-info"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($totalDrivers); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['drivers'] ?? 'Drivers'; ?></small>
+                            <div class="mt-2">
+                                <span class="badge bg-success"><?php echo $activeDrivers; ?> <?php echo $t['active'] ?? 'Active'; ?></span>
+                                <span class="badge bg-primary"><?php echo $verifiedDrivers; ?> <?php echo $t['verified'] ?? 'Verified'; ?></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-box fa-2x text-success mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM orders1")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['total_orders']; ?></small>
+
+                <!-- Order Statistics -->
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-success-soft mb-2">
+                                <i class="fas fa-box text-success"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($totalOrders); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['total_orders'] ?? 'Total Orders'; ?></small>
+                            <div class="mt-2">
+                                <span class="badge bg-warning text-dark"><?php echo $pendingOrders; ?> <?php echo $t['pending'] ?? 'Pending'; ?></span>
+                                <span class="badge bg-success"><?php echo $deliveredOrders; ?> <?php echo $t['delivered'] ?? 'Delivered'; ?></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="stats-box text-center">
-                        <i class="fas fa-check-circle fa-2x text-warning mb-2"></i>
-                        <h3 class="mb-0"><?php echo $conn->query("SELECT COUNT(*) FROM users1 WHERE role='driver' AND status='active'")->fetchColumn(); ?></h3>
-                        <small class="text-muted"><?php echo $t['active_drivers']; ?></small>
+
+                <div class="col-6 col-lg-3">
+                    <div class="ultra-card stat-card-enhanced">
+                        <div class="card-inner text-center">
+                            <div class="stat-icon-circle bg-warning-soft mb-2">
+                                <i class="fas fa-chart-line text-warning"></i>
+                            </div>
+                            <h3 class="stat-number mb-1"><?php echo number_format($todayOrders); ?></h3>
+                            <small class="text-muted text-uppercase fw-bold"><?php echo $t['today_orders'] ?? 'Today\'s Orders'; ?></small>
+                            <div class="mt-2">
+                                <span class="badge bg-success"><?php echo $todayDelivered; ?> <?php echo $t['delivered'] ?? 'Delivered'; ?></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue and Performance Row -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="ultra-card">
+                        <div class="card-inner">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted d-block mb-1"><?php echo $t['total_revenue'] ?? 'Total Revenue'; ?></small>
+                                    <h4 class="mb-0 text-success"><?php echo number_format($totalRevenue); ?> <small class="text-muted">pts</small></h4>
+                                </div>
+                                <div class="stat-icon-circle bg-success-soft">
+                                    <i class="fas fa-coins text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="ultra-card">
+                        <div class="card-inner">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted d-block mb-1"><?php echo $t['today_revenue'] ?? 'Today\'s Revenue'; ?></small>
+                                    <h4 class="mb-0 text-primary"><?php echo number_format($todayRevenue); ?> <small class="text-muted">pts</small></h4>
+                                </div>
+                                <div class="stat-icon-circle bg-primary-soft">
+                                    <i class="fas fa-calendar-day text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="ultra-card">
+                        <div class="card-inner">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted d-block mb-1"><?php echo $t['success_rate'] ?? 'Success Rate'; ?></small>
+                                    <h4 class="mb-0 text-info">
+                                        <?php
+                                        $successRate = $totalOrders > 0 ? round(($deliveredOrders / $totalOrders) * 100, 1) : 0;
+                                        echo $successRate;
+                                        ?>%
+                                    </h4>
+                                </div>
+                                <div class="stat-icon-circle bg-info-soft">
+                                    <i class="fas fa-percentage text-info"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -445,6 +555,9 @@ require_once 'actions.php';
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#points"><i class="fas fa-coins"></i> <span class="d-none d-sm-inline"><?php echo $t['add_points']; ?></span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#promo-codes"><i class="fas fa-tag"></i> <span class="d-none d-sm-inline"><?php echo $t['promo_codes'] ?? 'Promo Codes'; ?></span></a>
                 </li>
             </ul>
 
@@ -524,10 +637,23 @@ require_once 'actions.php';
                 <div class="tab-pane fade" id="drivers">
                     <div class="card content-card">
                         <div class="card-header bg-white py-3 d-flex justify-content-between flex-wrap gap-2">
-                            <h5 class="mb-0"><i class="fas fa-motorcycle text-info"></i> <?php echo $t['manage_drivers']; ?></h5>
-                            <button class="btn btn-sm btn-info text-white" onclick="showAddUserModal('driver')">
-                                <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
-                            </button>
+                            <div class="d-flex align-items-center gap-3">
+                                <h5 class="mb-0"><i class="fas fa-motorcycle text-info"></i> <?php echo $t['manage_drivers']; ?></h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="selectAllDrivers" onclick="toggleAllDrivers(this)">
+                                    <label class="form-check-label small" for="selectAllDrivers">
+                                        <?php echo $t['select_all'] ?? 'Select All'; ?>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-success" onclick="showBulkRechargeModal()" id="bulkRechargeBtn" style="display:none;">
+                                    <i class="fas fa-coins"></i> <?php echo $t['bulk_recharge'] ?? 'Bulk Recharge'; ?>
+                                </button>
+                                <button class="btn btn-sm btn-info text-white" onclick="showAddUserModal('driver')">
+                                    <i class="fas fa-plus"></i> <?php echo $t['add_user']; ?>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body p-3">
                             <div class="admin-cards-grid">
@@ -545,6 +671,9 @@ require_once 'actions.php';
                                 <div class="ultra-card admin-card">
                                     <div class="card-inner">
                                         <div class="d-flex align-items-start gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input driver-checkbox" type="checkbox" value="<?php echo $driver['id']; ?>" id="driver<?php echo $driver['id']; ?>" onchange="updateBulkRechargeButton()">
+                                            </div>
                                             <div class="avatar-with-badge">
                                                 <div class="profile-avatar avatar-sm avatar-driver">
                                                     <?php if($driverAvatarUrl): ?>
@@ -745,6 +874,95 @@ require_once 'actions.php';
                     </div>
                 </div>
 
+                <!-- PROMO CODES TAB -->
+                <div class="tab-pane fade" id="promo-codes">
+                    <div class="card content-card">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between flex-wrap gap-2">
+                            <h5 class="mb-0"><i class="fas fa-tag text-success"></i> <?php echo $t['promo_codes'] ?? 'Promo Codes'; ?></h5>
+                            <button class="btn btn-sm btn-success" onclick="showAddPromoCodeModal()">
+                                <i class="fas fa-plus"></i> <?php echo $t['create_promo'] ?? 'Create Promo Code'; ?>
+                            </button>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th><?php echo $t['code'] ?? 'Code'; ?></th>
+                                            <th><?php echo $t['discount'] ?? 'Discount'; ?></th>
+                                            <th><?php echo $t['usage'] ?? 'Usage'; ?></th>
+                                            <th><?php echo $t['validity'] ?? 'Validity'; ?></th>
+                                            <th><?php echo $t['status'] ?? 'Status'; ?></th>
+                                            <th><?php echo $t['actions'] ?? 'Actions'; ?></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $promo_codes = $conn->query("SELECT * FROM promo_codes ORDER BY created_at DESC");
+                                        if($promo_codes->rowCount() == 0): ?>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-4 text-muted">
+                                                <i class="fas fa-tag fa-2x mb-2 d-block"></i>
+                                                <?php echo $t['no_promo_codes'] ?? 'No promo codes yet. Create one to get started!'; ?>
+                                            </td>
+                                        </tr>
+                                        <?php else: while($promo = $promo_codes->fetch()):
+                                            $is_expired = $promo['valid_until'] && strtotime($promo['valid_until']) < time();
+                                            $is_maxed = $promo['max_uses'] && $promo['used_count'] >= $promo['max_uses'];
+                                        ?>
+                                        <tr>
+                                            <td><strong class="text-primary"><?php echo e($promo['code']); ?></strong></td>
+                                            <td>
+                                                <?php if($promo['discount_type'] == 'percentage'): ?>
+                                                    <span class="badge bg-info"><?php echo $promo['discount_value']; ?>%</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-success"><?php echo $promo['discount_value']; ?> MRU</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $promo['used_count']; ?> / <?php echo $promo['max_uses'] ?? '∞'; ?>
+                                            </td>
+                                            <td class="small">
+                                                <?php if($promo['valid_from']): ?>
+                                                    <div>From: <?php echo date('Y-m-d', strtotime($promo['valid_from'])); ?></div>
+                                                <?php endif; ?>
+                                                <?php if($promo['valid_until']): ?>
+                                                    <div>Until: <?php echo date('Y-m-d', strtotime($promo['valid_until'])); ?></div>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php if(!$promo['is_active']): ?>
+                                                    <span class="badge bg-secondary"><?php echo $t['inactive'] ?? 'Inactive'; ?></span>
+                                                <?php elseif($is_expired): ?>
+                                                    <span class="badge bg-danger"><?php echo $t['expired'] ?? 'Expired'; ?></span>
+                                                <?php elseif($is_maxed): ?>
+                                                    <span class="badge bg-warning text-dark"><?php echo $t['max_uses_reached'] ?? 'Max Uses'; ?></span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-success"><?php echo $t['active'] ?? 'Active'; ?></span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" onclick='editPromoCode(<?php echo json_encode($promo); ?>)'>
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <a href="?toggle_promo=<?php echo $promo['id']; ?>" class="btn btn-outline-<?php echo $promo['is_active'] ? 'warning' : 'success'; ?>">
+                                                        <i class="fas fa-<?php echo $promo['is_active'] ? 'pause' : 'play'; ?>"></i>
+                                                    </a>
+                                                    <a href="?delete_promo=<?php echo $promo['id']; ?>" class="btn btn-outline-danger" onclick="return confirm('<?php echo $t['confirm_delete'] ?? 'Delete this promo code?'; ?>')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <script>
                 function filterDrivers() {
                     const search = document.getElementById('driverSearchInput').value.toLowerCase();
@@ -852,6 +1070,106 @@ require_once 'actions.php';
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
                                 <button type="submit" name="admin_edit_user" class="btn btn-primary"><i class="fas fa-save me-1"></i><?php echo $t['save']; ?></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Recharge Modal -->
+            <div class="modal fade" id="bulkRechargeModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fas fa-coins text-success"></i> <?php echo $t['bulk_recharge'] ?? 'Bulk Recharge Drivers'; ?></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form method="POST">
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <span id="selectedDriverCount">0</span> <?php echo $t['drivers_selected'] ?? 'drivers selected'; ?>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><?php echo $t['amount_to_add'] ?? 'Amount to Add'; ?></label>
+                                    <div class="input-group">
+                                        <input type="number" name="bulk_amount" id="bulkAmount" class="form-control form-control-lg" min="1" required placeholder="<?php echo $t['enter_amount'] ?? 'Enter amount'; ?>">
+                                        <span class="input-group-text"><?php echo $t['pts'] ?? 'pts'; ?></span>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="driver_ids" id="selectedDriverIds">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
+                                <button type="submit" name="bulk_recharge_drivers" class="btn btn-success">
+                                    <i class="fas fa-check-circle me-1"></i><?php echo $t['confirm_recharge'] ?? 'Confirm Recharge'; ?>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add/Edit Promo Code Modal -->
+            <div class="modal fade" id="promoCodeModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fas fa-tag text-success"></i> <span id="promoModalTitle"><?php echo $t['create_promo'] ?? 'Create Promo Code'; ?></span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form method="POST" id="promoCodeForm">
+                            <div class="modal-body">
+                                <input type="hidden" name="promo_id" id="promoId">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><?php echo $t['code'] ?? 'Code'; ?> *</label>
+                                    <input type="text" name="promo_code" id="promoCode" class="form-control text-uppercase" required pattern="[A-Z0-9]+" placeholder="e.g. SUMMER2026" maxlength="50">
+                                    <small class="text-muted"><?php echo $t['code_help'] ?? 'Uppercase letters and numbers only'; ?></small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><?php echo $t['discount_type'] ?? 'Discount Type'; ?> *</label>
+                                    <select name="discount_type" id="discountType" class="form-select" required onchange="updateDiscountLabel()">
+                                        <option value="percentage"><?php echo $t['percentage'] ?? 'Percentage'; ?> (%)</option>
+                                        <option value="fixed"><?php echo $t['fixed_amount'] ?? 'Fixed Amount'; ?> (MRU)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><span id="discountLabel"><?php echo $t['discount_value'] ?? 'Discount Value'; ?></span> *</label>
+                                    <input type="number" name="discount_value" id="discountValue" class="form-control" required min="0" step="0.01" placeholder="e.g. 20">
+                                    <small class="text-muted" id="discountHelp"><?php echo $t['percentage_help'] ?? 'Enter percentage (e.g., 20 for 20% off)'; ?></small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><?php echo $t['max_uses'] ?? 'Maximum Uses'; ?></label>
+                                    <input type="number" name="max_uses" id="maxUses" class="form-control" min="1" placeholder="<?php echo $t['unlimited'] ?? 'Leave empty for unlimited'; ?>">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold"><?php echo $t['valid_from'] ?? 'Valid From'; ?></label>
+                                        <input type="date" name="valid_from" id="validFrom" class="form-control">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold"><?php echo $t['valid_until'] ?? 'Valid Until'; ?></label>
+                                        <input type="date" name="valid_until" id="validUntil" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="is_active" id="isActive" value="1" checked>
+                                    <label class="form-check-label" for="isActive">
+                                        <?php echo $t['active'] ?? 'Active'; ?>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $t['cancel']; ?></button>
+                                <button type="submit" name="save_promo_code" class="btn btn-success">
+                                    <i class="fas fa-check-circle me-1"></i><?php echo $t['save'] ?? 'Save'; ?>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -971,6 +1289,32 @@ require_once 'actions.php';
             // Get driver stats for driver role
             if($role == 'driver') {
                 $driverStats = getDriverStats($conn, $uid);
+
+                // Calculate driver priority tier
+                $completedOrders = (int)$driverStats['total_orders'];
+                $avgRating = (float)($u['rating'] ?? 0);
+
+                $priorityTier = 4; // Default: New driver
+                $priorityBadge = $t['new_driver'] ?? 'New Driver';
+                $priorityColor = 'secondary';
+                $priorityIcon = 'fa-user';
+
+                if ($completedOrders >= 50 && $avgRating >= 4) {
+                    $priorityTier = 1;
+                    $priorityBadge = $t['vip_driver'] ?? 'VIP Driver';
+                    $priorityColor = 'warning';
+                    $priorityIcon = 'fa-crown';
+                } elseif ($completedOrders >= 20 && $avgRating >= 3) {
+                    $priorityTier = 2;
+                    $priorityBadge = $t['pro_driver'] ?? 'Pro Driver';
+                    $priorityColor = 'primary';
+                    $priorityIcon = 'fa-medal';
+                } elseif ($completedOrders >= 5) {
+                    $priorityTier = 3;
+                    $priorityBadge = $t['regular_driver'] ?? 'Regular Driver';
+                    $priorityColor = 'info';
+                    $priorityIcon = 'fa-shield';
+                }
             } elseif($role == 'customer') {
                 $clientStats = getClientStats($conn, $u['id'], $u['username']);
             }
@@ -1012,15 +1356,32 @@ require_once 'actions.php';
                     <div style="position:absolute; top:-10px; left:-10px; width:60px; height:60px; background:rgba(255,255,255,0.1); border-radius:50%;"></div>
                 </div>
 
-                <?php if(!empty($u['rating'])): ?>
+                <!-- Priority Badge Card -->
+                <div class="stat-card-new card-new-white priority-badge-card">
+                    <i class="fa-solid <?php echo $priorityIcon; ?> stat-icon-new" style="color:var(--<?php echo $priorityColor; ?>)"></i>
+                    <div>
+                        <div class="stat-label-new text-uppercase" style="margin-bottom: 8px;"><?php echo $t['your_tier'] ?? 'Your Tier'; ?></div>
+                        <div class="priority-badge-text" style="font-size: 0.85rem; font-weight: 700; color: var(--<?php echo $priorityColor; ?>);">
+                            <?php echo $priorityBadge; ?>
+                        </div>
+                    </div>
+                    <?php if($priorityTier == 1): ?>
+                        <div class="sparkle-effect"></div>
+                    <?php endif; ?>
+                </div>
+
                 <div class="stat-card-new card-new-white">
                     <i class="fa-solid fa-star stat-icon-new" style="color:#FFD700"></i>
                     <div>
-                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo number_format($u['rating'] ?? 0, 1); ?></div>
+                        <div class="stat-num-new" style="color:var(--text-main)">
+                            <?php
+                            $rating = $u['rating'] ?? 0;
+                            echo $rating > 0 ? number_format($rating, 1) : '<span style="font-size:0.9rem;">-</span>';
+                            ?>
+                        </div>
                         <div class="stat-label-new"><?php echo $t['rating'] ?? 'التقييم'; ?></div>
                     </div>
                 </div>
-                <?php endif; ?>
 
                 <div class="stat-card-new card-new-white">
                     <i class="fa-solid fa-route stat-icon-new" style="color:var(--success)"></i>
@@ -1112,9 +1473,9 @@ require_once 'actions.php';
                     </div>
                     <?php endif; ?>
                     <div class="d-flex gap-2">
-                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode('طلب شحن رصيد' . "\n" . 'المستخدم: ' . ($u['serial_no'] ?? $u['username']) . "\n" . 'الرقم: ' . ($u['phone'] ?? '')); ?>" target="_blank" class="recharge-btn whatsapp flex-grow-1 justify-content-center">
+                        <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode('مرحبا، أرغب في شحن رصيد' . "\n" . 'المستخدم: ' . ($u['serial_no'] ?? $u['username']) . "\n" . 'الرقم: ' . ($u['phone'] ?? '')); ?>" target="_blank" class="recharge-btn whatsapp flex-grow-1 justify-content-center">
                             <i class="fab fa-whatsapp"></i>
-                            <?php echo $t['recharge_whatsapp'] ?? 'Recharge via WhatsApp'; ?>
+                            <?php echo $t['whatsapp_recharge'] ?? 'WhatsApp to Recharge'; ?>
                         </a>
                     </div>
                     <div class="mt-3 text-center">
@@ -1191,21 +1552,34 @@ require_once 'actions.php';
                                 </label>
                                 <div class="input-group">
                                     <input type="text" name="address" id="pickupAddress" class="form-control"
-                                           placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" required readonly>
+                                           placeholder="<?php echo $t['click_gps'] ?? 'Click GPS to set your location'; ?>" readonly>
                                     <button type="button" class="btn btn-success px-4" onclick="getPickupLocation()" id="gpsBtn" title="<?php echo $t['turn_on_gps'] ?? 'Turn on GPS'; ?>">
                                         <i class="fas fa-location-crosshairs"></i>
                                     </button>
                                 </div>
-                                <input type="hidden" name="pickup_lat" id="pickupLat" required>
-                                <input type="hidden" name="pickup_lng" id="pickupLng" required>
+                                <input type="hidden" name="pickup_lat" id="pickupLat">
+                                <input type="hidden" name="pickup_lng" id="pickupLng">
                                 <small class="text-muted"><i class="fas fa-info-circle me-1"></i><?php echo $t['gps_required'] ?? 'GPS location is required for drivers to find you'; ?></small>
                             </div>
 
-                            <div class="slider-btn-container" onclick="document.getElementById('newOrderForm').submit();">
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-1">
+                                    <i class="fas fa-tag me-1 text-success"></i><?php echo $t['promo_code'] ?? 'Promo Code'; ?> <span class="text-muted">(<?php echo $t['optional'] ?? 'Optional'; ?>)</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" name="promo_code" id="promoCodeInput" class="form-control text-uppercase"
+                                           placeholder="<?php echo $t['enter_promo_code'] ?? 'Enter promo code'; ?>" maxlength="50">
+                                    <button type="button" class="btn btn-outline-success" onclick="validatePromoCode()" id="validatePromoBtn">
+                                        <i class="fas fa-check"></i> <?php echo $t['apply'] ?? 'Apply'; ?>
+                                    </button>
+                                </div>
+                                <small id="promoFeedback" class="text-muted"></small>
+                            </div>
+
+                            <button type="submit" name="add_order" class="slider-btn-container w-100">
                                 <div class="slider-thumb"><i class="fa-solid fa-paper-plane"></i></div>
                                 <div class="slider-text"><?php echo $t['btn_publish']; ?></div>
-                                <button name="add_order" style="display:none;"></button>
-                            </div>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -1248,9 +1622,10 @@ require_once 'actions.php';
                         $res = $stmt;
                     }
                 } elseif($role == 'customer') {
-                    $limit = "WHERE customer_name='{$u['username']}' OR client_id='$uid'";
-                    $sql = "SELECT * FROM orders1 $limit ORDER BY id DESC LIMIT 50";
-                    $res = $conn->query($sql);
+                    $sql = "SELECT * FROM orders1 WHERE customer_name = ? OR client_id = ? ORDER BY id DESC LIMIT 50";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute([$u['username'], $uid]);
+                    $res = $stmt;
                 } else {
                     $sql = "SELECT * FROM orders1 ORDER BY id DESC LIMIT 50";
                     $res = $conn->query($sql);
@@ -1282,7 +1657,7 @@ require_once 'actions.php';
                 <?php else: while($row = $res->fetch()):
                     $st = $row['status'];
                     $orderDistance = isset($row['distance']) ? round($row['distance'], 1) : null;
-                    $statusTagClass = ($st == 'pending') ? 'tag-pending' : (($st == 'accepted') ? 'tag-accepted' : (($st == 'picked_up') ? 'tag-picked' : 'tag-delivered'));
+                    $statusTagClass = ($st == 'pending') ? 'tag-pending' : (($st == 'accepted') ? 'tag-accepted' : (($st == 'picked_up') ? 'tag-picked' : (($st == 'cancelled') ? 'tag-cancelled' : 'tag-delivered')));
                 ?>
                 <div class="ultra-card">
                     <div class="card-inner">
@@ -1414,7 +1789,7 @@ require_once 'actions.php';
                             <?php elseif($st == 'picked_up' && $row['driver_id'] == $uid): ?>
                             <form method="POST" class="pin-input-row">
                                 <input type="hidden" name="oid" value="<?php echo $row['id']; ?>">
-                                <input type="text" name="entered_pin" placeholder="<?php echo $t['enter_pin'] ?? 'Enter PIN'; ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric">
+                                <input type="text" name="pin" placeholder="<?php echo $t['enter_pin'] ?? 'Enter PIN'; ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric">
                                 <button type="submit" name="finish_job" class="btn btn-success px-4 py-3 fw-bold" style="border-radius: 12px;">
                                     <i class="fas fa-check-double me-1"></i><?php echo $t['driver_finish'] ?? 'Finish'; ?>
                                 </button>
@@ -1468,6 +1843,7 @@ require_once 'actions.php';
 
             <!-- GLASS NAVIGATION BAR -->
             <?php if($role == 'driver'): ?>
+            <!-- Driver Navigation -->
             <nav class="glass-nav">
                 <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
                 <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-chart-simple"></i></a>
@@ -1476,17 +1852,31 @@ require_once 'actions.php';
                     <i class="fa-solid fa-power-off"></i>
                 </div>
 
-                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=Recharge%20User:%20<?php echo $u['username']; ?>" target="_blank" class="nav-icon"><i class="fa-solid fa-wallet"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
                 <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
             </nav>
-            <?php else: ?>
+            <?php elseif($role == 'customer'): ?>
+            <!-- Customer Navigation -->
             <nav class="glass-nav">
                 <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
                 <a href="#" class="nav-icon" onclick="document.getElementById('newOrderForm').scrollIntoView({behavior: 'smooth'})"><i class="fa-solid fa-plus"></i></a>
 
-                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'Hello, I need help'); ?>" target="_blank" class="nav-center-btn">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
+                <div class="nav-center-btn">
+                    <i class="fa-solid fa-box"></i>
+                </div>
+
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
+            </nav>
+            <?php else: ?>
+            <!-- Admin Navigation -->
+            <nav class="glass-nav">
+                <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-chart-bar"></i></a>
+
+                <div class="nav-center-btn" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
 
                 <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
                 <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
@@ -1545,12 +1935,9 @@ require_once 'actions.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-3 d-flex gap-2">
-                                <a href="#" id="tracking-call-btn" class="btn btn-success btn-sm flex-grow-1 rounded-pill">
+                            <div class="mt-3">
+                                <a href="#" id="tracking-call-btn" class="btn btn-success btn-sm w-100 rounded-pill">
                                     <i class="fas fa-phone me-1"></i> <?php echo $t['call_driver'] ?? 'Call'; ?>
-                                </a>
-                                <a href="#" id="tracking-whatsapp-btn" class="btn btn-outline-success btn-sm flex-grow-1 rounded-pill">
-                                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
                                 </a>
                             </div>
                         </div>
