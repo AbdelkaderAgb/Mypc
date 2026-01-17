@@ -97,6 +97,7 @@ try {
         customer_name VARCHAR(50) NOT NULL,
         details TEXT NOT NULL,
         address VARCHAR(255) NOT NULL,
+        client_phone VARCHAR(20) DEFAULT NULL,
         pickup_lat DECIMAL(10,8) DEFAULT NULL,
         pickup_lng DECIMAL(11,8) DEFAULT NULL,
         dropoff_lat DECIMAL(10,8) DEFAULT NULL,
@@ -181,7 +182,7 @@ try {
         'orders1' => [
             'client_id' => "ALTER TABLE orders1 ADD COLUMN client_id INT DEFAULT NULL AFTER id",
             'pickup_address' => "ALTER TABLE orders1 ADD COLUMN pickup_address VARCHAR(500) DEFAULT NULL AFTER address",
-            'client_phone' => "ALTER TABLE orders1 ADD COLUMN client_phone VARCHAR(20) DEFAULT NULL AFTER pickup_address",
+            'client_phone' => "ALTER TABLE orders1 ADD COLUMN client_phone VARCHAR(20) DEFAULT NULL AFTER address",
             'pickup_lat' => "ALTER TABLE orders1 ADD COLUMN pickup_lat DECIMAL(10,8) DEFAULT NULL AFTER client_phone",
             'pickup_lng' => "ALTER TABLE orders1 ADD COLUMN pickup_lng DECIMAL(11,8) DEFAULT NULL AFTER pickup_lat",
             'delivery_lat' => "ALTER TABLE orders1 ADD COLUMN delivery_lat DECIMAL(10,8) DEFAULT NULL AFTER pickup_lng",

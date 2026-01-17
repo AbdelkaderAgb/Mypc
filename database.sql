@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS orders1 (
     customer_name VARCHAR(50) NOT NULL COMMENT 'Customer username/display name',
     details TEXT NOT NULL COMMENT 'Order details/items',
     address VARCHAR(255) NOT NULL COMMENT 'Delivery address',
+    client_phone VARCHAR(20) DEFAULT NULL COMMENT 'Customer phone number',
     pickup_lat DECIMAL(10,8) DEFAULT NULL,
     pickup_lng DECIMAL(11,8) DEFAULT NULL,
     dropoff_lat DECIMAL(10,8) DEFAULT NULL,
