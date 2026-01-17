@@ -2440,6 +2440,7 @@
         .tag-accepted { background: #E3F2FD; color: #1565C0; }
         .tag-picked { background: #EDE7F6; color: #5E35B1; }
         .tag-delivered { background: #E8F5E9; color: #2E7D32; }
+        .tag-cancelled { background: #FFEBEE; color: #C62828; }
 
         /* Slider Button */
         .slider-btn-container {

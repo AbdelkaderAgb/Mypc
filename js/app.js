@@ -214,7 +214,8 @@ function updateBulkRechargeButton() {
 
     if (checkedBoxes.length > 0) {
         bulkBtn.style.display = 'inline-block';
-        bulkBtn.innerHTML = '<i class="fas fa-coins"></i> ' + (translations['bulk_recharge'] || 'Bulk Recharge') + ' (' + checkedBoxes.length + ')';
+        const bulkText = (typeof AppTranslations !== 'undefined' && AppTranslations['bulk_recharge']) ? AppTranslations['bulk_recharge'] : 'Bulk Recharge';
+        bulkBtn.innerHTML = '<i class="fas fa-coins"></i> ' + bulkText + ' (' + checkedBoxes.length + ')';
     } else {
         bulkBtn.style.display = 'none';
     }

@@ -1212,15 +1212,18 @@ require_once 'actions.php';
                     <?php endif; ?>
                 </div>
 
-                <?php if(!empty($u['rating'])): ?>
                 <div class="stat-card-new card-new-white">
                     <i class="fa-solid fa-star stat-icon-new" style="color:#FFD700"></i>
                     <div>
-                        <div class="stat-num-new" style="color:var(--text-main)"><?php echo number_format($u['rating'] ?? 0, 1); ?></div>
+                        <div class="stat-num-new" style="color:var(--text-main)">
+                            <?php
+                            $rating = $u['rating'] ?? 0;
+                            echo $rating > 0 ? number_format($rating, 1) : '<span style="font-size:0.9rem;">-</span>';
+                            ?>
+                        </div>
                         <div class="stat-label-new"><?php echo $t['rating'] ?? 'التقييم'; ?></div>
                     </div>
                 </div>
-                <?php endif; ?>
 
                 <div class="stat-card-new card-new-white">
                     <i class="fa-solid fa-route stat-icon-new" style="color:var(--success)"></i>
@@ -1401,11 +1404,10 @@ require_once 'actions.php';
                                 <small class="text-muted"><i class="fas fa-info-circle me-1"></i><?php echo $t['gps_required'] ?? 'GPS location is required for drivers to find you'; ?></small>
                             </div>
 
-                            <div class="slider-btn-container" onclick="document.getElementById('newOrderForm').submit();">
+                            <button type="submit" name="add_order" class="slider-btn-container w-100" style="border: none; background: none; padding: 0; cursor: pointer;">
                                 <div class="slider-thumb"><i class="fa-solid fa-paper-plane"></i></div>
                                 <div class="slider-text"><?php echo $t['btn_publish']; ?></div>
-                                <button name="add_order" style="display:none;"></button>
-                            </div>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -1483,7 +1485,7 @@ require_once 'actions.php';
                 <?php else: while($row = $res->fetch()):
                     $st = $row['status'];
                     $orderDistance = isset($row['distance']) ? round($row['distance'], 1) : null;
-                    $statusTagClass = ($st == 'pending') ? 'tag-pending' : (($st == 'accepted') ? 'tag-accepted' : (($st == 'picked_up') ? 'tag-picked' : 'tag-delivered'));
+                    $statusTagClass = ($st == 'pending') ? 'tag-pending' : (($st == 'accepted') ? 'tag-accepted' : (($st == 'picked_up') ? 'tag-picked' : (($st == 'cancelled') ? 'tag-cancelled' : 'tag-delivered')));
                 ?>
                 <div class="ultra-card">
                     <div class="card-inner">
@@ -1669,6 +1671,7 @@ require_once 'actions.php';
 
             <!-- GLASS NAVIGATION BAR -->
             <?php if($role == 'driver'): ?>
+            <!-- Driver Navigation -->
             <nav class="glass-nav">
                 <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
                 <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-chart-simple"></i></a>
@@ -1677,16 +1680,31 @@ require_once 'actions.php';
                     <i class="fa-solid fa-power-off"></i>
                 </div>
 
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
                 <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
             </nav>
-            <?php else: ?>
+            <?php elseif($role == 'customer'): ?>
+            <!-- Customer Navigation -->
             <nav class="glass-nav">
                 <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
                 <a href="#" class="nav-icon" onclick="document.getElementById('newOrderForm').scrollIntoView({behavior: 'smooth'})"><i class="fa-solid fa-plus"></i></a>
 
-                <a href="https://wa.me/<?php echo $whatsapp_number; ?>?text=<?php echo urlencode($t['need_help'] ?? 'مرحبا، أحتاج مساعدة'); ?>" target="_blank" class="nav-center-btn">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
+                <div class="nav-center-btn">
+                    <i class="fa-solid fa-box"></i>
+                </div>
+
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
+            </nav>
+            <?php else: ?>
+            <!-- Admin Navigation -->
+            <nav class="glass-nav">
+                <a href="index.php" class="nav-icon active"><i class="fa-solid fa-house"></i></a>
+                <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-chart-bar"></i></a>
+
+                <div class="nav-center-btn" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
 
                 <a href="?settings=1" class="nav-icon"><i class="fa-solid fa-gear"></i></a>
                 <a href="?settings=1" class="nav-icon"><i class="fa-regular fa-user"></i></a>
