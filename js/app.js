@@ -237,6 +237,52 @@ function showBulkRechargeModal() {
     modal.show();
 }
 
+// Promo Code Functions
+function showAddPromoCodeModal() {
+    document.getElementById('promoCodeForm').reset();
+    document.getElementById('promoId').value = '';
+    document.getElementById('promoModalTitle').textContent = (typeof AppTranslations !== 'undefined' && AppTranslations['create_promo']) ? AppTranslations['create_promo'] : 'Create Promo Code';
+    document.getElementById('isActive').checked = true;
+    updateDiscountLabel();
+
+    var modal = new bootstrap.Modal(document.getElementById('promoCodeModal'));
+    modal.show();
+}
+
+function editPromoCode(promo) {
+    document.getElementById('promoId').value = promo.id;
+    document.getElementById('promoCode').value = promo.code;
+    document.getElementById('discountType').value = promo.discount_type;
+    document.getElementById('discountValue').value = promo.discount_value;
+    document.getElementById('maxUses').value = promo.max_uses || '';
+    document.getElementById('validFrom').value = promo.valid_from ? promo.valid_from.split(' ')[0] : '';
+    document.getElementById('validUntil').value = promo.valid_until ? promo.valid_until.split(' ')[0] : '';
+    document.getElementById('isActive').checked = promo.is_active == 1;
+    document.getElementById('promoModalTitle').textContent = (typeof AppTranslations !== 'undefined' && AppTranslations['edit_promo']) ? AppTranslations['edit_promo'] : 'Edit Promo Code';
+    updateDiscountLabel();
+
+    var modal = new bootstrap.Modal(document.getElementById('promoCodeModal'));
+    modal.show();
+}
+
+function updateDiscountLabel() {
+    const type = document.getElementById('discountType').value;
+    const label = document.getElementById('discountLabel');
+    const help = document.getElementById('discountHelp');
+
+    if (type === 'percentage') {
+        label.textContent = (typeof AppTranslations !== 'undefined' && AppTranslations['percentage']) ? AppTranslations['percentage'] : 'Percentage';
+        help.textContent = (typeof AppTranslations !== 'undefined' && AppTranslations['percentage_help']) ? AppTranslations['percentage_help'] : 'Enter percentage (e.g., 20 for 20% off)';
+        document.getElementById('discountValue').placeholder = 'e.g. 20';
+        document.getElementById('discountValue').max = '100';
+    } else {
+        label.textContent = (typeof AppTranslations !== 'undefined' && AppTranslations['fixed_amount']) ? AppTranslations['fixed_amount'] : 'Fixed Amount (MRU)';
+        help.textContent = (typeof AppTranslations !== 'undefined' && AppTranslations['fixed_help']) ? AppTranslations['fixed_help'] : 'Enter fixed discount amount in MRU';
+        document.getElementById('discountValue').placeholder = 'e.g. 50';
+        document.getElementById('discountValue').removeAttribute('max');
+    }
+}
+
 function editOrder(order) {
     document.getElementById('edit_order_id').value = order.id;
     document.getElementById('edit_order_customer').value = order.customer_name;
@@ -1008,3 +1054,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 });
+
+// ==========================================
+// PROMO CODE VALIDATION
+// ==========================================
+function validatePromoCode() {
+    const input = document.getElementById('promoCodeInput');
+    const feedback = document.getElementById('promoFeedback');
+    const btn = document.getElementById('validatePromoBtn');
+    const code = input.value.trim().toUpperCase();
+
+    if (!code) {
+        feedback.innerHTML = '';
+        feedback.className = 'text-muted';
+        return;
+    }
+
+    // Show loading state
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    feedback.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Validating...';
+    feedback.className = 'text-info';
+
+    // Validate promo code via API
+    fetch('api.php?action=validate_promo&code=' + encodeURIComponent(code))
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check"></i> Apply';
+
+            if (data.success) {
+                feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i>' + data.message;
+                feedback.className = 'text-success fw-bold';
+                input.classList.add('is-valid');
+                input.classList.remove('is-invalid');
+            } else {
+                feedback.innerHTML = '<i class="fas fa-exclamation-circle me-1"></i>' + data.message;
+                feedback.className = 'text-danger';
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check"></i> Apply';
+            feedback.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Error validating code';
+            feedback.className = 'text-warning';
+        });
+}

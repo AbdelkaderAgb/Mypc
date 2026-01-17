@@ -191,6 +191,86 @@ if (isset($_SESSION['user'])) {
             exit();
         }
 
+        // Save Promo Code (Create/Update)
+        if (isset($_POST['save_promo_code'])) {
+            $promo_id = !empty($_POST['promo_id']) ? (int)$_POST['promo_id'] : null;
+            $code = strtoupper(trim($_POST['promo_code']));
+            $discount_type = $_POST['discount_type'];
+            $discount_value = floatval($_POST['discount_value']);
+            $max_uses = !empty($_POST['max_uses']) ? (int)$_POST['max_uses'] : null;
+            $valid_from = !empty($_POST['valid_from']) ? $_POST['valid_from'] : null;
+            $valid_until = !empty($_POST['valid_until']) ? $_POST['valid_until'] : null;
+            $is_active = isset($_POST['is_active']) ? 1 : 0;
+
+            // Validate
+            if (empty($code) || !preg_match('/^[A-Z0-9]+$/', $code)) {
+                setFlash('error', $t['invalid_promo_code'] ?? 'Invalid promo code. Use uppercase letters and numbers only.');
+                header("Location: index.php#promo-codes");
+                exit();
+            }
+
+            if ($discount_value <= 0) {
+                setFlash('error', $t['invalid_discount'] ?? 'Discount value must be greater than 0.');
+                header("Location: index.php#promo-codes");
+                exit();
+            }
+
+            if ($discount_type == 'percentage' && $discount_value > 100) {
+                setFlash('error', $t['invalid_percentage'] ?? 'Percentage cannot exceed 100%.');
+                header("Location: index.php#promo-codes");
+                exit();
+            }
+
+            // Check if code already exists (for different promo)
+            $check = $conn->prepare("SELECT id FROM promo_codes WHERE code=? AND id!=?");
+            $check->execute([$code, $promo_id ?? 0]);
+            if ($check->rowCount() > 0) {
+                setFlash('error', $t['promo_code_exists'] ?? 'This promo code already exists.');
+                header("Location: index.php#promo-codes");
+                exit();
+            }
+
+            if ($promo_id) {
+                // Update existing
+                $stmt = $conn->prepare("UPDATE promo_codes SET code=?, discount_type=?, discount_value=?, max_uses=?, valid_from=?, valid_until=?, is_active=?, updated_at=CURRENT_TIMESTAMP WHERE id=?");
+                $stmt->execute([$code, $discount_type, $discount_value, $max_uses, $valid_from, $valid_until, $is_active, $promo_id]);
+                setFlash('success', $t['promo_updated'] ?? 'Promo code updated successfully!');
+            } else {
+                // Create new
+                $stmt = $conn->prepare("INSERT INTO promo_codes (code, discount_type, discount_value, max_uses, valid_from, valid_until, is_active, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$code, $discount_type, $discount_value, $max_uses, $valid_from, $valid_until, $is_active, $uid]);
+                setFlash('success', $t['promo_created'] ?? 'Promo code created successfully!');
+            }
+
+            header("Location: index.php#promo-codes");
+            exit();
+        }
+
+        // Toggle Promo Code Active Status
+        if (isset($_GET['toggle_promo'])) {
+            $promo_id = (int)$_GET['toggle_promo'];
+            $stmt = $conn->prepare("SELECT is_active FROM promo_codes WHERE id=?");
+            $stmt->execute([$promo_id]);
+            $promo = $stmt->fetch();
+
+            if ($promo) {
+                $new_status = $promo['is_active'] ? 0 : 1;
+                $conn->prepare("UPDATE promo_codes SET is_active=? WHERE id=?")->execute([$new_status, $promo_id]);
+                setFlash('success', $new_status ? ($t['promo_activated'] ?? 'Promo code activated!') : ($t['promo_deactivated'] ?? 'Promo code deactivated!'));
+            }
+            header("Location: index.php#promo-codes");
+            exit();
+        }
+
+        // Delete Promo Code
+        if (isset($_GET['delete_promo'])) {
+            $promo_id = (int)$_GET['delete_promo'];
+            $conn->prepare("DELETE FROM promo_codes WHERE id=?")->execute([$promo_id]);
+            setFlash('success', $t['promo_deleted'] ?? 'Promo code deleted successfully!');
+            header("Location: index.php#promo-codes");
+            exit();
+        }
+
         // Recharge Points
         if (isset($_POST['recharge'])) {
             $amt = (int)$_POST['amount'];
@@ -342,10 +422,61 @@ if (isset($_SESSION['user'])) {
             exit();
         }
 
+        // Validate and process promo code if provided
+        $promo_code = !empty($_POST['promo_code']) ? strtoupper(trim($_POST['promo_code'])) : null;
+        $discount_amount = 0;
+        $promo_id = null;
+
+        if ($promo_code) {
+            $stmt = $conn->prepare("SELECT * FROM promo_codes WHERE code = ? AND is_active = 1");
+            $stmt->execute([$promo_code]);
+            $promo = $stmt->fetch();
+
+            if ($promo) {
+                $now = time();
+                $is_valid = true;
+
+                // Check expiry
+                if ($promo['valid_from'] && strtotime($promo['valid_from']) > $now) {
+                    $is_valid = false;
+                }
+                if ($promo['valid_until'] && strtotime($promo['valid_until']) < $now) {
+                    $is_valid = false;
+                }
+
+                // Check max uses
+                if ($promo['max_uses'] && $promo['used_count'] >= $promo['max_uses']) {
+                    $is_valid = false;
+                }
+
+                // Check if user already used it
+                $check = $conn->prepare("SELECT id FROM promo_code_uses WHERE promo_code_id = ? AND user_id = ?");
+                $check->execute([$promo['id'], $uid]);
+                if ($check->rowCount() > 0) {
+                    $is_valid = false;
+                }
+
+                if ($is_valid) {
+                    // Calculate discount (we'll assume base order cost for percentage calculation)
+                    // For fixed, just use the value
+                    if ($promo['discount_type'] == 'fixed') {
+                        $discount_amount = $promo['discount_value'];
+                    } else {
+                        // For percentage, calculate based on points_cost_per_order or fixed base price
+                        // Assuming 1 point = 1 MRU for simplicity
+                        $base_price = $points_cost_per_order; // or use a fixed value
+                        $discount_amount = ($base_price * $promo['discount_value']) / 100;
+                    }
+
+                    $promo_id = $promo['id'];
+                }
+            }
+        }
+
         if ($details) {
             $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
-            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, client_phone, pickup_lat, pickup_lng, status, delivery_code, points_cost) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO orders1 (client_id, customer_name, details, address, client_phone, pickup_lat, pickup_lng, status, delivery_code, points_cost, promo_code, discount_amount) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?)");
             $stmt->execute([
                 $uid,
                 $u['username'],
@@ -355,9 +486,28 @@ if (isset($_SESSION['user'])) {
                 $pickup_lat,
                 $pickup_lng,
                 $otp,
-                $points_cost_per_order
+                $points_cost_per_order,
+                $promo_code,
+                $discount_amount
             ]);
-            setFlash('success', $t['success_add']);
+
+            $order_id = $conn->lastInsertId();
+
+            // If promo code was used, update usage tracking
+            if ($promo_id) {
+                // Increment usage count
+                $conn->prepare("UPDATE promo_codes SET used_count = used_count + 1 WHERE id = ?")
+                    ->execute([$promo_id]);
+
+                // Track user usage
+                $conn->prepare("INSERT INTO promo_code_uses (promo_code_id, user_id, order_id, discount_amount) VALUES (?, ?, ?, ?)")
+                    ->execute([$promo_id, $uid, $order_id, $discount_amount]);
+
+                setFlash('success', ($t['success_add_with_promo'] ?? 'Order created! Discount applied: %s MRU') . ' ' . number_format($discount_amount, 2) . ' MRU');
+            } else {
+                setFlash('success', $t['success_add']);
+            }
+
             header("Location: index.php");
             exit();
         }
