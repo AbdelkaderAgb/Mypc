@@ -1,0 +1,4424 @@
+Array
+(
+    [hotel_name] => 
+    [data] => Array
+        (
+        )
+
+    [message] => No pricing data found.
+)
+Fetching data for hotel: null
+Array
+(
+    [hotel_name] => 
+    [data] => Array
+        (
+        )
+
+    [message] => No pricing data found for the specified hotel.
+)
+Fetching data for hotel: null
+Array
+(
+    [hotel_name] => 
+    [data] => Array
+        (
+        )
+
+    [message] => No pricing data found for the specified hotel.
+)
+Fetching data for hotel: null
+Array
+(
+    [hotel_name] => 
+    [data] => Array
+        (
+        )
+
+    [message] => No pricing data found for the specified hotel.
+)
+Fetching data for hotel: null
+Array
+(
+    [hotel_name] => 
+    [data] => Array
+        (
+        )
+
+    [message] => No pricing data found for the specified hotel.
+)
+Fetching data for hotel: null
+Array
+(
+    [hotel_name] => 
+    [data] => Array
+        (
+        )
+
+    [message] => No pricing data found for the specified hotel.
+)
+Fetching data for hotel: GALAXY BEACH HOTEL / 4* / ALANYA
+Array
+(
+    [hotel_name] => GALAXY BEACH HOTEL / 4* / ALANYA
+    [data] => Array
+        (
+            [2024.05.01 - 2024.05.09] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 28.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.60
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 42.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 42.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 70.00
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 70.00
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 70.00
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.60
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.60
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 30.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 81.00
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 45.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 45.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 75.00
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 75.00
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 75.00
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 81.00
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 81.00
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 28.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.60
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 42.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 42.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 70.00
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 70.00
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 56.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 70.00
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.60
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.60
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 30.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 81.00
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 45.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 45.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 75.00
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 75.00
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 60.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 75.00
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 81.00
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 81.00
+                        )
+
+                )
+
+            [2024.05.10 - 2024.05.20] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 30.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 32.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 30.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 32.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                )
+
+            [2024.05.21 - 2024.06.03] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 32.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 86.40
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 48.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 48.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 80.00
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 80.00
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 80.00
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 86.40
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 86.40
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 34.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 91.80
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 51.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 51.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 85.00
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 85.00
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 85.00
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 91.80
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 91.80
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 32.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 86.40
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 48.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 48.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 80.00
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 80.00
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 64.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 80.00
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 86.40
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 86.40
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 34.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 91.80
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 51.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 51.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 85.00
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 85.00
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 68.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 85.00
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 91.80
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 91.80
+                        )
+
+                )
+
+            [2024.06.04 - 2024.06.14] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 39.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.30
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 97.50
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 97.50
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 97.50
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.30
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.30
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 41.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.70
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 102.50
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 102.50
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 102.50
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.70
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.70
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 39.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.30
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 97.50
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 97.50
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 78.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 97.50
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.30
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.30
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 41.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.70
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 102.50
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 102.50
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 82.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 102.50
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.70
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.70
+                        )
+
+                )
+
+            [2024.06.15 - 2024.06.30] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 52.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 140.40
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 130.00
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 130.00
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 130.00
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 140.40
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 140.40
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 55.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 148.50
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 137.50
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 137.50
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 137.50
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 148.50
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 148.50
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 52.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 140.40
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 130.00
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 130.00
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 104.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 130.00
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 140.40
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 140.40
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 55.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 148.50
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 137.50
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 137.50
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 110.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 137.50
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 148.50
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 148.50
+                        )
+
+                )
+
+            [2024.07.01 - 2024.07.15] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 54.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 145.80
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 135.00
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 135.00
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 135.00
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 145.80
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 145.80
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 57.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 153.90
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 142.50
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 142.50
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 142.50
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 153.90
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 153.90
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 54.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 145.80
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 135.00
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 135.00
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 108.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 135.00
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 145.80
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 145.80
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 57.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 153.90
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 142.50
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 142.50
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 114.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 142.50
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 153.90
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 153.90
+                        )
+
+                )
+
+            [2024.07.16 - 2024.08.25] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 59.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 159.30
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 147.50
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 147.50
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 147.50
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 159.30
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 159.30
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 61.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 164.70
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 152.50
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 152.50
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 152.50
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 164.70
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 164.70
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 59.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 159.30
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 147.50
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 147.50
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 118.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 147.50
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 159.30
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 159.30
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 61.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 164.70
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 152.50
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 152.50
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 122.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 152.50
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 164.70
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 164.70
+                        )
+
+                )
+
+            [2024.08.26 - 2024.09.20] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 51.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 137.70
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 127.50
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 127.50
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 127.50
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 137.70
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 137.70
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 53.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 143.10
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 132.50
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 132.50
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 132.50
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 143.10
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 143.10
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 51.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 137.70
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 127.50
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 127.50
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 102.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 127.50
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 137.70
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 137.70
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 53.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 143.10
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 132.50
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 132.50
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 106.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 132.50
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 143.10
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 143.10
+                        )
+
+                )
+
+            [2024.09.21 - 2024.09.30] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 42.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 113.40
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.00
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.00
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.00
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 113.40
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 113.40
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 45.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 121.50
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 112.50
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 112.50
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 112.50
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 121.50
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 121.50
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 42.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 113.40
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.00
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.00
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 84.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 105.00
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 113.40
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 113.40
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 45.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 121.50
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 112.50
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 112.50
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 90.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 112.50
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 121.50
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 121.50
+                        )
+
+                )
+
+            [2024.10.01 - 2024.10.15] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 33.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 89.10
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 49.50
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 49.50
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 82.50
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 82.50
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 82.50
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 89.10
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 89.10
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 35.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 94.50
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 52.50
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 52.50
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 87.50
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 87.50
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 87.50
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 94.50
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 94.50
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 33.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 89.10
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 49.50
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 49.50
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 82.50
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 82.50
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 66.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 82.50
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 89.10
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 89.10
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 35.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 94.50
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 52.50
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 52.50
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 87.50
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 87.50
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 70.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 87.50
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 94.50
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 94.50
+                        )
+
+                )
+
+            [2024.10.16 - 2024.10.31] => Array
+                (
+                    [0] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 30.00
+                        )
+
+                    [1] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [2] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [3] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [4] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [5] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [6] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [7] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [8] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [9] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [10] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [11] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [12] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [13] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [14] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 32.00
+                        )
+
+                    [15] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [16] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [17] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [18] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [19] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [20] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [21] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [22] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [23] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [24] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [25] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [26] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [27] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [28] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 30.00
+                        )
+
+                    [29] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [30] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [31] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [32] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 45.00
+                        )
+
+                    [33] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [34] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [35] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [36] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [37] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [38] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 60.00
+                        )
+
+                    [39] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 75.00
+                        )
+
+                    [40] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [41] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => ANEX BUILDING LAND VIEW
+                            [price] => 81.00
+                        )
+
+                    [42] => Array
+                        (
+                            [room_type] => P.P.P.D.IN DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 32.00
+                        )
+
+                    [43] => Array
+                        (
+                            [room_type] => DOUBLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [44] => Array
+                        (
+                            [room_type] => DOUBLE ROOM+EXTRA BED
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [45] => Array
+                        (
+                            [room_type] => SINGLE ROOM
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [46] => Array
+                        (
+                            [room_type] => 1+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 48.00
+                        )
+
+                    [47] => Array
+                        (
+                            [room_type] => 1+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [48] => Array
+                        (
+                            [room_type] => 1+2 CHD (0-6,99) (0-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [49] => Array
+                        (
+                            [room_type] => 1+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [50] => Array
+                        (
+                            [room_type] => 2+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [51] => Array
+                        (
+                            [room_type] => 2+1 CHD (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [52] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 64.00
+                        )
+
+                    [53] => Array
+                        (
+                            [room_type] => 2+2 CHD (0-6,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 80.00
+                        )
+
+                    [54] => Array
+                        (
+                            [room_type] => 2+2 CHD (7-11,99) (7-11,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                    [55] => Array
+                        (
+                            [room_type] => 3+1 CHD (0-6,99)
+                            [accommodation] => STANDARD ROOM
+                            [price] => 86.40
+                        )
+
+                )
+
+        )
+
+)
